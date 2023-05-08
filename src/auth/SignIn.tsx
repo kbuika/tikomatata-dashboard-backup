@@ -2,8 +2,8 @@ import GoogleIcon from "../assets/icons/google.png"
 
 export default function SignIn() {
   return (
-    <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center p-[100px]'>
-      <div className='h-100 w-1/3 flex flex-col items-center'>
+    <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] pt-[100px]'>
+      <div className='h-100 lg:w-1/3 flex flex-col items-center'>
         <div>
           <h2 className='text-[36px] font-normal'>Hey, Welcome Back</h2>
         </div>

@@ -7,10 +7,10 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier"
+        "prettier",
+        "plugin:storybook/recommended"
     ],
-    "overrides": [
-    ],
+    "overrides": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -25,7 +25,10 @@
     "rules": {
         "camelcase": "off",
         "spaced-comment": "off",
-        "quotes": ["error", "double"],
+        "quotes": [
+            "error",
+            "double"
+        ],
         "no-duplicate-imports": "error",
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
