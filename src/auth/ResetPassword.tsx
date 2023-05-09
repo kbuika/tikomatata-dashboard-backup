@@ -3,18 +3,20 @@ export default function ResetPassword() {
     <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] py-[100px]'>
       <div className='h-100 w-[85%] lg:w-1/3 flex flex-col items-center'>
         <div className='flex flex-col items-center'>
-          <h2 className='text-[28px] font-normal text-center'>Choose a new Password</h2>
-          <p className='mt-2'>Almost done resetting your password</p>
+          <h2 className='text-[28px] font-normal text-center text-neutralDark'>
+            Choose a new Password
+          </h2>
+          <p className='mt-2 text-neutralDark'>Almost done resetting your password</p>
         </div>
         <div className='w-full mt-[24px]'>
           <div>
-            <label>New password</label>
+            <label className='text-neutralDark'>New password</label>
             <input
               id='password'
               name='password'
               type='password'
               required
-              className='h-[50px] appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
+              className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Enter new password'
               autoComplete='nope'
             ></input>
@@ -22,13 +24,13 @@ export default function ResetPassword() {
         </div>
         <div className='w-full mt-[24px]'>
           <div>
-            <label>Confirm new password</label>
+            <label className='text-neutralDark'>Confirm new password</label>
             <input
               id='password'
               name='password'
               type='password'
               required
-              className='h-[50px] appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
+              className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Confirm new password'
               autoComplete='nope'
             ></input>
