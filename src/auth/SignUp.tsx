@@ -26,7 +26,7 @@ export default function SignUp() {
           <div>
             <label>Phone Number</label>
             <div className='flex items-center'>
-              <span className='w-1/4 bg-white h-[50px] flex items-center justify-center border border-gray-600'>
+              <span className='w-[35%] lg:w-1/4 bg-white h-[50px] flex items-center justify-center border border-gray-600'>
                 <img src={KenyaIcon} alt='Kenyan Flag' className='mr-2' />
                 +254
               </span>
