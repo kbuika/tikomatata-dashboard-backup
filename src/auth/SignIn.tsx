@@ -45,7 +45,7 @@ export default function SignIn() {
         </div>
         <div className='w-full flex justify-center mt-[24px]'>
           <p>
-            Already have an account? <a>Sign Up</a>
+            Don&rsquo;t have an account? <a href='/register'>Sign Up</a>
           </p>
         </div>
         <div className='mt-[20px] mb-[20px]'>Or</div>
