@@ -36,7 +36,7 @@ export default function SignIn() {
           </div>
         </div>
         <div className='w-full flex justify-end mt-[20px]'>
-          <a className='text-sm' href='/forgot-password'>
+          <a className='text-sm text-secondary' href='/forgot-password'>
             Forgot password?
           </a>
         </div>
@@ -53,7 +53,7 @@ export default function SignIn() {
             </a>
           </p>
         </div>
-        <div className='mt-[20px] mb-[20px]'>Or</div>
+        <div className='mt-[20px] mb-[20px] text-neutralDark'>Or</div>
         <div className='w-full flex justify-center'>
           <button className='h-[50px] w-full text-neutralDark border border-neutralDark rounded-sm bg-white flex justify-center items-center focus:border-none focus:outline-none focus:ring-2'>
             <span className='mr-[10px]'>

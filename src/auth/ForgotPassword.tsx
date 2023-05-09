@@ -8,8 +8,8 @@ export default function ForgotPassword() {
         {resetLinkSent ? (
           <>
             <div className='flex flex-col items-center'>
-              <h2 className='text-[30px] font-normal'>Check your email</h2>
-              <p className='mt-2 text-center'>
+              <h2 className='text-[30px] font-normal text-neutralDark'>Check your email</h2>
+              <p className='mt-2 text-center text-neutralDark'>
                 A reset password link has been sent to [email here]
               </p>
             </div>
@@ -27,20 +27,20 @@ export default function ForgotPassword() {
         ) : (
           <>
             <div className='flex flex-col items-center'>
-              <h2 className='text-[30px] font-normal'>Forgot Password</h2>
-              <p className='mt-2 text-center'>
+              <h2 className='text-[30px] font-normal text-neutralDark'>Forgot Password</h2>
+              <p className='mt-2 text-center text-neutralDark'>
                 Please enter your email to get a reset password code
               </p>
             </div>
             <div className='w-full mt-[30px]'>
               <div>
-                <label>Email Address</label>
+                <label className='text-neutralDark'>Email Address</label>
                 <input
                   id='email'
                   name='email'
                   type='email'
                   required
-                  className='h-[50px] appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
+                  className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
                   placeholder='Email Address'
                   autoComplete='nope'
                 ></input>
