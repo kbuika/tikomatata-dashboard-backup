@@ -1,6 +1,23 @@
+import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 import GoogleIcon from "../assets/icons/google.png"
 
+const schema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+})
+
+type IFormInput = yup.InferType<typeof schema>
+
 export default function SignIn() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({ resolver: yupResolver(schema) })
+  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
+
   return (
     <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] pt-[100px]'>
       <div className='h-100 w-[85%] lg:w-1/3 flex flex-col items-center'>
@@ -12,13 +29,14 @@ export default function SignIn() {
             <label className='text-neutralDark'>Email Address</label>
             <input
               id='email'
-              name='email'
               type='email'
               required
               className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Email Address'
               autoComplete='nope'
+              {...register("email", { required: true })}
             ></input>
+            {errors.email && <span className='text-criticalRed'>{errors.email?.message}</span>}
           </div>
         </div>
         <div className='w-full mt-[24px]'>
@@ -26,13 +44,16 @@ export default function SignIn() {
             <label className='text-neutralDark'>Password</label>
             <input
               id='password'
-              name='password'
               type='password'
               required
               className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Enter Password'
               autoComplete='nope'
+              {...register("password", { required: true })}
             ></input>
+            {errors.password && (
+              <span className='text-criticalRed'>{errors.password?.message}</span>
+            )}
           </div>
         </div>
         <div className='w-full flex justify-end mt-[20px]'>
@@ -41,7 +62,11 @@ export default function SignIn() {
           </a>
         </div>
         <div className='w-full mt-[20px]'>
-          <button className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'>
+          <button
+            type='submit'
+            onClick={handleSubmit(onSubmit)}
+            className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'
+          >
             Continue
           </button>
         </div>

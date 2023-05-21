@@ -1,4 +1,23 @@
+import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+const schema = yup.object({
+  password: yup.string().min(8).required(),
+  confirmPassword: yup
+    .string()
+    .min(8)
+    .required()
+    .equals([yup.ref("password"), null], "Passwords must match"),
+})
+type IFormInput = yup.InferType<typeof schema>
 export default function ResetPassword() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({ resolver: yupResolver(schema) })
+  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
   return (
     <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] py-[100px]'>
       <div className='h-100 w-[85%] lg:w-1/3 flex flex-col items-center'>
@@ -13,31 +32,41 @@ export default function ResetPassword() {
             <label className='text-neutralDark'>New password</label>
             <input
               id='password'
-              name='password'
               type='password'
               required
               className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Enter new password'
               autoComplete='nope'
+              {...register("password", { required: true })}
             ></input>
+            {errors.password && (
+              <span className='text-criticalRed'>{errors.password?.message}</span>
+            )}
           </div>
         </div>
         <div className='w-full mt-[24px]'>
           <div>
             <label className='text-neutralDark'>Confirm new password</label>
             <input
-              id='password'
-              name='password'
+              id='confirmPassword'
               type='password'
               required
               className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Confirm new password'
               autoComplete='nope'
+              {...register("confirmPassword", { required: true })}
             ></input>
+            {errors.confirmPassword && (
+              <span className='text-criticalRed'>passwords must match</span>
+            )}
           </div>
         </div>
         <div className='w-full mt-[40px]'>
-          <button className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'>
+          <button
+            type='submit'
+            onClick={handleSubmit(onSubmit)}
+            className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'
+          >
             Reset Password
           </button>
         </div>
