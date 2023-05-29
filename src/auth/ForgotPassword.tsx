@@ -1,6 +1,21 @@
 import { useState } from "react"
+import { useForm, SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+})
+type IFormInput = yup.InferType<typeof schema>
 
 export default function ForgotPassword() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({ resolver: yupResolver(schema) })
+  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [resetLinkSent, setResetLinkSent] = useState(false)
   return (
     <div className='bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] py-[100px]'>
@@ -37,18 +52,19 @@ export default function ForgotPassword() {
                 <label className='text-neutralDark'>Email Address</label>
                 <input
                   id='email'
-                  name='email'
                   type='email'
                   required
                   className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
                   placeholder='Email Address'
                   autoComplete='nope'
+                  {...register("email", { required: true })}
                 ></input>
+                {errors.email && <span className='text-criticalRed'>{errors.email?.message}</span>}
               </div>
             </div>
             <div className='w-full mt-[40px]'>
               <button
-                onClick={() => setResetLinkSent(!resetLinkSent)}
+                onClick={handleSubmit(onSubmit)}
                 className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'
               >
                 Reset Password

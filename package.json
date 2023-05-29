@@ -28,11 +28,15 @@
   },
   "dependencies": {
     "@heroicons/react": "1.0.6",
+    "@hookform/resolvers": "^3.1.0",
     "@tremor/react": "^2.4.0",
     "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.1"
+    "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.43.9",
+    "react-router-dom": "^6.11.1",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.9",
@@ -45,6 +49,7 @@
     "@types/d3": "^7.4.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-helmet": "^6.1.6",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "@vitejs/plugin-react": "^3.1.0",
