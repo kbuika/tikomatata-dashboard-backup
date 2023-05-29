@@ -2,6 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import GoogleIcon from "../assets/icons/google.png"
+import { GOOGLE_AUTH_URL } from "../constants"
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -80,12 +81,14 @@ export default function SignIn() {
         </div>
         <div className='mt-[20px] mb-[20px] text-neutralDark'>Or</div>
         <div className='w-full flex justify-center'>
-          <button className='h-[50px] w-full text-neutralDark border border-neutralDark rounded-sm bg-white flex justify-center items-center focus:border-none focus:outline-none focus:ring-2'>
-            <span className='mr-[10px]'>
-              <img src={GoogleIcon} height={20} width={20}></img>
-            </span>
-            Continue with Google
-          </button>
+          <a href={GOOGLE_AUTH_URL} className='w-full'>
+            <button className='h-[50px] w-full text-neutralDark border border-neutralDark rounded-sm bg-white flex justify-center items-center focus:border-none focus:outline-none focus:ring-2'>
+              <span className='mr-[10px]'>
+                <img src={GoogleIcon} height={20} width={20}></img>
+              </span>
+              Continue with Google
+            </button>
+          </a>
         </div>
       </div>
     </div>

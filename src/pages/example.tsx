@@ -31,8 +31,6 @@ const chartdata = [
     SemiAnalysis: 3129,
     "The Pragmatic Engineer": 1726,
   },
-
-  
 ]
 
 const dataFormatter = (number: number) => {

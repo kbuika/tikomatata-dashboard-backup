@@ -25,15 +25,25 @@ module.exports = {
         neutralDark: "#171412",
         neutralGray: "#595959",
         navBar: "#FFFCEE",
+        menuBg: "#FDFDFD",
       },
-    },
-
-    ringColor: {
-      DEFAULT: "#F28500",
-    },
-    borderColor: {
-      primary: "#F28500",
-      neutralDark: "#171412",
+      ringColor: {
+        DEFAULT: "#F28500",
+      },
+      borderColor: {
+        primary: "#F28500",
+        neutralDark: "#171412",
+      },
+      fontWeight: {
+        thin: "100",
+        extralight: "200",
+        light: "300",
+        normal: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+        extrabold: "800",
+      },
     },
   },
   plugins: [],
