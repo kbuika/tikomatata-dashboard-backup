@@ -35,7 +35,7 @@ module.exports = {
         neutralWhite: "#F2F2F2",
         white: "#FFFFFF",
         neutralDark: "#171412",
-        neutralGray: "#595959",
+        neutralGrey: "#595959",
         navBar: "#FFFCEE",
         menuBg: "#FDFDFD",
         border: "hsl(var(--border))",

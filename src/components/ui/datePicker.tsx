@@ -9,7 +9,7 @@ import { Button } from "../../components/ui/button"
 import { Calendar } from "../../components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
 
-export function DatePicker() {
+export function DatePicker({ className }: any) {
   const [date, setDate] = React.useState<Date>()
 
   return (
@@ -18,8 +18,9 @@ export function DatePicker() {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-[280px] justify-start text-left font-normal border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10",
             !date && "text-muted-foreground",
+            className,
           )}
         >
           <CalendarIcon className='mr-2 h-4 w-4' />
