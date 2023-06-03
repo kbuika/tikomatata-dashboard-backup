@@ -1,4 +1,4 @@
-import MainContainer from "../../components/CustomContainer"
+import MainContainer from "../../components/ui/CustomContainer"
 
 const Settings = () => {
   return (

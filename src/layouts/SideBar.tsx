@@ -8,7 +8,7 @@ export default function SideBar() {
         className='fixed top-0 left-0 z-40 w-[230px] h-screen transition-transform -translate-x-full justify-center duration-300 sm:translate-x-0'
         aria-label='Sidebar'
       >
-        <div className='h-full px-3 py-6 overflow-y-auto bg-menuBg dark:bg-gray-800'>
+        <div className='h-full px-3 py-6 overflow-y-auto bg-neutralWhite dark:bg-gray-800'>
           <a href='/' className='flex items-center pl-2.5 mb-5 h-[80px]'>
             {/* <img
               src='https://flowbite.com/docs/images/logo.svg'
