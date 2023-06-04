@@ -1,14 +1,18 @@
+import { useState } from "react"
 import { Link, Outlet } from "react-router-dom"
 
 export default function SideBar() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLargeView, setIsLargeView] = useState(true)
   return (
     <>
       <aside
         id='logo-sidebar'
-        className='fixed top-0 left-0 z-40 w-[230px] h-screen transition-transform -translate-x-full justify-center duration-300 sm:translate-x-0'
+        className='fixed top-0 left-0 w-[230px] h-screen transition-transform -translate-x-full justify-center duration-300 sm:translate-x-0'
         aria-label='Sidebar'
+        style={{}}
       >
-        <div className='h-full px-3 py-6 overflow-y-auto bg-menuBg dark:bg-gray-800'>
+        <div className='h-full px-3 py-6 overflow-y-auto bg-neutralWhite dark:bg-gray-800'>
           <a href='/' className='flex items-center pl-2.5 mb-5 h-[80px]'>
             {/* <img
               src='https://flowbite.com/docs/images/logo.svg'
@@ -16,14 +20,14 @@ export default function SideBar() {
               alt='Flowbite Logo'
             /> */}
             <span className='self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white'>
-              TIKOMATATA
+              TIKO{isLargeView && "MATATA"}
             </span>
           </a>
           <ul className='space-y-2 font-medium'>
             <li>
               <Link
                 to='/events'
-                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-lg group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
+                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
               >
                 <svg
                   width='18'
@@ -37,13 +41,13 @@ export default function SideBar() {
                     className='fill-neutralDark group-hover:fill-neutralWhite group-focus:fill-neutralWhite'
                   />
                 </svg>
-                <span className='ml-3'>Events</span>
+                {isLargeView && <span className='ml-3'>Events</span>}
               </Link>
             </li>
             <li>
               <Link
                 to='/payments'
-                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-lg group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
+                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
               >
                 <svg
                   width='18'
@@ -57,13 +61,13 @@ export default function SideBar() {
                     className='fill-neutralDark group-hover:fill-neutralWhite group-focus:fill-neutralWhite'
                   />
                 </svg>
-                <span className='ml-3'>Payments</span>
+                {isLargeView && <span className='ml-3'>Payments</span>}
               </Link>
             </li>
             <li>
               <Link
                 to='/settings'
-                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-lg group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
+                className='h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark'
               >
                 <svg
                   width='18'
@@ -77,7 +81,7 @@ export default function SideBar() {
                     className='fill-neutralDark group-hover:fill-neutralWhite group-focus:fill-neutralWhite'
                   />
                 </svg>
-                <span className='ml-3'>Settings</span>
+                {isLargeView && <span className='ml-3'>Settings</span>}
               </Link>
             </li>
           </ul>

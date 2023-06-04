@@ -33,7 +33,7 @@ export default function ForgotPassword() {
                 href='/sign-in'
                 className='flex items-center justify-center text-secondary text-[14px]'
               >
-                <button className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'>
+                <button className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2'>
                   Back to Login
                 </button>
               </a>
@@ -65,7 +65,7 @@ export default function ForgotPassword() {
             <div className='w-full mt-[40px]'>
               <button
                 onClick={handleSubmit(onSubmit)}
-                className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2'
+                className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2'
               >
                 Reset Password
               </button>

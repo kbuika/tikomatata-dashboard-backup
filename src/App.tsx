@@ -14,6 +14,8 @@ import SideBar from "./layouts/SideBar"
 import Settings from "./pages/settings"
 import Payments from "./pages/payments"
 import Events from "./pages/events"
+import CreateEvent from "./pages/events/create"
+import ManageEvent from "./pages/events/manage"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
         <Route path='/settings' element={<Settings />} />
         <Route path='/payments' element={<Payments />} />
         <Route path='/events' element={<Events />} />
+        <Route path='/create-event' element={<CreateEvent />} />
+        <Route path='/events/manage/:id' element={<ManageEvent />} />
       </Route>
     </Route>,
   ),
