@@ -21,7 +21,7 @@ const EventDetails = () => {
           <CustomButton className='mt-[1em] w-[5em]'>Save</CustomButton>
         </div>
       </div>
-      <div className='w-full min-h-screen'>
+      <div className='w-full min-h-screen mt-6'>
         <div className='flex flex-row items-center justify-between w-full'>
           <div className='w-[48%]'>
             <label htmlFor='name' className='text-neutralDark'>

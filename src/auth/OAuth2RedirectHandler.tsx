@@ -1,30 +1,19 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { ACCESS_TOKEN } from "../constants"
-import { redirect } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
-const OAuth2RedirectHandler = ({ props }: any) => {
-  const [token, setToken] = useState<string>("")
-  const [, setError] = useState<string>("")
+const OAuth2RedirectHandler = () => {
+  const navigate = useNavigate()
   useEffect(() => {
-    const token = getUrlParameter("token")
-    const error = getUrlParameter("error")
-    setToken(token)
-    setError(error)
+    const token = new URLSearchParams(window.location.search).get("token")
+    if (token) {
+      localStorage.setItem(ACCESS_TOKEN, token)
+      navigate("/events")
+    }
+    // TODO: Handle errors
   }, [])
 
-  const getUrlParameter = (name: string) => {
-    name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]")
-    const regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
-    const results = regex.exec(props?.location.search)
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, "  "))
-  }
-
-  if (token) {
-    localStorage.setItem(ACCESS_TOKEN, token)
-    redirect("/example")
-  } else {
-    redirect("/")
-  }
+  return <></>
 }
 
 export default OAuth2RedirectHandler

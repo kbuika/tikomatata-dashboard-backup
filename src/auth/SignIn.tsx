@@ -58,7 +58,7 @@ export default function SignIn() {
           </div>
         </div>
         <div className='w-full flex justify-end mt-[20px]'>
-          <a className='text-sm text-secondary' href='/forgot-password'>
+          <a className='text-sm text-mainSecondary' href='/forgot-password'>
             Forgot password?
           </a>
         </div>
@@ -74,7 +74,7 @@ export default function SignIn() {
         <div className='w-full flex justify-center mt-[24px]'>
           <p className='text-neutralDark'>
             Don&rsquo;t have an account?{" "}
-            <a href='/register' className='text-secondary'>
+            <a href='/register' className='text-mainSecondary'>
               Sign Up
             </a>
           </p>
