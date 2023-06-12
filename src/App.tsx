@@ -16,6 +16,7 @@ import Payments from "./pages/payments"
 import Events from "./pages/events"
 import CreateEvent from "./pages/events/create"
 import ManageEvent from "./pages/events/manage"
+import OAuth2RedirectHandler from "./auth/OAuth2RedirectHandler"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path='/register' element={<SignUp />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
       <Route path='/reset-password' element={<ResetPassword />} />
+      <Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} />
       <Route path='/' element={<SideBar />}>
         <Route path='/example' element={<Example />} />
         <Route path='/settings' element={<Settings />} />
