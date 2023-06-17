@@ -1,26 +1,17 @@
 import { useState } from "react"
 
-interface UserToken {
-  token: string
-}
-
 const useToken = () => {
   const getToken = (): string | undefined => {
     const tokenString = sessionStorage.getItem("token")
-    const userToken: UserToken | null = JSON.parse(tokenString || "{}")
-    return userToken?.token
+    const userToken: string | null = tokenString
+    return userToken || undefined
   }
 
   const [token, setToken] = useState<string | undefined>(getToken())
 
-  const saveToken = (userToken: string | UserToken) => {
-    if (typeof userToken === "string") {
-      sessionStorage.setItem("token", userToken)
-      setToken(userToken)
-    } else {
-      sessionStorage.setItem("token", JSON.stringify(userToken))
-      setToken(userToken.token)
-    }
+  const saveToken = (userToken: string) => {
+    sessionStorage.setItem("token", userToken)
+    setToken(userToken)
   }
 
   return {
