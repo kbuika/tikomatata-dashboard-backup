@@ -10,6 +10,10 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
+interface ISignUpProps {
+  setToken: (userToken: string) => void
+}
+
 const schema = yup.object({
   fullName: yup.string().required(),
   phone: yup.string().required(),
@@ -28,7 +32,8 @@ type IFormInput = yup.InferType<typeof schema>
 
 // write a mutation to register a user
 
-export default function SignUp() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function SignUp({ setToken }: ISignUpProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [regError, setRegError] = useState<any>(null)
   const [, setErrorMessage] = useState<string>("")
