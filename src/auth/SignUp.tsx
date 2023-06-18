@@ -30,8 +30,6 @@ const schema = yup.object({
 })
 type IFormInput = yup.InferType<typeof schema>
 
-// write a mutation to register a user
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function SignUp({ setToken }: ISignUpProps) {
   const [loading, setLoading] = useState<boolean>(false)
@@ -63,7 +61,6 @@ export default function SignUp({ setToken }: ISignUpProps) {
         setErrorMessage(res?.message)
       }
     } catch (err) {
-      console.log(err)
       setRegError(err)
     } finally {
       setLoading(false)

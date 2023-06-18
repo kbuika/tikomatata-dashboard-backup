@@ -17,25 +17,25 @@ import { Textarea } from "../../components/ui/textarea"
 import { DatePicker } from "../../components/ui/datePicker"
 
 const schema = yup.object({
-  name: yup.string().required(),
-  ageLimit: yup.number().required(),
-  description: yup.string().required(),
-  poster: yup.object().required(),
-  location: yup.string().required(),
+  name: yup.string().required("Event name is required"),
+  ageLimit: yup.number().required("Age limit is required"),
+  description: yup.string().required("Description is required"),
+  poster: yup.object().required("File is required"),
+  location: yup.string().required("Location is required"),
   mapsLink: yup.string().notRequired(),
-  environment: yup.string().required(),
-  startDate: yup.date().required(),
-  endDate: yup.date().required(),
+  environment: yup.string().required("Environment is required"),
+  startDate: yup.date().required("Start date is required"),
+  endDate: yup.date().required("End date is required"),
 })
-type IFormInput = yup.InferType<typeof schema>
+type ICreateEventInput = yup.InferType<typeof schema>
 
 const CreateEvent = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({ resolver: yupResolver(schema) })
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
+  } = useForm<ICreateEventInput>({ resolver: yupResolver(schema) })
+  const onSubmit: SubmitHandler<ICreateEventInput> = (data) => console.log(data)
   return (
     <MainContainer>
       <div className='text-neutralDark'>
@@ -58,18 +58,20 @@ const CreateEvent = () => {
               id='name'
               placeholder='Event Name'
               type='text'
+              required
               {...register("name", { required: true })}
             />
             {errors.name && <span className='text-criticalRed'>{errors.name?.message}</span>}
           </div>
           <div className='w-[48%]'>
-            <label htmlFor='name' className='text-neutralDark'>
+            <label htmlFor='ageLimit' className='text-neutralDark'>
               Age Limit
             </label>
             <Input
               id='name'
               placeholder='Age Limit'
               type='number'
+              required
               {...register("ageLimit", { required: true })}
             />
             {errors.ageLimit && (
@@ -82,7 +84,14 @@ const CreateEvent = () => {
             <label htmlFor='name' className='text-neutralDark'>
               Description
             </label>
-            <Textarea id='name' name='ageLimit' placeholder='A brief description of the event' />
+            <Textarea
+              id='name'
+              placeholder='A brief description of the event'
+              {...register("description", { required: true })}
+            />
+            {errors.description && (
+              <span className='text-criticalRed'>{errors.description?.message}</span>
+            )}
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full mt-4'>
@@ -92,11 +101,12 @@ const CreateEvent = () => {
             </label>
             <Input
               id='name'
-              name='ageLimit'
               placeholder='A brief description of the event'
               type='file'
               className='h-[80px] border border-dashed flex flex-col items-center justify-center text-center'
+              {...register("poster", { required: true })}
             />
+            {errors.poster && <span className='text-criticalRed'>{errors.poster?.message}</span>}
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full mt-4'>
@@ -104,19 +114,35 @@ const CreateEvent = () => {
             <label htmlFor='name' className='text-neutralDark'>
               Event Location
             </label>
-            <Input id='name' name='name' placeholder='Event Location' type='text' />
+            <Input
+              id='name'
+              placeholder='Event Location'
+              type='text'
+              {...register("location", { required: true })}
+            />
+            {errors.location && (
+              <span className='text-criticalRed'>{errors.location?.message}</span>
+            )}
           </div>
           <div className='w-[32%]'>
             <label htmlFor='name' className='text-neutralDark'>
               Google Maps Link
             </label>
-            <Input id='name' name='name' placeholder='Pin Location' type='text' />
+            <Input
+              id='name'
+              placeholder='Pin Location'
+              type='text'
+              {...register("mapsLink", { required: false })}
+            />
+            {errors.mapsLink && (
+              <span className='text-criticalRed'>{errors.mapsLink?.message}</span>
+            )}
           </div>
           <div className='w-[32%]'>
             <label htmlFor='name' className='text-neutralDark'>
               Event Environment
             </label>
-            <Select>
+            <Select name='environment'>
               <SelectTrigger>
                 <SelectValue placeholder='Indoor/Outdoor' />
               </SelectTrigger>
@@ -127,6 +153,9 @@ const CreateEvent = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            {errors.environment && (
+              <span className='text-criticalRed'>{errors.environment?.message}</span>
+            )}
           </div>
         </div>
         <div className='flex flex-row items-center justify-between w-full mt-4'>
@@ -134,25 +163,33 @@ const CreateEvent = () => {
             <label htmlFor='name' className='text-neutralDark'>
               Start Date
             </label>
-            <DatePicker />
+            <DatePicker name='startDate' />
+            {errors.startDate && (
+              <span className='text-criticalRed'>{errors.startDate?.message}</span>
+            )}
           </div>
           <div className='flex flex-col'>
             <label htmlFor='name' className='text-neutralDark'>
               End Date
             </label>
-            <DatePicker />
+            <DatePicker name='endDate' />
+            {errors.endDate && <span className='text-criticalRed'>{errors.endDate?.message}</span>}
           </div>
           <div className='flex flex-col'>
             <label htmlFor='name' className='text-neutralDark'>
               Start Date
             </label>
-            <DatePicker />
+            <DatePicker name='startDate' />
+            {errors.startDate && (
+              <span className='text-criticalRed'>{errors.startDate?.message}</span>
+            )}
           </div>
           <div className='flex flex-col'>
             <label htmlFor='name' className='text-neutralDark'>
-              Start Date
+              End Date
             </label>
-            <DatePicker />
+            <DatePicker name='endDate' />
+            {errors.endDate && <span className='text-criticalRed'>{errors.endDate?.message}</span>}
           </div>
         </div>
       </div>
