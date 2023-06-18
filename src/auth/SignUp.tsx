@@ -4,22 +4,68 @@ import * as yup from "yup"
 import GoogleIcon from "../assets/icons/google.png"
 import KenyaIcon from "../assets/icons/kenya.png"
 import { GOOGLE_AUTH_URL } from "../constants"
+import { registerUser } from "../apiCalls"
+import { checkRegistrationError, errorToast, formatPhoneNumber, successToast } from "../lib/utils"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+
+interface ISignUpProps {
+  setToken: (userToken: string) => void
+}
 
 const schema = yup.object({
-  name: yup.string().required(),
+  fullName: yup.string().required(),
   phone: yup.string().required(),
   email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
+  password: yup
+    .string()
+    .min(6)
+    .max(16)
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!.,"'-*()])(?=.*[^\s]).*$/,
+      "Password must have at least one uppercase letter, one lowercase letter, a digit and a special character",
+    )
+    .required(),
 })
 type IFormInput = yup.InferType<typeof schema>
 
-export default function SignUp() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function SignUp({ setToken }: ISignUpProps) {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [regError, setRegError] = useState<any>(null)
+  const [, setErrorMessage] = useState<string>("")
+
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({ resolver: yupResolver(schema) })
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data)
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      setLoading(true)
+      const userData = {
+        ...data,
+        phone: formatPhoneNumber(data.phone),
+      }
+      const res = await registerUser(userData)
+      if (res?.status === 200) {
+        successToast("Registration Successful")
+        navigate("/events")
+      }
+      if (res?.status === 400) {
+        errorToast(res?.message)
+        setErrorMessage(res?.message)
+      }
+    } catch (err) {
+      setRegError(err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className='bg-gradient-to-r from-criticalBg to-successBg h-auto flex items-start justify-center lg:p-[100px] py-[100px]'>
@@ -37,16 +83,23 @@ export default function SignUp() {
               className='h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm'
               placeholder='Enter Full Name'
               autoComplete='nope'
-              {...register("name", { required: true })}
+              {...register("fullName", { required: true })}
             ></input>
-            {errors.name && <span className='text-criticalRed'>{errors.name?.message}</span>}
+            {errors.fullName && (
+              <span className='text-criticalRed'>{errors.fullName?.message}</span>
+            )}
+            {checkRegistrationError("fullName", regError)?.hasError && (
+              <span className='text-criticalRed'>
+                {checkRegistrationError("fullName", regError)?.message}
+              </span>
+            )}
           </div>
         </div>
         <div className='w-full mt-[16px]'>
           <div>
             <label className='text-neutralDark'>Phone Number</label>
             <div className='flex items-center'>
-              <span className='w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center border border-hidden-left border-gray-600'>
+              <span className='w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-sm border border-hidden-left border-gray-600'>
                 <img src={KenyaIcon} alt='Kenyan Flag' className='mr-2' />
                 +254
               </span>
@@ -59,9 +112,14 @@ export default function SignUp() {
                 autoComplete='nope'
                 {...register("phone", { required: true })}
               ></input>
-              {errors.phone && <span className='text-criticalRed'>{errors.phone?.message}</span>}
             </div>
           </div>
+          {errors.phone && <span className='text-criticalRed'>{errors.phone?.message}</span>}
+          {checkRegistrationError("phone", regError)?.hasError && (
+            <span className='text-criticalRed'>
+              {checkRegistrationError("phone", regError)?.message}
+            </span>
+          )}
         </div>
         <div className='w-full mt-[16px]'>
           <div>
@@ -76,6 +134,11 @@ export default function SignUp() {
               {...register("email", { required: true })}
             ></input>
             {errors.email && <span className='text-criticalRed'>{errors.email?.message}</span>}
+            {checkRegistrationError("email", regError)?.hasError && (
+              <span className='text-criticalRed'>
+                {checkRegistrationError("email", regError)?.message}
+              </span>
+            )}
           </div>
         </div>
         <div className='w-full mt-[16px]'>
@@ -92,6 +155,11 @@ export default function SignUp() {
             ></input>
             {errors.password && (
               <span className='text-criticalRed'>{errors.password?.message}</span>
+            )}
+            {checkRegistrationError("password", regError)?.hasError && (
+              <span className='text-criticalRed'>
+                {checkRegistrationError("password", regError)?.message}
+              </span>
             )}
           </div>
         </div>
@@ -118,7 +186,13 @@ export default function SignUp() {
             onClick={handleSubmit(onSubmit)}
             className='h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2'
           >
-            Continue
+            {loading ? (
+              <>
+                <Loader2 className='mr-2 h4 w-4 animate-spin' /> Setting you up
+              </>
+            ) : (
+              "Continue"
+            )}
           </button>
         </div>
         <div className='w-full flex justify-center mt-[16px]'>

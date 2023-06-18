@@ -1,6 +1,9 @@
+import * as React from "react"
 import clsx from "clsx"
 
-const Input = ({ className, ...props }: any) => {
+export type InputtextProps = React.InputHTMLAttributes<HTMLInputElement>
+
+const Input = React.forwardRef<HTMLInputElement, InputtextProps>(({ className, ...props }, ref) => {
   return (
     <input
       id={props.id}
@@ -13,8 +16,12 @@ const Input = ({ className, ...props }: any) => {
       )}
       placeholder={props.placeholder}
       autoComplete='nope'
+      ref={ref}
+      {...props}
     ></input>
   )
-}
+})
+
+Input.displayName = "Input"
 
 export default Input

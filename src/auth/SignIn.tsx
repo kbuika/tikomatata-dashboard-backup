@@ -4,6 +4,10 @@ import * as yup from "yup"
 import GoogleIcon from "../assets/icons/google.png"
 import { GOOGLE_AUTH_URL } from "../constants"
 
+interface ISignInProps {
+  setToken: (userToken: string) => void
+}
+
 const schema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().min(8).required(),
@@ -11,7 +15,8 @@ const schema = yup.object({
 
 type IFormInput = yup.InferType<typeof schema>
 
-export default function SignIn() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function SignIn({ setToken }: ISignInProps) {
   const {
     register,
     handleSubmit,
