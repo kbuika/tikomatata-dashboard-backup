@@ -11,7 +11,6 @@ import SideBarLayout from "./layouts/SideBarLayout"
 import Events from "./pages/events"
 import CreateEvent from "./pages/events/create"
 import ManageEvent from "./pages/events/manage"
-import Example from "./pages/example"
 import Payments from "./pages/payments"
 import Settings from "./pages/settings"
 import { ToastContainer } from "react-toastify"
@@ -23,16 +22,15 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<SignIn setToken={setToken} />} />
-          <Route path='/sign-in' element={<SignIn setToken={setToken} />} />
-          <Route path='/register' element={<SignUp setToken={setToken} />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/oauth2/redirect' element={<OAuth2RedirectHandler setToken={setToken} />} />
+          <Route path="/" element={<SignIn setToken={setToken} />} />
+          <Route path="/sign-in" element={<SignIn setToken={setToken} />} />
+          <Route path="/register" element={<SignUp setToken={setToken} />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler setToken={setToken} />} />
           <Route element={<SideBarLayout />}>
-            <Route path='/example' element={<Example />} />
             <Route
-              path='/settings'
+              path="/settings"
               element={
                 <Protected isSignedIn={!!token}>
                   <Settings />
@@ -40,7 +38,7 @@ const App = () => {
               }
             />
             <Route
-              path='/payments'
+              path="/payments"
               element={
                 <Protected isSignedIn={!!token}>
                   <Payments />
@@ -48,7 +46,7 @@ const App = () => {
               }
             />
             <Route
-              path='/events'
+              path="/events"
               element={
                 <Protected isSignedIn={!!token}>
                   <Events />
@@ -56,7 +54,7 @@ const App = () => {
               }
             />
             <Route
-              path='/create-event'
+              path="/create-event"
               element={
                 <Protected isSignedIn={!!token}>
                   <CreateEvent />
@@ -64,7 +62,7 @@ const App = () => {
               }
             />
             <Route
-              path='/events/manage/:id'
+              path="/events/manage/:id"
               element={
                 <Protected isSignedIn={!!token}>
                   <ManageEvent />
