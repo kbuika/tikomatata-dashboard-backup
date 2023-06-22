@@ -18,7 +18,7 @@ const OAuth2RedirectHandler = ({ setToken }: IOAuth2RedirectHandlerProps) => {
     // TODO: Handle errors
   }, [])
 
-  return <></>
+  return null
 }
 
 export default OAuth2RedirectHandler
