@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 export default function EventSideBar() {
   return (
     <div className="w-[250px]">
-      <div className="mt-[90px] px-4">
+      <div className="mt-[90px] px-4 fixed">
         <ul className="space-y-2 font-medium">
           <li>
             <Link
