@@ -1,4 +1,5 @@
-import { UserRegisterObj } from "../types"
+import { OAUTH2_REDIRECT_URI } from "../constants"
+import { UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
@@ -10,7 +11,6 @@ export const registerUser = async (user: UserRegisterObj) => {
     email: user?.email,
     password: user?.password,
   })
-  console.log(data)
   const config = {
     method: "post",
     url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/signup`,
@@ -21,10 +21,33 @@ export const registerUser = async (user: UserRegisterObj) => {
   }
   try {
     const response = await axios.request(config)
+    return response.data
+  } catch (error: any) {
+    return error.response?.data?.data
+  }
+}
+
+export const loginUser = async (user: UserLoginObj) => {
+  const data = JSON.stringify({
+    email: user?.email,
+    password: user?.password,
+    grant_type: "password",
+  })
+  console.log(data)
+  const config = {
+    method: "post",
+    url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/token/pin?redirect_uri=${OAUTH2_REDIRECT_URI}`,
+    data,
+    headers: {
+      "Content-type": "application/json",
+    },
+  }
+  try {
+    const response = await axios.request(config)
     console.log(response.data)
     return response.data
   } catch (error: any) {
-    console.log(error.response?.data?.data)
+    console.log(error)
     return error.response?.data?.data
   }
 }

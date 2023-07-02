@@ -191,7 +191,7 @@ const EventDashBoard = () => {
     data: performance,
     index: "date",
     categories: [selectedKpi],
-    colors: ["blue"] as Color[],
+    colors: ["orange"] as Color[],
     showLegend: false,
     valueFormatter: formatters[selectedKpi],
     yAxisWidth: 56,
@@ -228,7 +228,7 @@ const EventDashBoard = () => {
                         <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                         <Text>{item.target}</Text>
                       </Flex>
-                      <ProgressBar value={item.progress} className="mt-2" />
+                      <ProgressBar value={item.progress} className="mt-2" color="orange" />
                     </Card>
                   ))}
                 </Grid>
@@ -267,6 +267,7 @@ const EventDashBoard = () => {
                           startEndOnly={true}
                           showGradient={false}
                           showYAxis={false}
+                          colors={["orange"]}
                         />
                       </div>
                     </>

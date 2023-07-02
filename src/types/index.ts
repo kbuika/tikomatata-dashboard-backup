@@ -4,3 +4,8 @@ export interface UserRegisterObj {
   fullName: string
   password: string
 }
+
+export interface UserLoginObj {
+  email: string
+  password: string
+}
