@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "../ui/select"
 import { Textarea } from "../ui/textarea"
+import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -36,154 +37,159 @@ const EventDetails = () => {
   const onSubmit: SubmitHandler<IEventDetails> = (data) => console.log(data)
   return (
     <>
-      <div className="text-neutralDark">
+      <div className="text-neutralDark mt-2">
         <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[23px] font-semibold">event details</h2>
-          <CustomButton className="mt-[1em] w-[5em]" onClick={handleSubmit(onSubmit)}>
+          <h2 className="text-[18px] font-semibold">event details</h2>
+          <CustomButton className=" w-[5em]" onClick={handleSubmit(onSubmit)}>
             Save
           </CustomButton>
         </div>
       </div>
-      <div className="w-full min-h-screen mt-6">
-        <div className="flex flex-row items-center justify-between w-full">
-          <div className="w-[48%]">
-            <label htmlFor="name" className="text-neutralDark">
-              Event Name
-            </label>
-            <Input
-              id="name"
-              placeholder="Event Name"
-              type="text"
-              required
-              {...register("name", { required: true })}
-            />
-            {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
+      <VerticalEventNavBar />
+      <div className="border rounded-md mt-[3em] p-4">
+        <div className="w-full min-h-screen">
+          <div className="flex flex-row items-center justify-between w-full">
+            <div className="w-[48%]">
+              <label htmlFor="name" className="text-neutralDark">
+                Event Name
+              </label>
+              <Input
+                id="name"
+                placeholder="Event Name"
+                type="text"
+                required
+                {...register("name", { required: true })}
+              />
+              {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
+            </div>
+            <div className="w-[48%]">
+              <label htmlFor="ageLimit" className="text-neutralDark">
+                Age Limit
+              </label>
+              <Input
+                id="name"
+                placeholder="Age Limit"
+                type="number"
+                required
+                {...register("ageLimit", { required: true })}
+              />
+              {errors.ageLimit && (
+                <span className="text-criticalRed">{errors.ageLimit?.message}</span>
+              )}
+            </div>
           </div>
-          <div className="w-[48%]">
-            <label htmlFor="ageLimit" className="text-neutralDark">
-              Age Limit
-            </label>
-            <Input
-              id="name"
-              placeholder="Age Limit"
-              type="number"
-              required
-              {...register("ageLimit", { required: true })}
-            />
-            {errors.ageLimit && (
-              <span className="text-criticalRed">{errors.ageLimit?.message}</span>
-            )}
+          <div className="flex flex-row items-center justify-between w-full mt-4">
+            <div className="w-full">
+              <label htmlFor="name" className="text-neutralDark">
+                Description
+              </label>
+              <Textarea
+                id="name"
+                placeholder="A brief description of the event"
+                {...register("description", { required: true })}
+              />
+              {errors.description && (
+                <span className="text-criticalRed">{errors.description?.message}</span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Description
-            </label>
-            <Textarea
-              id="name"
-              placeholder="A brief description of the event"
-              {...register("description", { required: true })}
-            />
-            {errors.description && (
-              <span className="text-criticalRed">{errors.description?.message}</span>
-            )}
+          <div className="flex flex-row items-center justify-between w-full mt-4">
+            <div className="w-full">
+              <label htmlFor="name" className="text-neutralDark">
+                Upload Poster
+              </label>
+              <Input
+                id="name"
+                placeholder="A brief description of the event"
+                type="file"
+                className="h-[80px] border border-dashed flex flex-col items-center justify-center text-center"
+                {...register("poster", { required: true })}
+              />
+              {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Upload Poster
-            </label>
-            <Input
-              id="name"
-              placeholder="A brief description of the event"
-              type="file"
-              className="h-[80px] border border-dashed flex flex-col items-center justify-center text-center"
-              {...register("poster", { required: true })}
-            />
-            {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
+          <div className="flex flex-row items-center justify-between w-full mt-4">
+            <div className="w-[32%]">
+              <label htmlFor="name" className="text-neutralDark">
+                Event Location
+              </label>
+              <Input
+                id="name"
+                placeholder="Event Location"
+                type="text"
+                {...register("location", { required: true })}
+              />
+              {errors.location && (
+                <span className="text-criticalRed">{errors.location?.message}</span>
+              )}
+            </div>
+            <div className="w-[32%]">
+              <label htmlFor="name" className="text-neutralDark">
+                Google Maps Link
+              </label>
+              <Input
+                id="name"
+                placeholder="Pin Location"
+                type="text"
+                {...register("mapsLink", { required: false })}
+              />
+              {errors.mapsLink && (
+                <span className="text-criticalRed">{errors.mapsLink?.message}</span>
+              )}
+            </div>
+            <div className="w-[32%]">
+              <label htmlFor="name" className="text-neutralDark">
+                Event Environment
+              </label>
+              <Select name="environment">
+                <SelectTrigger>
+                  <SelectValue placeholder="Indoor/Outdoor" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="indoor">Indoor</SelectItem>
+                    <SelectItem value="outdoor">Outdoor</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {errors.environment && (
+                <span className="text-criticalRed">{errors.environment?.message}</span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-[32%]">
-            <label htmlFor="name" className="text-neutralDark">
-              Event Location
-            </label>
-            <Input
-              id="name"
-              placeholder="Event Location"
-              type="text"
-              {...register("location", { required: true })}
-            />
-            {errors.location && (
-              <span className="text-criticalRed">{errors.location?.message}</span>
-            )}
+          <div className="flex flex-row items-center justify-between w-full mt-6">
+            <div className="flex flex-col w-[48%]">
+              <label htmlFor="startDate" className="text-neutralDark">
+                Start Date
+              </label>
+              <DatePicker name="startDate" className="w-full" />
+              {errors.startDate && (
+                <span className="text-criticalRed">{errors.startDate?.message}</span>
+              )}
+            </div>
+            <div className="flex flex-col w-[48%]">
+              <label htmlFor="endDate" className="text-neutralDark">
+                End Date
+              </label>
+              <DatePicker name="endDate" className="w-full" />
+              {errors.endDate && (
+                <span className="text-criticalRed">{errors.endDate?.message}</span>
+              )}
+            </div>
           </div>
-          <div className="w-[32%]">
-            <label htmlFor="name" className="text-neutralDark">
-              Google Maps Link
-            </label>
-            <Input
-              id="name"
-              placeholder="Pin Location"
-              type="text"
-              {...register("mapsLink", { required: false })}
-            />
-            {errors.mapsLink && (
-              <span className="text-criticalRed">{errors.mapsLink?.message}</span>
-            )}
-          </div>
-          <div className="w-[32%]">
-            <label htmlFor="name" className="text-neutralDark">
-              Event Environment
-            </label>
-            <Select name="environment">
-              <SelectTrigger>
-                <SelectValue placeholder="Indoor/Outdoor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="indoor">Indoor</SelectItem>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {errors.environment && (
-              <span className="text-criticalRed">{errors.environment?.message}</span>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-6">
-          <div className="flex flex-col w-[48%]">
-            <label htmlFor="startDate" className="text-neutralDark">
-              Start Date
-            </label>
-            <DatePicker name="startDate" className="w-full" />
-            {errors.startDate && (
-              <span className="text-criticalRed">{errors.startDate?.message}</span>
-            )}
-          </div>
-          <div className="flex flex-col w-[48%]">
-            <label htmlFor="endDate" className="text-neutralDark">
-              End Date
-            </label>
-            <DatePicker name="endDate" className="w-full" />
-            {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
-          </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-6">
-          <div className="flex flex-col w-[48%]">
-            <label htmlFor="name" className="text-neutralDark">
-              Start Time
-            </label>
-            <DatePicker className="w-full" />
-          </div>
-          <div className="flex flex-col w-[48%]">
-            <label htmlFor="name" className="text-neutralDark">
-              End Time
-            </label>
-            <DatePicker className="w-full" />
+          <div className="flex flex-row items-center justify-between w-full mt-6">
+            <div className="flex flex-col w-[48%]">
+              <label htmlFor="name" className="text-neutralDark">
+                Start Time
+              </label>
+              <DatePicker className="w-full" />
+            </div>
+            <div className="flex flex-col w-[48%]">
+              <label htmlFor="name" className="text-neutralDark">
+                End Time
+              </label>
+              <DatePicker className="w-full" />
+            </div>
           </div>
         </div>
       </div>

@@ -69,7 +69,7 @@ export default function SignIn({ setToken }: ISignInProps) {
 
   return (
     <div className="bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] pt-[100px]">
-      <div className="h-100 w-[85%] lg:w-1/3 flex flex-col items-center">
+      <div className="h-auto w-[38%] max-[730px]:w-[80%] lg:w-1/3 flex flex-col items-center">
         <div>
           <h2 className="text-[30px] font-normal text-neutralDark">Hey, Welcome Back</h2>
         </div>

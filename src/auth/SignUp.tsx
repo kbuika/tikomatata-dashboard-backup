@@ -79,7 +79,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
 
   return (
     <div className="bg-gradient-to-r from-criticalBg to-successBg h-auto flex items-start justify-center lg:p-[100px] py-[100px]">
-      <div className="h-auto w-[90%] lg:w-1/3 flex flex-col items-center">
+      <div className="h-auto w-[38%] max-[730px]:w-[80%] lg:w-1/3 flex flex-col items-center">
         <div>
           <h2 className="text-[30px] font-normal text-neutralDark">Hey, lets get started!</h2>
         </div>

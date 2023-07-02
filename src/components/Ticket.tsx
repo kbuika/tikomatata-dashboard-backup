@@ -12,7 +12,7 @@ interface EventTicketProps {
 const EventTicketCard: React.FC<EventTicketProps> = ({ title, date, location }) => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center bg-center bg-cover w-[46%] m-2">
+      <div className="flex flex-col items-center justify-center bg-center bg-cover w-[46%] m-2 max-[580px]:w-[80%]">
         <div className="w-full mx-auto z-10 bg-blue-900 rounded-3xl">
           <div className="flex flex-col">
             <div className="bg-white relative drop-shadow-2xl rounded-3xl p-4 m-2">
@@ -39,7 +39,7 @@ const EventTicketCard: React.FC<EventTicketProps> = ({ title, date, location }) 
                     <h6 className="font-bold text-center">Tickets Sold</h6>
                     <div className="flex row items-center">
                       <p className="font-bold text-center text-2xl mt-2 text-gray-500">200/500</p>
-                      <Badge color="green" size="xs" className="ml-2 h-7">
+                      <Badge color="green" size="xs" className="ml-2 h-7 max-[480px]:hidden">
                         12.3% Sold
                       </Badge>
                     </div>
