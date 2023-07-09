@@ -6,6 +6,7 @@ import EventDashBoard from "@/src/components/manage-event/EventDashBoard"
 import EventTickets from "@/src/components/manage-event/EventTickets"
 import EventDetails from "@/src/components/manage-event/EventDetails"
 import EventCollaborators from "@/src/components/manage-event/EventCollaborators"
+import EventTargets from "@/src/components/manage-event/EventTargets"
 
 const ManageEvent = () => {
   const [searchParams] = useSearchParams()
@@ -23,6 +24,7 @@ const ManageEvent = () => {
           {activeTab === "dashboard" && <EventDashBoard />}
           {activeTab === "details" && <EventDetails />}
           {activeTab === "tickets" && <EventTickets />}
+          {activeTab === "targets" && <EventTargets />}
           {activeTab === "collaborators" && <EventCollaborators />}
         </div>
       </div>

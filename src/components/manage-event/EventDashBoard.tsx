@@ -21,10 +21,6 @@ import {
   AreaChart,
   Color,
   Icon,
-  MultiSelect,
-  MultiSelectItem,
-  Select,
-  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -45,14 +41,14 @@ type Kpi = {
 const kpiData: Kpi[] = [
   {
     title: "Sales",
-    metric: "$ 12,699",
+    metric: "KES 12,699",
     progress: 15.9,
-    target: "$ 80,000",
+    target: "KES 80,000",
     delta: "13.2%",
     deltaType: "moderateIncrease",
   },
   {
-    title: "Customers",
+    title: "Attendees",
     metric: "1,072",
     progress: 53.6,
     target: "2,000",
@@ -72,120 +68,84 @@ const usNumberformatter = (number: number, decimals = 0) =>
     .toString()
 
 const formatters: { [key: string]: any } = {
-  Sales: (number: number) => `$ ${usNumberformatter(number)}`,
-  Customers: (number: number) => `${usNumberformatter(number)}`,
+  Sales: (number: number) => `KES ${usNumberformatter(number)}`,
+  Attendees: (number: number) => `${usNumberformatter(number)}`,
   Delta: (number: number) => `${usNumberformatter(number, 2)}%`,
 }
 
 const Kpis = {
   Sales: "Sales",
-  Customers: "Customers",
+  Attendees: "Attendees",
 }
 
-const kpiList = [Kpis.Sales, Kpis.Customers]
+const kpiList = [Kpis.Sales, Kpis.Attendees]
 
 export type DailyPerformance = {
   date: string
   Sales: number
-  Customers: number
+  Attendees: number
 }
 
 export const performance: DailyPerformance[] = [
   {
     date: "2023-05-01",
     Sales: 900.73,
-    Customers: 73,
+    Attendees: 73,
   },
   {
     date: "2023-05-02",
     Sales: 1000.74,
-    Customers: 74,
+    Attendees: 74,
   },
   {
     date: "2023-05-03",
     Sales: 1100.93,
-    Customers: 293,
+    Attendees: 293,
   },
   {
     date: "2023-05-04",
     Sales: 1200.9,
-    Customers: 29,
+    Attendees: 29,
   },
 ]
 
-export type SalesPerson = {
+export type Attendee = {
   name: string
-  leads: number
-  sales: string
-  quota: string
-  variance: string
-  region: string
-  status: string
+  email: string
+  dateOfPurchase: string
+  ticketType: string
 }
 
-export const salesPeople: SalesPerson[] = [
+export const AttendeesList: Attendee[] = [
   {
     name: "Peter Doe",
-    leads: 45,
-    sales: "1,000,000",
-    quota: "1,200,000",
-    variance: "low",
-    region: "Region A",
-    status: "overperforming",
+    email: "peter@doe.com",
+    dateOfPurchase: "23/07",
+    ticketType: "Regular",
   },
   {
-    name: "Lena Whitehouse",
-    leads: 35,
-    sales: "900,000",
-    quota: "1,000,000",
-    variance: "low",
-    region: "Region B",
-    status: "average",
+    name: "Peter Doe",
+    email: "peter@doe.com",
+    dateOfPurchase: "23/07",
+    ticketType: "Regular",
   },
   {
-    name: "Phil Less",
-    leads: 52,
-    sales: "930,000",
-    quota: "1,000,000",
-    variance: "medium",
-    region: "Region C",
-    status: "underperforming",
+    name: "Peter Doe",
+    email: "peter@doe.com",
+    dateOfPurchase: "23/07",
+    ticketType: "Regular",
   },
   {
-    name: "John Camper",
-    leads: 22,
-    sales: "390,000",
-    quota: "250,000",
-    variance: "low",
-    region: "Region A",
-    status: "overperforming",
-  },
-  {
-    name: "Max Balmoore",
-    leads: 49,
-    sales: "860,000",
-    quota: "750,000",
-    variance: "low",
-    region: "Region B",
-    status: "overperforming",
+    name: "Peter Doe",
+    email: "peter@doe.com",
+    dateOfPurchase: "23/07",
+    ticketType: "Regular",
   },
 ]
-
-const deltaTypes: { [key: string]: DeltaType } = {
-  average: "unchanged",
-  overperforming: "moderateIncrease",
-  underperforming: "moderateDecrease",
-}
 
 const EventDashBoard = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selectedKpi = kpiList[selectedIndex]
-  const [selectedStatus, setSelectedStatus] = useState("all")
-  const [selectedNames, setSelectedNames] = useState<string[]>([])
-
-  const isSalesPersonSelected = (salesPerson: SalesPerson) =>
-    (salesPerson.status === selectedStatus || selectedStatus === "all") &&
-    (selectedNames.includes(salesPerson.name) || selectedNames.length === 0)
 
   const areaChartArgs = {
     className: "mt-5 h-72",
@@ -246,11 +206,6 @@ const EventDashBoard = () => {
                               alignItems="center"
                             >
                               <Title> Sales History </Title>
-                              <Icon
-                                icon={InformationCircleIcon}
-                                variant="simple"
-                                tooltip="Shows daily increase or decrease for sales"
-                              />
                             </Flex>
                             <Text> Daily change for sales </Text>
                           </div>
@@ -258,7 +213,7 @@ const EventDashBoard = () => {
                             <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
                               <TabList color="gray" variant="solid">
                                 <Tab value={""}>Sales</Tab>
-                                <Tab>Customers</Tab>
+                                <Tab>Attendees</Tab>
                               </TabList>
                             </TabGroup>
                           </div>
@@ -287,7 +242,7 @@ const EventDashBoard = () => {
                       <>
                         <div>
                           <Flex className="space-x-0.5" justifyContent="start" alignItems="center">
-                            <Title> Performance History </Title>
+                            <Title> Attendees List </Title>
                             <Icon
                               icon={InformationCircleIcon}
                               variant="simple"
@@ -295,60 +250,28 @@ const EventDashBoard = () => {
                             />
                           </Flex>
                         </div>
-                        <div className="flex space-x-2">
-                          <MultiSelect
-                            className="max-w-full sm:max-w-xs"
-                            onValueChange={setSelectedNames}
-                            placeholder="Select Salespeople..."
-                          >
-                            {salesPeople.map((item) => (
-                              <MultiSelectItem key={item.name} value={item.name}>
-                                {item.name}
-                              </MultiSelectItem>
-                            ))}
-                          </MultiSelect>
-                          <Select
-                            className="max-w-full sm:max-w-xs"
-                            defaultValue="all"
-                            onValueChange={setSelectedStatus}
-                          >
-                            <SelectItem value="all">All Performances</SelectItem>
-                            <SelectItem value="overperforming">Overperforming</SelectItem>
-                            <SelectItem value="average">Average</SelectItem>
-                            <SelectItem value="underperforming">Underperforming</SelectItem>
-                          </Select>
-                        </div>
+
                         <Table className="mt-6">
                           <TableHead>
                             <TableRow>
                               <TableHeaderCell>Name</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Leads</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Sales ($)</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Quota ($)</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Variance</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Region</TableHeaderCell>
-                              <TableHeaderCell className="text-right">Status</TableHeaderCell>
+                              <TableHeaderCell className="text-left">Email</TableHeaderCell>
+                              <TableHeaderCell className="text-left">
+                                Date of Purchase
+                              </TableHeaderCell>
+                              <TableHeaderCell className="text-left">Ticket Type</TableHeaderCell>
                             </TableRow>
                           </TableHead>
 
                           <TableBody>
-                            {salesPeople
-                              .filter((item) => isSalesPersonSelected(item))
-                              .map((item) => (
-                                <TableRow key={item.name}>
-                                  <TableCell>{item.name}</TableCell>
-                                  <TableCell className="text-right">{item.leads}</TableCell>
-                                  <TableCell className="text-right">{item.sales}</TableCell>
-                                  <TableCell className="text-right">{item.quota}</TableCell>
-                                  <TableCell className="text-right">{item.variance}</TableCell>
-                                  <TableCell className="text-right">{item.region}</TableCell>
-                                  <TableCell className="text-right">
-                                    <BadgeDelta deltaType={deltaTypes[item.status]} size="xs">
-                                      {item.status}
-                                    </BadgeDelta>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
+                            {AttendeesList.map((item) => (
+                              <TableRow key={item.name}>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell className="text-left">{item.email}</TableCell>
+                                <TableCell className="text-left">{item.dateOfPurchase}</TableCell>
+                                <TableCell className="text-left">{item.ticketType}</TableCell>
+                              </TableRow>
+                            ))}
                           </TableBody>
                         </Table>
                       </>

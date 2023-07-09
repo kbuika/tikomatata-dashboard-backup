@@ -15,35 +15,55 @@ import {
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { DatePicker } from "../../components/ui/datePicker"
+import { useMutation } from "@tanstack/react-query"
+import { createEvent } from "@/src/apiCalls"
+import { EventDataType } from "@/src/types"
+import { Loader2 } from "lucide-react"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
-  ageLimit: yup.number().required("Age limit is required"),
+  ageLimit: yup.number().notRequired(),
   description: yup.string().required("Description is required"),
   poster: yup.object().required("File is required"),
   location: yup.string().required("Location is required"),
   mapsLink: yup.string().notRequired(),
-  environment: yup.string().required("Environment is required"),
+  environment: yup.string().notRequired(),
   startDate: yup.date().required("Start date is required"),
   endDate: yup.date().required("End date is required"),
 })
-type ICreateEventInput = yup.InferType<typeof schema>
 
 const CreateEvent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isLoading, isSuccess, error, mutate } = useMutation(createEvent)
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ICreateEventInput>({ resolver: yupResolver(schema) })
-  const onSubmit: SubmitHandler<ICreateEventInput> = (data) => console.log(data)
+  } = useForm<EventDataType>({ resolver: yupResolver(schema) })
+  const onSubmit: SubmitHandler<EventDataType> = (data) => {
+    try {
+      mutate(data)
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <MainContainer>
       <div className="text-neutralDark">
         <div className="w-full flex flex-row items-center justify-between">
           <h2 className="text-[23px] font-semibold">Event Details</h2>
           <Link to={"/create-event"}>
-            <CustomButton className="mt-[1em] w-[5em]" onClick={handleSubmit(onSubmit)}>
-              Save
+            <CustomButton className="mt-[1em] w-auto flex" onClick={handleSubmit(onSubmit)}>
+              {isLoading ? (
+                <>
+                  Creating... <Loader2 className="animate-spin" />
+                </>
+              ) : isSuccess ? (
+                "Success"
+              ) : (
+                "Create"
+              )}
             </CustomButton>
           </Link>
         </div>
@@ -72,7 +92,7 @@ const CreateEvent = () => {
               placeholder="Age Limit"
               type="number"
               required
-              {...register("ageLimit", { required: true })}
+              {...register("ageLimit", { required: false })}
             />
             {errors.ageLimit && (
               <span className="text-criticalRed">{errors.ageLimit?.message}</span>
@@ -109,8 +129,8 @@ const CreateEvent = () => {
             {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
           </div>
         </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-[32%]">
+        <div className="flex flex-row flex-wrap items-center justify-between w-full mt-4 max-[620px]:flex-col">
+          <div className="w-[32%] flex flex-col max-[620px]:w-full">
             <label htmlFor="name" className="text-neutralDark">
               Event Location
             </label>
@@ -124,7 +144,7 @@ const CreateEvent = () => {
               <span className="text-criticalRed">{errors.location?.message}</span>
             )}
           </div>
-          <div className="w-[32%]">
+          <div className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2">
             <label htmlFor="name" className="text-neutralDark">
               Google Maps Link
             </label>
@@ -132,17 +152,15 @@ const CreateEvent = () => {
               id="name"
               placeholder="Pin Location"
               type="text"
-              {...register("mapsLink", { required: false })}
+              {...register("mapLink", { required: false })}
             />
-            {errors.mapsLink && (
-              <span className="text-criticalRed">{errors.mapsLink?.message}</span>
-            )}
+            {errors.mapLink && <span className="text-criticalRed">{errors.mapLink?.message}</span>}
           </div>
-          <div className="w-[32%]">
+          <div className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2">
             <label htmlFor="name" className="text-neutralDark">
               Event Environment
             </label>
-            <Select name="environment">
+            <Select {...register("environment", { required: false })}>
               <SelectTrigger>
                 <SelectValue placeholder="Indoor/Outdoor" />
               </SelectTrigger>
@@ -158,12 +176,12 @@ const CreateEvent = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
+        <div className="flex flex-row flex-wrap items-center justify-between w-full mt-4">
           <div className="flex flex-col">
             <label htmlFor="startDate" className="text-neutralDark">
               Start Date
             </label>
-            <DatePicker name="startDate" />
+            <DatePicker {...register("startDate", { required: true })} />
             {errors.startDate && (
               <span className="text-criticalRed">{errors.startDate?.message}</span>
             )}
@@ -172,7 +190,7 @@ const CreateEvent = () => {
             <label htmlFor="endDate" className="text-neutralDark">
               End Date
             </label>
-            <DatePicker name="endDate" />
+            <DatePicker {...register("endDate", { required: true })} />
             {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
           </div>
           <div className="flex flex-col">

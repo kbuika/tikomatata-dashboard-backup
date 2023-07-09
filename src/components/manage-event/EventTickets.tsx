@@ -39,7 +39,7 @@ const EventTickets = () => {
         </div>
       </div>
       <VerticalEventNavBar />
-      <div className="border min-h-screen rounded-md mt-[3em] p-4">
+      <div className="border h-auto rounded-md mt-[3em] p-4">
         {createTicketView ? (
           <CreateTicket />
         ) : (

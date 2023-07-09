@@ -19,13 +19,13 @@ import {
   SelectItem,
 } from "../ui/select"
 
-const EventCollaborators = () => {
+const EventTargets = () => {
   const comingSoon = true
   return (
     <>
       <div className="text-neutralDark mt-2">
         <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[18px] font-semibold">Collaborators</h2>
+          <h2 className="text-[18px] font-semibold">Event Targets</h2>
           {/* <Dialog>
             <DialogTrigger asChild>
               <CustomButton className="">Add Collaborator</CustomButton>
@@ -86,7 +86,8 @@ const EventCollaborators = () => {
             <div className="flex flex-col items-start justify-center">
               <p>Coming Soon</p>
               <p className="text-sm mt-4">
-                This will allow you to invite other people to your event dashboard
+                This will allow you to set desired targets and we&apos;ll help you track progress on
+                them.
               </p>
             </div>
           ) : (
@@ -154,4 +155,4 @@ const EventCollaborators = () => {
   )
 }
 
-export default EventCollaborators
+export default EventTargets

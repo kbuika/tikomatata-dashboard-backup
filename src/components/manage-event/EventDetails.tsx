@@ -46,8 +46,8 @@ const EventDetails = () => {
         </div>
       </div>
       <VerticalEventNavBar />
-      <div className="border rounded-md mt-[3em] p-4">
-        <div className="w-full min-h-screen">
+      <div className="border rounded-md mt-[3em] p-4 h-auto">
+        <div className="w-full h-auto">
           <div className="flex flex-row items-center justify-between w-full">
             <div className="w-[48%]">
               <label htmlFor="name" className="text-neutralDark">

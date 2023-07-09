@@ -4,6 +4,15 @@ import CustomButton from "../../components/ui/CustomButton"
 import CalendarImage from "../../assets/images/calendar.png"
 import { Helmet } from "react-helmet"
 import { Link } from "react-router-dom"
+import { Switch } from "../../components/ui/switch"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../../components/ui/tooltip"
+
+import { ExternalLink } from "lucide-react"
 
 const Events = () => {
   const [events] = useState([
@@ -29,18 +38,171 @@ const Events = () => {
         {events.length > 0 ? (
           <div className="mt-[20px] h-[90vh]">
             <div className="flex flex-col w-full space-y-4">
-              <Link to="/events/manage/1">
-                <div className="bg-mainPrimary h-[4em] p-2">Event Name </div>
-              </Link>
-              <Link to="/events/manage/1">
-                <div className="bg-mainPrimary h-[4em] p-2">Event Name </div>
-              </Link>
-              <Link to="/events/manage/1">
-                <div className="bg-mainPrimary h-[4em] p-2">Event Name </div>
-              </Link>
-              <Link to="/events/manage/1">
-                <div className="bg-mainPrimary h-[4em] p-2">Event Name </div>
-              </Link>
+              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                <Link to="/events/manage/1" className="w-full h-full p-4">
+                  <div className="">
+                    <p>Event Name on 7th July 2023</p>
+                  </div>
+                </Link>
+                <div className="pr-4 flex flex-row items-center justify-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p>
+                          <Switch />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Publish event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link to="/events/manage/1">
+                          <p className="ml-4 mb-2">
+                            <ExternalLink />
+                          </p>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Manage event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                <Link to="/events/manage/1" className="w-full h-full p-4">
+                  <div className="">
+                    <p>Event Name on 7th July 2023</p>
+                  </div>
+                </Link>
+                <div className="pr-4 flex flex-row items-center justify-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p>
+                          <Switch />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Publish event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link to="/events/manage/1">
+                          <p className="ml-4 mb-2">
+                            <ExternalLink />
+                          </p>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Manage event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                <Link to="/events/manage/1" className="w-full h-full p-4">
+                  <div className="">
+                    <p>Event Name on 7th July 2023</p>
+                  </div>
+                </Link>
+                <div className="pr-4 flex flex-row items-center justify-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p>
+                          <Switch />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Publish event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link to="/events/manage/1">
+                          <p className="ml-4 mb-2">
+                            <ExternalLink />
+                          </p>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Manage event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                <Link to="/events/manage/1" className="w-full h-full p-4">
+                  <div className="">
+                    <p>Event Name on 7th July 2023</p>
+                  </div>
+                </Link>
+                <div className="pr-4 flex flex-row items-center justify-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p>
+                          <Switch />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Publish event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link to="/events/manage/1">
+                          <p className="ml-4 mb-2">
+                            <ExternalLink />
+                          </p>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Manage event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                <Link to="/events/manage/1" className="w-full h-full p-4">
+                  <div className="">
+                    <p>Event Name on 7th July 2023</p>
+                  </div>
+                </Link>
+                <div className="pr-4 flex flex-row items-center justify-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p>
+                          <Switch />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Publish event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Link to="/events/manage/1">
+                          <p className="ml-4 mb-2">
+                            <ExternalLink />
+                          </p>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Manage event</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
