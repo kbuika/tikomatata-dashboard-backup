@@ -125,8 +125,12 @@ export default function SideBar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                    <Link to="/settings">
+                      <p className="flex flex-row">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </p>
+                    </Link>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
