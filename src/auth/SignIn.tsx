@@ -38,6 +38,7 @@ export default function SignIn({ setToken }: ISignInProps) {
   } = useForm<IFormInput>({ resolver: yupResolver(schema) })
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log("data", data)
     try {
       setLoading(true)
       const userData = {

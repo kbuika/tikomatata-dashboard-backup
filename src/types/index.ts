@@ -16,10 +16,10 @@ export interface EventDataType {
   location?: string
   mapLink?: string
   environment?: string
-  startDate: Date
-  endDate: Date
-  startTime: string
-  endTime: string
+  startDate?: string
+  endDate?: string
+  startTime?: string
+  endTime?: string
   ageLimit?: number
-  poster: File
+  poster?: File
 }

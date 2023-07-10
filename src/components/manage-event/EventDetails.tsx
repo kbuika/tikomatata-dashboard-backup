@@ -162,19 +162,19 @@ const EventDetails = () => {
               <label htmlFor="startDate" className="text-neutralDark">
                 Start Date
               </label>
-              <DatePicker name="startDate" className="w-full" />
+              {/* <DatePicker name="startDate" className="w-full" />
               {errors.startDate && (
                 <span className="text-criticalRed">{errors.startDate?.message}</span>
-              )}
+              )} */}
             </div>
             <div className="flex flex-col w-[48%]">
               <label htmlFor="endDate" className="text-neutralDark">
                 End Date
               </label>
-              <DatePicker name="endDate" className="w-full" />
+              {/* <DatePicker name="endDate" className="w-full" />
               {errors.endDate && (
                 <span className="text-criticalRed">{errors.endDate?.message}</span>
-              )}
+              )} */}
             </div>
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-6">

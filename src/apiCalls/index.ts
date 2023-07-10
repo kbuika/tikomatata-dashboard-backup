@@ -52,19 +52,19 @@ export const loginUser = async (user: UserLoginObj) => {
   }
 }
 
-export const createEvent = async (eventData: EventDataType) => {
+export const createEventFn = async (eventData: EventDataType) => {
+  console.log("event", eventData)
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/api/v1/event/create`,
     headers: {
-      Authorization:
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJ0aWtvbWF0YXRhX29yZ2FuaXplcnMiLCJuYmYiOjE2ODgyMTg4NDQsInVzZXJfbmFtZSI6ImphbmUuZG9lQGdtYWlsLmNvbSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE2ODgyMjA2NDQsImlhdCI6MTY4ODIxODg0NCwianRpIjoiOTFmYzYzNTUtMWEzYS00MWM4LTg5OWUtOTIzYTE5NDA1Mjk0IiwiY2xpZW50X2lkIjoidGlrb21hdGF0YSIsImF1dGhvcml0aWVzIjpbIlJPTEVfT1JHQU5JWkVSIl19.AmIQPtU2wJkQecTbKBCYiv35EjD0lUHws4tSEDDlIl8f9PeGPkALWKdYftSwk8nEZrl9m_0eU7DvbWOS2EL8f9_Tuwidnc1aM8VI6OzvUjO5zfpamyDY68G2TAL11HGz8nzgWfX_WOY1lFzvP5r85wrq0W8AYqfKAd2CDIBgVsFmCV0Via8vJxe0zAaDDIKy073rK0k0sx0x0vOPzlLhZU82zY4WUfaN3_3hfP3lfHHwq9l83i_gR60mdoiIFslRACOh3FJtXA72OUqMFPr3lwRpkxMIlEWKU_cLCZM-iAPiIaR-6b8n_W8It3x_lntNI9v6FvP5M4bDScGm_7tFQw",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       "Content-type": "application/json",
     },
     data: {
-      createEventRequest: eventData,
-      filePart: eventData?.poster,
+      payload: eventData,
+      file: eventData?.poster,
     },
   }
 
