@@ -15,6 +15,9 @@ module.exports = {
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      sidebar: "980px",
+    },
     container: {
       center: true,
       padding: "2rem",
