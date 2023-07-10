@@ -1,4 +1,4 @@
-// import CustomButton from "../ui/CustomButton"
+import CustomButton from "../ui/CustomButton"
 import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 import CalendarImage from "../../assets/images/calendar.png"
 import { InformationCircleIcon } from "@heroicons/react/solid"
@@ -58,6 +58,17 @@ const kpiData: Kpi[] = [
 ]
 
 import { useState } from "react"
+import { Download, Rocket } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -160,9 +171,32 @@ const EventDashBoard = () => {
   return (
     <>
       <div className="text-neutralDark mt-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[18px] font-semibold">event Dashboard</h2>
-          {/* <CustomButton className='mt-[1em] w-[5em]'>Save</CustomButton> */}
+        <div className="w-full flex flex-row items-center justify-between relative">
+          <h2 className="text-[18px] font-semibold">AfroFest 2023</h2>
+          <div>
+            <Dialog>
+              <DialogTrigger>
+                <CustomButton className=" w-auto">Publish Event</CustomButton>
+              </DialogTrigger>
+              <DialogContent className="rounded-lg">
+                <DialogHeader>
+                  <DialogTitle>Publish Event?</DialogTitle>
+                  <DialogDescription className="mt-4">
+                    <p className="mt-4 text-base text-left">
+                      This will make your event live and tickets will be visible to the public.
+                    </p>
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="flex flex-row items-center justify-end">
+                  <DialogClose>Cancel</DialogClose>
+                  <CustomButton className="mt-auto w-auto ml-4 flex flex-row items-center">
+                    <Rocket size={15} />
+                    <span className="ml-2">Publish</span>
+                  </CustomButton>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </div>
       <VerticalEventNavBar />
@@ -171,7 +205,7 @@ const EventDashBoard = () => {
           // eslint-disable-next-line no-constant-condition
           true ? (
             <TabGroup className="">
-              <TabList>
+              <TabList color="amber">
                 <Tab>Overview</Tab>
                 <Tab>Detail</Tab>
               </TabList>
@@ -191,7 +225,7 @@ const EventDashBoard = () => {
                           <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                           <Text>{item.target}</Text>
                         </Flex>
-                        <ProgressBar value={item.progress} className="mt-2" color="orange" />
+                        <ProgressBar value={item.progress} className="mt-2" color="slate" />
                       </Card>
                     ))}
                   </Grid>
@@ -240,7 +274,7 @@ const EventDashBoard = () => {
                   <div className="mt-6">
                     <Card>
                       <>
-                        <div>
+                        <div className="flex flex-row">
                           <Flex className="space-x-0.5" justifyContent="start" alignItems="center">
                             <Title> Attendees List </Title>
                             <Icon
@@ -249,6 +283,10 @@ const EventDashBoard = () => {
                               tooltip="Shows sales performance per employee"
                             />
                           </Flex>
+                          <div className="flex flex-row items-center text-sm cursor-pointer">
+                            <Download size={15} />
+                            <span className="ml-2">Download</span>
+                          </div>
                         </div>
 
                         <Table className="mt-6">
