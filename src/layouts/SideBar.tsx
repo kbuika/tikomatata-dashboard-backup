@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
+import MainLogo from "../assets/logos/tikomatata.svg"
 
 const SideBarRoutes = [
   {
@@ -94,7 +95,7 @@ export default function SideBar() {
         <div className="h-full px-3 py-6 overflow-y-auto bg-neutralWhite relative dark:bg-gray-800">
           <a href="/" className="flex items-center pl-2.5 mb-5 h-[80px]">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white">
-              {width < 980 ? "TIKO" : "TIKOMATATA"}
+              {width < 980 ? "TIKO" : <img src={MainLogo} alt="logo" className="h-7 w-15" />}
             </span>
           </a>
           <ul className="space-y-2 font-medium">

@@ -211,7 +211,7 @@ const CreateEvent = () => {
           </div>
           <div className="flex flex-col">
             <label htmlFor="name" className="text-neutralDark">
-              Start Date
+              Start Time
             </label>
             {/* <DatePicker name="startDate" /> */}
             {/* {errors.startDate && (
@@ -220,7 +220,7 @@ const CreateEvent = () => {
           </div>
           <div className="flex flex-col">
             <label htmlFor="name" className="text-neutralDark">
-              End Date
+              End Time
             </label>
             {/* <DatePicker name="endDate" /> */}
             {/* {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>} */}
