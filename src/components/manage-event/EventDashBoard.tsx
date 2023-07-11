@@ -2,7 +2,6 @@ import CustomButton from "../ui/CustomButton"
 import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 import CalendarImage from "../../assets/images/calendar.png"
 import { InformationCircleIcon } from "@heroicons/react/solid"
-
 import {
   Card,
   Grid,
@@ -28,6 +27,19 @@ import {
   TableHeaderCell,
   TableRow,
 } from "@tremor/react"
+import { useState } from "react"
+import { Download, Rocket } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog"
+import { setCookie } from "@/src/lib/utils"
 
 type Kpi = {
   title: string
@@ -56,19 +68,6 @@ const kpiData: Kpi[] = [
     deltaType: "moderateDecrease",
   },
 ]
-
-import { useState } from "react"
-import { Download, Rocket } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog"
-import { DialogClose } from "@radix-ui/react-dialog"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -157,6 +156,7 @@ export const AttendeesList: Attendee[] = [
 const EventDashBoard = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selectedKpi = kpiList[selectedIndex]
+  console.log(setCookie("token", "1234567890"))
 
   const areaChartArgs = {
     className: "mt-5 h-72",
@@ -225,7 +225,7 @@ const EventDashBoard = () => {
                           <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                           <Text>{item.target}</Text>
                         </Flex>
-                        <ProgressBar value={item.progress} className="mt-2" color="slate" />
+                        <ProgressBar value={item.progress} className="mt-2" color="orange" />
                       </Card>
                     ))}
                   </Grid>

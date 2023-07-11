@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
-import MainLogo from "../assets/logos/tikomatata.png"
+import MainLogo from "../assets/logos/tikomatata.svg"
 
 const SideBarRoutes = [
   {

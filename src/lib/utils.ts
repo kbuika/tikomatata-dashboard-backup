@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { toast } from "react-toastify"
+import Cookies from "js-cookie"
+import { ACCESS_TOKEN } from "../constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -37,4 +39,20 @@ export const successToast = (message: string) => {
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
+}
+
+export const setCookie = (cookieName: string, value: string) => {
+  if (cookieName === ACCESS_TOKEN) {
+    Cookies.set(cookieName, value, { expires: 1 })
+  }
+  Cookies.set(cookieName, value)
+}
+
+export const getCookie = (cookieName: string): string | undefined => {
+  const cookie = Cookies.get(cookieName)
+  return cookie
+}
+
+export const removeCookie = (cookieName: string) => {
+  Cookies.remove(cookieName)
 }

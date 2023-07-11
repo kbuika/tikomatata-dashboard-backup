@@ -1,4 +1,5 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
+import { getCookie } from "../lib/utils"
 import { EventDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
 
@@ -59,7 +60,7 @@ export const createEventFn = async (eventData: EventDataType) => {
     maxBodyLength: Infinity,
     url: `${baseUrl}/api/v1/event/create`,
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      Authorization: `Bearer ${getCookie("accessToken")}`,
       "Content-type": "application/json",
     },
     data: {
