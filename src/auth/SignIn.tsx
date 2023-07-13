@@ -20,14 +20,13 @@ const schema = yup.object({
 
 type IFormInput = yup.InferType<typeof schema>
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function SignIn({ setToken }: ISignInProps) {
   const [isGoogleLogin, setIsGoogleLogin] = useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [loading, setLoading] = useState<boolean>(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [regError, setRegError] = useState<any>(null)
-  const [, setErrorMessage] = useState<string>("")
+  const [errorMessage, setErrorMessage] = useState<string>("")
 
   const navigate = useNavigate()
 
@@ -38,20 +37,20 @@ export default function SignIn({ setToken }: ISignInProps) {
   } = useForm<IFormInput>({ resolver: yupResolver(schema) })
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log("data", data)
     try {
       setLoading(true)
       const userData = {
         ...data,
       }
       const res = await loginUser(userData)
-      if (res?.status === 200) {
+      if (res?.status === 200 && res?.data?.status === 200) {
         successToast("Registration Successful")
+        setToken(res?.data?.token)
         navigate("/events")
       }
-      if (res?.status === 400) {
-        errorToast(res?.message)
-        setErrorMessage(res?.message)
+      if (res?.status !== 200 || res?.data?.status !== 200) {
+        errorToast(res?.message || res?.data?.message)
+        setErrorMessage(res?.message || res?.data?.message)
       }
     } catch (err) {
       setRegError(err)
@@ -73,6 +72,9 @@ export default function SignIn({ setToken }: ISignInProps) {
       <div className="h-auto w-[38%] max-[730px]:w-[80%] lg:w-1/3 flex flex-col items-center">
         <div>
           <h2 className="text-[30px] font-normal text-neutralDark">Hey, Welcome Back</h2>
+        </div>
+        <div className="flex items-center justify-center mt-4">
+          {errorMessage && <p className="text-criticalRed">{errorMessage}</p>}
         </div>
         <div className="w-full mt-[36px] text-neutralDark">
           <div>
@@ -156,7 +158,7 @@ export default function SignIn({ setToken }: ISignInProps) {
           <button
             type="submit"
             onClick={handleSubmit(onSubmit)}
-            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-white bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
           >
             {loading ? (
               <>
@@ -180,7 +182,7 @@ export default function SignIn({ setToken }: ISignInProps) {
           <Link to={GOOGLE_AUTH_URL} className="w-full">
             <button
               onClick={handleGoogleLogin}
-              className="h-[50px] w-full text-neutralDark border border-neutralDark rounded-sm bg-white flex justify-center items-center focus:border-none focus:outline-none focus:ring-2"
+              className="h-[50px] w-full text-mainSecondary border border-neutralDark rounded-sm bg-white flex justify-center items-center focus:border-none focus:outline-none focus:ring-2"
             >
               <span className="mr-[10px]">
                 <img src={GoogleIcon} height={20} width={20}></img>

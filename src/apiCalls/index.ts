@@ -2,6 +2,7 @@ import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie } from "../lib/utils"
 import { EventDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
+import qs from "qs"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -29,27 +30,25 @@ export const registerUser = async (user: UserRegisterObj) => {
 }
 
 export const loginUser = async (user: UserLoginObj) => {
-  const data = JSON.stringify({
-    email: user?.email,
-    password: user?.password,
+  const data = qs.stringify({
+    username: user?.email,
+    pin: user?.password,
     grant_type: "password",
   })
-  console.log(data)
   const config = {
     method: "post",
-    url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/token/pin?redirect_uri=${OAUTH2_REDIRECT_URI}`,
-    data,
+    url: `${baseUrl}/api/v1/auth/token/pin?redirect_uri=${OAUTH2_REDIRECT_URI}`,
+    data: data,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
     },
   }
   try {
     const response = await axios.request(config)
-    console.log(response.data)
-    return response.data
+    return response
   } catch (error: any) {
-    console.log(error)
-    return error.response?.data?.data
+    return error
   }
 }
 
