@@ -135,3 +135,25 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
     return error
   }
 }
+
+export const fetchEventTicketsFn = async (eventId: number, page = 0, size = 5) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/event/${eventId}?page=${page}&size=${size}`,
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+
+  try {
+    const response = await axios.request(config)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error(response.data.message)
+    }
+  } catch (error) {
+    return error
+  }
+}
