@@ -21,5 +21,5 @@ export interface EventDataType {
   startTime?: string
   endTime?: string
   ageLimit?: number
-  poster?: File
+  poster: FileList
 }

@@ -76,27 +76,39 @@ export const forgetPassord = async (email: string) => {
 }
 
 export const createEventFn = async (eventData: EventDataType) => {
-  console.log("event", eventData)
+  const eventPoster: File = eventData?.poster?.[0]
+  const payload = JSON.stringify(eventData)
+
+  eventData = {
+    ...eventData,
+    startTime: "10:00:00",
+    endTime: "18:00:00",
+  }
+
+  console.log(eventPoster, "event poster")
+  console.log("event data", eventData)
+
+  const data = new FormData()
+  data.append("payload", new Blob([payload], { type: "application/json" }))
+  data.set("Content-Type", "application/json")
+
+  data.append("file", eventPoster, "poster")
+
+  console.log("from data", data)
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/api/v1/event/create`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
-      "Content-type": "application/json",
-    },
-    data: {
-      payload: eventData,
-      file: eventData?.poster,
+      "Content-Type": "multipart/form-data", // Updated header value
     },
   }
 
   try {
-    const response = await axios.request(config)
-    console.log(response.data)
-    return response.data
+    const response = await axios.post(config.url, data, config)
+    return response
   } catch (error: any) {
-    console.log(error)
-    return error.response?.data?.data
+    return error
   }
 }
