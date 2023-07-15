@@ -7,6 +7,7 @@ import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 const EventTickets = () => {
   const [createTicketView, setCreateTicketView] = useState(false)
   const [hasTickets] = useState(true)
+
   return (
     <>
       <div className="text-neutralDark mt-2">
@@ -16,15 +17,15 @@ const EventTickets = () => {
             {createTicketView ? (
               <>
                 <CustomButton
-                  className="mr-2 bg-neutralWhite"
+                  className="mr-2 bg-neutralWhite text-mainSecondary"
                   onClick={() => setCreateTicketView(false)}
                 >
                   Cancel
                 </CustomButton>
                 <CustomButton
                   onClick={() => {
-                    alert("save event!")
-                    setCreateTicketView(false)
+                    // handleSubmit(submit)
+                    // setCreateTicketView(false)
                   }}
                 >
                   Save
@@ -41,7 +42,7 @@ const EventTickets = () => {
       <VerticalEventNavBar />
       <div className="border h-auto rounded-md mt-[3em] p-4">
         {createTicketView ? (
-          <CreateTicket />
+          <CreateTicket setCreateTicketView={setCreateTicketView} />
         ) : (
           <>
             {hasTickets ? (

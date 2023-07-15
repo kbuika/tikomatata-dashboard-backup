@@ -198,7 +198,6 @@ const CreateEvent = () => {
             <DatePicker
               onChange={(date: Date | undefined) => {
                 const startDate = moment(date).format("YYYY-MM-DD")
-                console.log(startDate)
                 setValue("startDate", startDate)
               }}
             />
@@ -213,7 +212,6 @@ const CreateEvent = () => {
             <DatePicker
               onChange={(date: Date | undefined) => {
                 const endDate = moment(date).format("YYYY-MM-DD")
-                console.log(endDate)
                 setValue("endDate", endDate)
               }}
             />

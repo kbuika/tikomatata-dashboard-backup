@@ -16,10 +16,21 @@ export interface EventDataType {
   location?: string
   mapLink?: string
   environment?: string
-  startDate?: string
-  endDate?: string
+  startDate: string
+  endDate: string
   startTime?: string
   endTime?: string
-  ageLimit?: number
+  ageLimit: number
   poster: FileList
+}
+
+export interface TicketDataType {
+  eventId: string
+  name: string
+  price: string
+  quantity: string
+  saleStartDate: string
+  saleEndDate: string
+  saleStartTime?: string
+  saleEndTime?: string
 }

@@ -1,6 +1,6 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie } from "../lib/utils"
-import { EventDataType, UserLoginObj, UserRegisterObj } from "../types"
+import { EventDataType, TicketDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
 import qs from "qs"
 
@@ -107,6 +107,29 @@ export const createEventFn = async (eventData: EventDataType) => {
 
   try {
     const response = await axios.post(config.url, data, config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const createTicketFn = async (ticketData: TicketDataType) => {
+  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00", eventId: 8 }
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(data),
+  }
+
+  try {
+    const response = await axios.request(config)
+    console.log(response)
     return response
   } catch (error: any) {
     return error
