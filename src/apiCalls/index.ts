@@ -159,7 +159,7 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
   }
 }
 
-export const fetchEventTicketsFn = async (eventId: number, page = 0, size = 5) => {
+export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0, size = 5) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,

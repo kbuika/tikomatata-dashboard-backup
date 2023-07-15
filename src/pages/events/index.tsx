@@ -25,7 +25,7 @@ const Events = () => {
   const [eventsError, setEventsError] = useState<string>("")
 
   useEffect(() => {
-    fetchEvents() //TODO: Pass the proper eventId
+    fetchEvents()
   }, [])
 
   const fetchEvents = async () => {

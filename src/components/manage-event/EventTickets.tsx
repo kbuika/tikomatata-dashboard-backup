@@ -7,6 +7,7 @@ import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 import { fetchEventTicketsFn } from "@/src/apiCalls"
 import { TicketDataType } from "@/src/types"
 import { errorToast } from "@/src/lib/utils"
+import { useParams } from "react-router-dom"
 
 const EventTickets = () => {
   const [createTicketView, setCreateTicketView] = useState(false)
@@ -14,12 +15,13 @@ const EventTickets = () => {
   const [eventTickets, setEventTickets] = useState<[]>([])
   const [fetchTicketsError, setTicketsError] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const params = useParams()
 
   useEffect(() => {
-    fetchTickets(8) //TODO: Pass the proper eventId
+    fetchTickets(params.id)
   }, [])
 
-  const fetchTickets = async (eventId: number) => {
+  const fetchTickets = async (eventId: string | undefined) => {
     setIsLoading(true)
     try {
       const res = await fetchEventTicketsFn(eventId)
