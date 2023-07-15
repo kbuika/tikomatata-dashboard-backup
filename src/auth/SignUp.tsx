@@ -218,14 +218,14 @@ export default function SignUp({ setToken }: ISignUpProps) {
           <div className="relative flex gap-x-3">
             <div className="flex h-6 items-center">
               <input
-                id="comments"
-                name="comments"
+                id="terms"
+                name="terms"
                 type="checkbox"
                 className="h-4 w-4 bg-white rounded border-gray-300 text-indigo-600 focus:ring-indigo-200"
               ></input>
             </div>
             <div className="text-sm leading-6">
-              <label htmlFor="comments" className="font-medium text-gray-900">
+              <label htmlFor="terms" className="font-medium text-gray-900">
                 Agree to terms & conditions
               </label>
             </div>
@@ -235,7 +235,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
           <button
             type="submit"
             onClick={handleSubmit(onSubmit)}
-            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-white bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
           >
             {loading ? (
               <>

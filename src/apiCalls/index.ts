@@ -52,6 +52,29 @@ export const loginUser = async (user: UserLoginObj) => {
   }
 }
 
+export const forgetPassord = async (email: string) => {
+  const data = JSON.stringify({
+    email: email,
+  })
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/forget-password`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
+    },
+    data: data,
+  }
+  try {
+    const response = await axios.request(config)
+    console.log("response", response)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
 export const createEventFn = async (eventData: EventDataType) => {
   console.log("event", eventData)
   const config = {
