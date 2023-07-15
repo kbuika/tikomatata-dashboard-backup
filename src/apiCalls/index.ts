@@ -113,6 +113,29 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 }
 
+export const fetchUserEventsFn = async (page = 0, size = 5) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/all-user?size=${size}&page=${page}`,
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+
+  try {
+    const response = await axios.request(config)
+    console.log(response)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error(response.data.message)
+    }
+  } catch (error) {
+    return error
+  }
+}
+
 export const createTicketFn = async (ticketData: TicketDataType) => {
   const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00", eventId: 8 }
 

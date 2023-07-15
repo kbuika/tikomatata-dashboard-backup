@@ -11,6 +11,7 @@ export interface UserLoginObj {
 }
 
 export interface EventDataType {
+  eventId?: number
   name: string
   description: string
   location?: string
@@ -22,6 +23,7 @@ export interface EventDataType {
   endTime?: string
   ageLimit: number
   poster: FileList
+  posterUrl?: string
 }
 
 export interface TicketDataType {
