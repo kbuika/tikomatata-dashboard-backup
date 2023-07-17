@@ -56,3 +56,5 @@ export const getCookie = (cookieName: string): string | undefined => {
 export const removeCookie = (cookieName: string) => {
   Cookies.remove(cookieName)
 }
+
+// TODO: Create middleware to handle errors

@@ -43,7 +43,7 @@ module.exports = {
         menuBg: "#FDFDFD",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: "#54318C",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -135,9 +135,9 @@ module.exports = {
           },
         },
       },
-      ringColor: {
-        DEFAULT: "#F28500",
-      },
+      // ringColor: {
+      //   DEFAULT: "#F28500",
+      // },
       borderColor: {
         primary: "#F28500",
         neutralDark: "#171412",

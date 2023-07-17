@@ -1,7 +1,8 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie } from "../lib/utils"
-import { EventDataType, UserLoginObj, UserRegisterObj } from "../types"
+import { EventDataType, TicketDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
+import qs from "qs"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -29,52 +30,153 @@ export const registerUser = async (user: UserRegisterObj) => {
 }
 
 export const loginUser = async (user: UserLoginObj) => {
-  const data = JSON.stringify({
-    email: user?.email,
-    password: user?.password,
+  const data = qs.stringify({
+    username: user?.email,
+    pin: user?.password,
     grant_type: "password",
   })
-  console.log(data)
   const config = {
     method: "post",
-    url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/token/pin?redirect_uri=${OAUTH2_REDIRECT_URI}`,
-    data,
+    url: `${baseUrl}/api/v1/auth/token/pin?redirect_uri=${OAUTH2_REDIRECT_URI}`,
+    data: data,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
     },
   }
   try {
     const response = await axios.request(config)
-    console.log(response.data)
-    return response.data
+    return response
   } catch (error: any) {
-    console.log(error)
-    return error.response?.data?.data
+    return error
+  }
+}
+
+export const forgetPassord = async (email: string) => {
+  const data = JSON.stringify({
+    email: email,
+  })
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/forget-password`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
+    },
+    data: data,
+  }
+  try {
+    const response = await axios.request(config)
+    console.log("response", response)
+    return response
+  } catch (error: any) {
+    return error
   }
 }
 
 export const createEventFn = async (eventData: EventDataType) => {
-  console.log("event", eventData)
+  const eventPoster: File = eventData?.poster?.[0]
+  const payload = JSON.stringify(eventData)
+
+  eventData = {
+    ...eventData,
+    startTime: "10:00:00",
+    endTime: "18:00:00",
+  }
+
+  console.log(eventPoster, "event poster")
+  console.log("event data", eventData)
+
+  const data = new FormData()
+  data.append("payload", new Blob([payload], { type: "application/json" }))
+  data.set("Content-Type", "application/json")
+
+  data.append("file", eventPoster, "poster")
+
+  console.log("from data", data)
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/api/v1/event/create`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
-      "Content-type": "application/json",
+      "Content-Type": "multipart/form-data", // Updated header value
     },
-    data: {
-      payload: eventData,
-      file: eventData?.poster,
+  }
+
+  try {
+    const response = await axios.post(config.url, data, config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const fetchUserEventsFn = async (page = 0, size = 5) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/all-user?size=${size}&page=${page}`,
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
     },
   }
 
   try {
     const response = await axios.request(config)
-    console.log(response.data)
-    return response.data
+    console.log(response)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error(response.data.message)
+    }
+  } catch (error) {
+    return error
+  }
+}
+
+export const createTicketFn = async (ticketData: TicketDataType) => {
+  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00", eventId: 8 }
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(data),
+  }
+
+  try {
+    const response = await axios.request(config)
+    console.log(response)
+    return response
   } catch (error: any) {
-    console.log(error)
-    return error.response?.data?.data
+    return error
+  }
+}
+
+export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0, size = 5) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/event/${eventId}?page=${page}&size=${size}`,
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+
+  try {
+    const response = await axios.request(config)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error(response.data.message)
+    }
+  } catch (error) {
+    return error
   }
 }

@@ -1,4 +1,5 @@
-import { useState } from "react"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from "react"
 import MainContainer from "../../components/ui/CustomContainer"
 import CustomButton from "../../components/ui/CustomButton"
 import CalendarImage from "../../assets/images/calendar.png"
@@ -13,13 +14,36 @@ import {
 } from "../../components/ui/tooltip"
 import { ExternalLink } from "lucide-react"
 import testImage from "../../assets/images/Chapo.jpg"
+import { fetchUserEventsFn } from "@/src/apiCalls"
+import { errorToast } from "@/src/lib/utils"
+import { EventDataType } from "@/src/types"
+import moment from "moment"
 
 const Events = () => {
-  const [events] = useState([
-    { name: "Event Name" },
-    { name: "Event Name" },
-    { name: "Event Name" },
-  ])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [userEvents, setUserEvents] = useState<[]>([])
+  const [eventsError, setEventsError] = useState<string>("")
+
+  useEffect(() => {
+    fetchEvents()
+  }, [])
+
+  const fetchEvents = async () => {
+    setIsLoading(true)
+    try {
+      const res = await fetchUserEventsFn()
+      if (res.status === 200) {
+        setUserEvents(res.data)
+      } else {
+        setEventsError(res.message)
+        errorToast("Could not fetch your. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch your. Try again later.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <MainContainer>
@@ -35,49 +59,58 @@ const Events = () => {
             <CustomButton className="mt-[1em]">Create Event</CustomButton>
           </Link>
         </div>
-        {events.length > 0 ? (
+        {userEvents.length > 0 ? (
           <div className="mt-[20px] h-[90vh]">
-            <div className="flex flex-col w-full space-y-4">
-              <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
-                <Link
-                  to="/events/manage/1"
-                  className="w-full h-full px-4 py-2 flex flex-row items-center"
-                >
-                  <div className="h-10 w-10 bg-neutralDark rounded">
-                    <img src={testImage} className="w-full h-full object-cover rounded" />
-                  </div>
-                  <div className="ml-4">
-                    <p>Event Name on 7th July 2023</p>
-                  </div>
-                </Link>
-                <div className="pr-4 flex flex-row items-center justify-center">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
+            {userEvents?.map((event: EventDataType) => {
+              return (
+                <div className="flex flex-col w-full space-y-4 mb-4" key={event?.name}>
+                  <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
+                    <Link
+                      to={`/events/manage/${event?.eventId}`}
+                      className="w-full h-full px-4 py-2 flex flex-row items-center"
+                    >
+                      <div className="h-10 w-10 bg-neutralDark rounded">
+                        <img
+                          src={event?.posterUrl}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
+                      <div className="ml-4">
                         <p>
-                          <Switch />
+                          {event?.name} on {moment(event?.startDate)?.format("Do MMMM YYYY")}
                         </p>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Publish event</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Link to="/events/manage/1">
-                          <p className="ml-4 mb-2">
-                            <ExternalLink />
-                          </p>
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Manage event</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                      </div>
+                    </Link>
+                    <div className="pr-4 flex flex-row items-center justify-center">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <p>
+                              <Switch />
+                            </p>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Publish event</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Link to={`/events/manage/${event?.eventId}`}>
+                              <p className="ml-4 mb-2">
+                                <ExternalLink />
+                              </p>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Manage event</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
         ) : (
           <div className="mt-[20px] h-[90vh]">

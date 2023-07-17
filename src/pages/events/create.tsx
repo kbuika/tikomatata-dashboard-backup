@@ -19,6 +19,8 @@ import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
 import { useState } from "react"
+import { errorToast, successToast } from "@/src/lib/utils"
+import { useNavigate } from "react-router-dom"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -37,6 +39,8 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
+
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -45,10 +49,16 @@ const CreateEvent = () => {
   } = useForm<EventDataType>({ resolver: yupResolver(schema) })
 
   const onSubmit: SubmitHandler<EventDataType> = async (data) => {
-    console.log("kjqefjljAJSlkal", data)
     setIsLoading(true)
     try {
-      await createEventFn(data)
+      const res = await createEventFn(data)
+      if (res.status === 200) {
+        successToast("Event has been created successfully!")
+        navigate("/events")
+      } else {
+        setCreateEventError(res.message)
+        errorToast(res?.message)
+      }
     } catch (err) {
       setCreateEventError(err)
     } finally {
@@ -188,7 +198,6 @@ const CreateEvent = () => {
             <DatePicker
               onChange={(date: Date | undefined) => {
                 const startDate = moment(date).format("YYYY-MM-DD")
-                console.log(startDate)
                 setValue("startDate", startDate)
               }}
             />
@@ -203,7 +212,6 @@ const CreateEvent = () => {
             <DatePicker
               onChange={(date: Date | undefined) => {
                 const endDate = moment(date).format("YYYY-MM-DD")
-                console.log(endDate)
                 setValue("endDate", endDate)
               }}
             />

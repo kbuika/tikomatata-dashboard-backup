@@ -5,15 +5,17 @@ import { Sheet, SheetTrigger, SheetHeader, SheetContent, SheetDescription } from
 import Input from "./ui/Input"
 import { DatePicker } from "./ui/datePicker"
 import CustomButton from "./ui/CustomButton"
+import { TicketDataType } from "../types"
+import moment from "moment"
 
 interface EventTicketProps {
-  title: string
-  date: string
-  location: string
+  ticketData: TicketDataType
+  key: any
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EventTicketCard: React.FC<EventTicketProps> = ({ title, date, location }) => {
+const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
+  const ticket = ticketData?.ticketData
   return (
     <>
       <div className="flex flex-col items-center justify-center bg-center bg-cover w-[46%] m-2 max-[580px]:w-[80%]">
@@ -24,7 +26,7 @@ const EventTicketCard: React.FC<EventTicketProps> = ({ title, date, location }) 
                 <div className="flex-auto justify-evenly">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center my-1">
-                      <h2 className="font-medium">Early Bird Tickets</h2>
+                      <h2 className="font-medium">{ticket?.name}</h2>
                     </div>
                     <div className="ml-auto">
                       <Sheet>
@@ -133,7 +135,8 @@ const EventTicketCard: React.FC<EventTicketProps> = ({ title, date, location }) 
                   <div className="flex flex-col py-3 justify-center text-sm ">
                     <h6 className="font-bold text-center">Sale Period</h6>
                     <p className="font-bold text-center text-lg mt-2 text-gray-500">
-                      03 June - 08 August
+                      {moment(ticket?.saleStartDate).format("Do MMMM")} -{" "}
+                      {moment(ticket?.saleEndDate)?.format("Do MMMM")}
                     </p>
                   </div>
                 </div>
