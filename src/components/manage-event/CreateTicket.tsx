@@ -4,6 +4,7 @@ import * as yup from "yup"
 import { useForm, SubmitHandler } from "react-hook-form"
 import moment from "moment"
 import Input from "../ui/Input"
+import { Button } from "../ui/button"
 import { DatePicker } from "../ui/datePicker"
 import CustomButton from "../ui/CustomButton"
 // import { Switch } from "../ui/switch"
@@ -57,7 +58,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
     }
   }
   return (
-    <div className="h-auto w-full mt-6 mb-6">
+    <div className="h-auto w-full mt-2 mb-6">
       <div className="flex flex-row items-center justify-between w-full">
         <div className="w-full">
           <label htmlFor="name" className="text-neutralDark">
@@ -68,6 +69,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
             placeholder="Ticket Name"
             type="text"
             {...register("name", { required: true })}
+            className="mt-1"
           />
           {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
         </div>
@@ -82,6 +84,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
             placeholder="Ticket Quantity"
             type="number"
             {...register("quantity", { required: true })}
+            className="mt-1"
           />
           {errors.quantity && <span className="text-criticalRed">{errors.quantity?.message}</span>}
         </div>
@@ -94,6 +97,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
             placeholder="Ticket Price"
             type="number"
             {...register("price", { required: true })}
+            className="mt-1"
           />
           {errors.price && <span className="text-criticalRed">{errors.price?.message}</span>}
         </div>
@@ -124,7 +128,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
               const startDate = moment(date).format("YYYY-MM-DD")
               setValue("saleStartDate", startDate)
             }}
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.saleStartDate && (
             <span className="text-criticalRed">{errors.saleEndDate?.message}</span>
@@ -139,7 +143,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
               const endDate = moment(date).format("YYYY-MM-DD")
               setValue("saleEndDate", endDate)
             }}
-            className="w-full"
+            className="w-full mt-1"
           />
           {errors.saleEndDate && (
             <span className="text-criticalRed">{errors.saleEndDate?.message}</span>
@@ -151,17 +155,20 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
           <label htmlFor="name" className="text-neutralDark">
             Sale Start Time
           </label>
-          <DatePicker className="w-full" />
+          <DatePicker className="w-full mt-1" />
         </div>
         <div className="flex flex-col w-[48%]">
           <label htmlFor="name" className="text-neutralDark">
             Sale End Time
           </label>
-          <DatePicker className="w-full" />
+          <DatePicker className="w-full mt-1" />
         </div>
       </div>
-      <div className="mt-4 flex flex-row row-reverse">
-        <CustomButton onClick={handleSubmit(submit)}>
+      <div className="mt-4 flex flex-row justify-end">
+        <Button onClick={() => setCreateTicketView(false)} variant="ghost" className="mr-4">
+          Cancel
+        </Button>
+        <CustomButton onClick={handleSubmit(submit)} className="w-28">
           {isLoading ? (
             <>
               Creating... <Loader2 className="animate-spin" />
@@ -170,7 +177,6 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
             "Save"
           )}
         </CustomButton>
-        <CustomButton onClick={() => setCreateTicketView(false)}>Cancel</CustomButton>
       </div>
     </div>
   )

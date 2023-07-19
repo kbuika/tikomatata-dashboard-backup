@@ -204,7 +204,7 @@ const EventDashBoard = () => {
           // eslint-disable-next-line no-constant-condition
           true ? (
             <TabGroup className="">
-              <TabList color="amber">
+              <TabList color="violet">
                 <Tab>Overview</Tab>
                 <Tab>Detail</Tab>
               </TabList>
@@ -263,7 +263,7 @@ const EventDashBoard = () => {
                             startEndOnly={true}
                             showGradient={false}
                             showYAxis={false}
-                            colors={["orange"]}
+                            colors={["violet"]}
                           />
                         </div>
                       </>

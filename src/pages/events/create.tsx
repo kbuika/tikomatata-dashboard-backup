@@ -21,6 +21,7 @@ import moment from "moment"
 import { useState } from "react"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate } from "react-router-dom"
+import { Button } from "@/src/components/ui/button"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -71,18 +72,21 @@ const CreateEvent = () => {
       <div className="text-neutralDark">
         <div className="w-full flex flex-row items-center justify-between">
           <h2 className="text-[23px] font-semibold">Create Event</h2>
-          <CustomButton className="mt-[1em] w-auto flex" onClick={handleSubmit(onSubmit)}>
-            {isLoading ? (
-              <>
-                Creating... <Loader2 className="animate-spin" />
-              </>
-            ) : (
-              "Save"
-            )}
-          </CustomButton>
+          <div className="flex flex-flow items-center">
+            <Button variant="ghost">Cancel</Button>
+            <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)}>
+              {isLoading ? (
+                <>
+                  Creating... <Loader2 className="animate-spin" />
+                </>
+              ) : (
+                "Save"
+              )}
+            </CustomButton>
+          </div>
         </div>
       </div>
-      <div className="w-full min-h-screen">
+      <div className="w-full min-h-screen mt-[1em]">
         <div className="flex flex-row items-center justify-between w-full">
           <div className="w-[48%]">
             <label htmlFor="name" className="text-neutralDark">

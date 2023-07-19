@@ -36,6 +36,7 @@ module.exports = {
         pending: "#ADD8E6",
         pendingBg: "#E9FAFF",
         neutralWhite: "#F2F2F2",
+        neutralPrimary: "#6a2b99",
         white: "#FFFFFF",
         neutralDark: "#171412",
         neutralGrey: "#595959",

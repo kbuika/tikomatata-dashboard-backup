@@ -45,22 +45,7 @@ const EventTickets = () => {
           <h2 className="text-[18px] font-semibold">event Tickets</h2>
           <div>
             {createTicketView ? (
-              <>
-                <CustomButton
-                  className="mr-2 bg-neutralWhite text-mainSecondary"
-                  onClick={() => setCreateTicketView(false)}
-                >
-                  Cancel
-                </CustomButton>
-                <CustomButton
-                  onClick={() => {
-                    // handleSubmit(submit)
-                    // setCreateTicketView(false)
-                  }}
-                >
-                  Save
-                </CustomButton>
-              </>
+              <></>
             ) : (
               <CustomButton className="" onClick={() => setCreateTicketView(true)}>
                 Create Ticket
