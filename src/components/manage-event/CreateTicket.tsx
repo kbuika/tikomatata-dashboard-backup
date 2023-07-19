@@ -13,6 +13,7 @@ import { createTicketFn } from "@/src/apiCalls"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
+import { useParams } from "react-router-dom"
 
 const schema = yup.object({
   name: yup.string().required("Ticket name is required"),
@@ -31,6 +32,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createTicketError, setCreateTicketError] = useState<any>(null)
+  const params = useParams()
 
   // const [groupTicket, setGroupTicket] = useState<boolean>(false)
   const {
@@ -43,6 +45,7 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
   const submit: SubmitHandler<TicketDataType> = async (data) => {
     setIsLoading(true)
     try {
+      data = { ...data, eventId: parseInt(params?.eventId || "") }
       const res = await createTicketFn(data)
       if (res.status === 200) {
         successToast("Ticket has been created successfully!")

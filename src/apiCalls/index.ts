@@ -3,6 +3,7 @@ import { getCookie } from "../lib/utils"
 import { EventDataType, TicketDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
 import qs from "qs"
+import axiosInstance from "./axios-interceptor"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -69,7 +70,6 @@ export const forgetPassord = async (email: string) => {
   }
   try {
     const response = await axios.request(config)
-    console.log("response", response)
     return response
   } catch (error: any) {
     return error
@@ -87,8 +87,7 @@ export const getUserInfo = async () => {
     },
   }
   try {
-    const response = await axios.request(config)
-    console.log("response", response)
+    const response = await axiosInstance.request(config)
     return response?.data
   } catch (error: any) {
     return error
@@ -96,7 +95,6 @@ export const getUserInfo = async () => {
 }
 
 export const getUserAvatar = async () => {
-  console.log("get user avatar")
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -107,7 +105,7 @@ export const getUserAvatar = async () => {
     },
   }
   try {
-    const response = await axios.request(config)
+    const response = await axiosInstance.request(config)
     if (response?.data.status === 200) {
       return response?.data?.data?.imageUrl
     }
@@ -126,16 +124,12 @@ export const createEventFn = async (eventData: EventDataType) => {
     endTime: "18:00:00",
   }
 
-  console.log(eventPoster, "event poster")
-  console.log("event data", eventData)
-
   const data = new FormData()
   data.append("payload", new Blob([payload], { type: "application/json" }))
   data.set("Content-Type", "application/json")
 
   data.append("file", eventPoster, "poster")
 
-  console.log("from data", data)
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -147,7 +141,7 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 
   try {
-    const response = await axios.post(config.url, data, config)
+    const response = await axiosInstance.post(config.url, data, config)
     return response
   } catch (error: any) {
     return error
@@ -165,8 +159,7 @@ export const fetchUserEventsFn = async (page = 0, size = 5) => {
   }
 
   try {
-    const response = await axios.request(config)
-    console.log(response)
+    const response = await axiosInstance.request(config)
     if (response.status === 200) {
       return response.data
     } else {
@@ -178,7 +171,7 @@ export const fetchUserEventsFn = async (page = 0, size = 5) => {
 }
 
 export const createTicketFn = async (ticketData: TicketDataType) => {
-  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00", eventId: 8 }
+  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00" }
 
   const config = {
     method: "post",
@@ -192,8 +185,7 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
   }
 
   try {
-    const response = await axios.request(config)
-    console.log(response)
+    const response = await axiosInstance.request(config)
     return response
   } catch (error: any) {
     return error
@@ -211,7 +203,7 @@ export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0,
   }
 
   try {
-    const response = await axios.request(config)
+    const response = await axiosInstance.request(config)
     if (response.status === 200) {
       return response.data
     } else {
