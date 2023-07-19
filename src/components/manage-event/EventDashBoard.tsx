@@ -16,7 +16,6 @@ import {
   DeltaType,
   Flex,
   Metric,
-  ProgressBar,
   AreaChart,
   Color,
   Icon,
@@ -221,11 +220,12 @@ const EventDashBoard = () => {
                           </div>
                           <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta>
                         </Flex>
-                        <Flex className="mt-4 space-x-2">
+                        {/* TODO: Restore this once the "target" feature is ready */}
+                        {/* <Flex className="mt-4 space-x-2">
                           <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                           <Text>{item.target}</Text>
                         </Flex>
-                        <ProgressBar value={item.progress} className="mt-2" color="orange" />
+                        <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                       </Card>
                     ))}
                   </Grid>

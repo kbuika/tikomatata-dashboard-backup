@@ -76,6 +76,46 @@ export const forgetPassord = async (email: string) => {
   }
 }
 
+export const getUserInfo = async () => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/user-info`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+  try {
+    const response = await axios.request(config)
+    console.log("response", response)
+    return response?.data
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const getUserAvatar = async () => {
+  console.log("get user avatar")
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/user-info`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+  try {
+    const response = await axios.request(config)
+    if (response?.data.status === 200) {
+      return response?.data?.data?.imageUrl
+    }
+  } catch (error: any) {
+    return ""
+  }
+}
+
 export const createEventFn = async (eventData: EventDataType) => {
   const eventPoster: File = eventData?.poster?.[0]
   const payload = JSON.stringify(eventData)
