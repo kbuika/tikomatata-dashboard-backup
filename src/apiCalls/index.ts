@@ -15,17 +15,18 @@ export const registerUser = async (user: UserRegisterObj) => {
   })
   const config = {
     method: "post",
-    url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/signup`,
+    url: `${baseUrl}/api/v1/auth/signup`,
     data,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
     },
   }
   try {
     const response = await axios.request(config)
-    return response.data
+    return response?.data
   } catch (error: any) {
-    return error.response?.data?.data
+    return error?.response?.data
   }
 }
 

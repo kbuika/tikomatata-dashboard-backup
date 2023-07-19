@@ -21,8 +21,7 @@ export const checkRegistrationError = (field: string, errors: any) => {
   const errorMessage = errors?.find(
     (error: { code: string; message: string }) => error?.code === field,
   )
-
-  return { hasError, message: errorMessage }
+  return { hasError, message: errorMessage?.message }
 }
 
 export const errorToast = (message: string) => {

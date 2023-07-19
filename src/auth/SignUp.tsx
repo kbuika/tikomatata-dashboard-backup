@@ -49,6 +49,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setLoading(true)
+      setRegError(null)
       const userData = {
         ...data,
         phone: formatPhoneNumber(data.phone),
@@ -61,6 +62,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
       if (res?.status === 400) {
         errorToast(res?.message)
         setErrorMessage(res?.message)
+        setRegError(res?.data?.errors)
       }
     } catch (err) {
       setRegError(err)
@@ -109,7 +111,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
           <div>
             <label className="text-neutralDark">Phone Number</label>
             <div className="flex items-center">
-              <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-sm border border-hidden-left border-gray-600">
+              <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-sm border rounded-r-none border-gray-600">
                 <img src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
                 +254
               </span>
@@ -117,7 +119,7 @@ export default function SignUp({ setToken }: ISignUpProps) {
                 id="phone"
                 type="text"
                 required
-                className="w-3/4 h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                className="w-3/4 h-[50px] bg-white appearance-none rounded-sm rounded-l-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                 placeholder="Phone number"
                 autoComplete="nope"
                 {...register("phone", { required: true })}
