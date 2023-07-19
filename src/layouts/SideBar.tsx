@@ -103,7 +103,7 @@ export default function SideBar() {
               <li key={route.label}>
                 <Link
                   to={route.path}
-                  className="h-[40px] w-[200px] max-[980px]:w-[50px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark"
+                  className="h-[40px] w-[200px] max-[980px]:w-[50px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-mainPrimary hover:text-neutralWhite active:text-neutralWhite active:bg-mainPrimary focus:text-neutralWhite focus:bg-mainPrimary"
                 >
                   {route.svg}
                   {width < 980 ? "" : <span className="ml-3">{route.label}</span>}
