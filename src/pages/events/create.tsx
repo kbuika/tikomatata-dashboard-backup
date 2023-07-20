@@ -1,3 +1,4 @@
+import React, { useRef, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -18,10 +19,10 @@ import { createEventFn } from "@/src/apiCalls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
-import { useState } from "react"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
+import FileUploadModal from "@/src/components/FileUpload"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -40,6 +41,7 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
+  const componentRef = useRef(null)
 
   const navigate = useNavigate()
   const {
@@ -137,13 +139,7 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               Upload Poster
             </label>
-            <Input
-              id="name"
-              placeholder="A brief description of the event"
-              type="file"
-              className="h-[80px] border border-dashed flex flex-col items-center justify-center text-center"
-              {...register("poster", { required: false })}
-            />
+            <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
             {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
           </div>
         </div>
@@ -174,18 +170,25 @@ const CreateEvent = () => {
             />
             {errors.mapLink && <span className="text-criticalRed">{errors.mapLink?.message}</span>}
           </div>
-          <div className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2">
+          <div
+            className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2"
+            ref={componentRef}
+          >
             <label htmlFor="name" className="text-neutralDark">
               Event Environment
             </label>
             <Select {...register("environment", { required: false })}>
-              <SelectTrigger>
+              <SelectTrigger ref={componentRef}>
                 <SelectValue placeholder="Indoor/Outdoor" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="indoor">Indoor</SelectItem>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
+              <SelectContent ref={componentRef}>
+                <SelectGroup ref={componentRef}>
+                  <SelectItem value="indoor" ref={componentRef}>
+                    Indoor
+                  </SelectItem>
+                  <SelectItem value="outdoor" ref={componentRef}>
+                    Outdoor
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

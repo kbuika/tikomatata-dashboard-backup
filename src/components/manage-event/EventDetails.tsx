@@ -14,6 +14,8 @@ import {
 } from "../ui/select"
 import { Textarea } from "../ui/textarea"
 import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
+import FileUploadModal from "../FileUpload"
+import moment from "moment"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -23,8 +25,8 @@ const schema = yup.object({
   location: yup.string().required("Location is required"),
   mapsLink: yup.string().notRequired(),
   environment: yup.string().required("Environment is required"),
-  startDate: yup.date().required("Start date is required"),
-  endDate: yup.date().required("End date is required"),
+  startDate: yup.string().required("Start date is required"),
+  endDate: yup.string().required("End date is required"),
 })
 type IEventDetails = yup.InferType<typeof schema>
 
@@ -32,6 +34,7 @@ const EventDetails = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IEventDetails>({ resolver: yupResolver(schema) })
   const onSubmit: SubmitHandler<IEventDetails> = (data) => console.log(data)
@@ -98,13 +101,7 @@ const EventDetails = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Upload Poster
               </label>
-              <Input
-                id="name"
-                placeholder="A brief description of the event"
-                type="file"
-                className="h-[80px] border border-dashed flex flex-col items-center justify-center text-center"
-                {...register("poster", { required: true })}
-              />
+              <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
               {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
             </div>
           </div>
@@ -162,19 +159,23 @@ const EventDetails = () => {
               <label htmlFor="startDate" className="text-neutralDark">
                 Start Date
               </label>
-              {/* <DatePicker name="startDate" className="w-full" />
-              {errors.startDate && (
-                <span className="text-criticalRed">{errors.startDate?.message}</span>
-              )} */}
+              <DatePicker
+                onChange={(date: Date | undefined) => {
+                  const startDate = moment(date).format("YYYY-MM-DD")
+                  setValue("startDate", startDate)
+                }}
+              />
             </div>
             <div className="flex flex-col w-[48%]">
               <label htmlFor="endDate" className="text-neutralDark">
                 End Date
               </label>
-              {/* <DatePicker name="endDate" className="w-full" />
-              {errors.endDate && (
-                <span className="text-criticalRed">{errors.endDate?.message}</span>
-              )} */}
+              <DatePicker
+                onChange={(date: Date | undefined) => {
+                  const endDate = moment(date).format("YYYY-MM-DD")
+                  setValue("startDate", endDate)
+                }}
+              />
             </div>
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-6">
