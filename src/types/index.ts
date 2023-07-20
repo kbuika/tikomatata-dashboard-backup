@@ -33,6 +33,6 @@ export interface TicketDataType {
   quantity: string
   saleStartDate: string
   saleEndDate: string
-  saleStartTime?: string
-  saleEndTime?: string
+  saleStartTime: string
+  saleEndTime: string
 }

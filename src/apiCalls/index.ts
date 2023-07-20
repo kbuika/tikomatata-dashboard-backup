@@ -165,8 +165,6 @@ export const fetchUserEventsFn = async (page = 0, size = 5) => {
 }
 
 export const createTicketFn = async (ticketData: TicketDataType) => {
-  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00" }
-
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -175,7 +173,7 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
-    data: JSON.stringify(data),
+    data: JSON.stringify(ticketData),
   }
 
   try {

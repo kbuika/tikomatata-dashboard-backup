@@ -14,6 +14,7 @@ import { errorToast, successToast } from "@/src/lib/utils"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useParams } from "react-router-dom"
+import { TimePicker } from "../ui/timePicker"
 
 const schema = yup.object({
   name: yup.string().required("Ticket name is required"),
@@ -21,6 +22,8 @@ const schema = yup.object({
   quantity: yup.string().required("quantity is required"),
   saleStartDate: yup.string().required("Start date is required"),
   saleEndDate: yup.string().required("End date is required"),
+  saleStartTime: yup.string().default("12:00").required("Start time is required"),
+  saleEndTime: yup.string().default("12:00").required("End time is required"),
 })
 
 type CreateTicketProps = {
@@ -28,7 +31,7 @@ type CreateTicketProps = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
+const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createTicketError, setCreateTicketError] = useState<any>(null)
@@ -153,18 +156,18 @@ const CreateTicket = ({ setCreateTicketView }: CreateTicketProps) => {
           )}
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between w-full mt-6">
+      <div className="flex flex-row items-center justify-between w-[50%] mt-6">
         <div className="flex flex-col w-[48%]">
           <label htmlFor="name" className="text-neutralDark">
             Sale Start Time
           </label>
-          <DatePicker className="w-full mt-1" />
+          <TimePicker time="12:00" setTime={(time) => setValue("saleStartTime", time)} />
         </div>
         <div className="flex flex-col w-[48%]">
           <label htmlFor="name" className="text-neutralDark">
             Sale End Time
           </label>
-          <DatePicker className="w-full mt-1" />
+          <TimePicker time="12:00" setTime={(time) => setValue("saleEndTime", time)} />
         </div>
       </div>
       <div className="mt-4 flex flex-row justify-end">

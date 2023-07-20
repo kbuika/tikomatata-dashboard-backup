@@ -67,7 +67,7 @@ const EventTickets = () => {
                 ))}
               </div>
             ) : (
-              <div className="h-auto w-auto flex flex-col items-start mt-[3em]">
+              <div className="h-auto w-auto flex flex-col items-start my-4 p-2">
                 <div className="flex flex-col items-start">
                   <h2 className="text-[1.2em] font-semibold">
                     Oops! You have not created any tickets for this event
