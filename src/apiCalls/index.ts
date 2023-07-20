@@ -118,12 +118,6 @@ export const createEventFn = async (eventData: EventDataType) => {
   const eventPoster: File = eventData?.poster?.[0]
   const payload = JSON.stringify(eventData)
 
-  eventData = {
-    ...eventData,
-    startTime: "10:00:00",
-    endTime: "18:00:00",
-  }
-
   const data = new FormData()
   data.append("payload", new Blob([payload], { type: "application/json" }))
   data.set("Content-Type", "application/json")

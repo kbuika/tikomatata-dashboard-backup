@@ -52,7 +52,7 @@ const EventDetails = () => {
         </div>
       </div>
       <VerticalEventNavBar />
-      <div className="border rounded-md mt-[3em] p-4 h-auto">
+      <div className="border rounded-md mt-[3em] p-4 h-auto mb-8">
         <div className="w-full h-auto">
           <div className="flex flex-row items-center justify-between w-full">
             <div className="w-[48%]">
@@ -188,13 +188,13 @@ const EventDetails = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Start Time
               </label>
-              <TimePicker time="" setTime={(time) => setValue("startTime", time)} />
+              <TimePicker time="00:00" setTime={(time) => setValue("startTime", time)} />
             </div>
             <div className="flex flex-col w-[48%]">
               <label htmlFor="name" className="text-neutralDark">
                 End Time
               </label>
-              <TimePicker time="" setTime={(time) => setValue("endTime", time)} />
+              <TimePicker time="00:00" setTime={(time) => setValue("endTime", time)} />
             </div>
           </div>
         </div>

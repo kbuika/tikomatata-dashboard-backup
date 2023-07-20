@@ -35,8 +35,8 @@ const schema = yup.object({
   environment: yup.string().notRequired(),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
-  startTime: yup.string().required("Start time is required"),
-  endTime: yup.string().required("End time is required"),
+  startTime: yup.string().default("12:00").required("Start time is required"),
+  endTime: yup.string().default("12:00").required("End time is required"),
 })
 
 const CreateEvent = () => {
@@ -238,7 +238,7 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               Start Time
             </label>
-            <TimePicker time="10:00" setTime={(time) => setValue("startTime", time)} />
+            <TimePicker time="12:00" setTime={(time) => setValue("startTime", time)} />
             {errors.startTime && (
               <span className="text-criticalRed">{errors.startTime?.message}</span>
             )}
@@ -247,7 +247,7 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               End Time
             </label>
-            <TimePicker time="" setTime={(time) => setValue("endTime", time)} />
+            <TimePicker time="12:00" setTime={(time) => setValue("endTime", time)} />
             {errors.endTime && <span className="text-criticalRed">{errors.endTime?.message}</span>}
           </div>
         </div>
