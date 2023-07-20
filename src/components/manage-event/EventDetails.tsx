@@ -16,6 +16,7 @@ import { Textarea } from "../ui/textarea"
 import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 import FileUploadModal from "../FileUpload"
 import moment from "moment"
+import { TimePicker } from "../ui/timePicker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -27,6 +28,8 @@ const schema = yup.object({
   environment: yup.string().required("Environment is required"),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
+  startTime: yup.string().required("Start time is required"),
+  endTime: yup.string().required("End time is required"),
 })
 type IEventDetails = yup.InferType<typeof schema>
 
@@ -44,7 +47,7 @@ const EventDetails = () => {
         <div className="w-full flex flex-row items-center justify-between">
           <h2 className="text-[18px] font-semibold">event details</h2>
           <CustomButton className=" w-[5em]" onClick={handleSubmit(onSubmit)}>
-            Save
+            Update
           </CustomButton>
         </div>
       </div>
@@ -164,6 +167,7 @@ const EventDetails = () => {
                   const startDate = moment(date).format("YYYY-MM-DD")
                   setValue("startDate", startDate)
                 }}
+                className="w-full"
               />
             </div>
             <div className="flex flex-col w-[48%]">
@@ -175,21 +179,22 @@ const EventDetails = () => {
                   const endDate = moment(date).format("YYYY-MM-DD")
                   setValue("startDate", endDate)
                 }}
+                className="w-full"
               />
             </div>
           </div>
-          <div className="flex flex-row items-center justify-between w-full mt-6">
+          <div className="flex flex-row items-center justify-between w-1/2 mt-6">
             <div className="flex flex-col w-[48%]">
               <label htmlFor="name" className="text-neutralDark">
                 Start Time
               </label>
-              <DatePicker className="w-full" />
+              <TimePicker time="" setTime={(time) => setValue("startTime", time)} />
             </div>
             <div className="flex flex-col w-[48%]">
               <label htmlFor="name" className="text-neutralDark">
                 End Time
               </label>
-              <DatePicker className="w-full" />
+              <TimePicker time="" setTime={(time) => setValue("endTime", time)} />
             </div>
           </div>
         </div>

@@ -23,6 +23,7 @@ import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
 import FileUploadModal from "@/src/components/FileUpload"
+import { TimePicker } from "@/src/components/ui/timePicker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -34,6 +35,8 @@ const schema = yup.object({
   environment: yup.string().notRequired(),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
+  startTime: yup.string().required("Start time is required"),
+  endTime: yup.string().required("End time is required"),
 })
 
 const CreateEvent = () => {
@@ -100,6 +103,7 @@ const CreateEvent = () => {
               type="text"
               required
               {...register("name", { required: true })}
+              className="mt-1"
             />
             {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
           </div>
@@ -113,6 +117,7 @@ const CreateEvent = () => {
               type="number"
               required
               {...register("ageLimit", { required: false })}
+              className="mt-1"
             />
             {errors.ageLimit && (
               <span className="text-criticalRed">{errors.ageLimit?.message}</span>
@@ -128,6 +133,7 @@ const CreateEvent = () => {
               id="description"
               placeholder="A brief description of the event"
               {...register("description", { required: true })}
+              className="mt-1"
             />
             {errors.description && (
               <span className="text-criticalRed">{errors.description?.message}</span>
@@ -153,6 +159,7 @@ const CreateEvent = () => {
               placeholder="Event Location"
               type="text"
               {...register("location", { required: true })}
+              className="mt-1"
             />
             {errors.location && (
               <span className="text-criticalRed">{errors.location?.message}</span>
@@ -167,6 +174,7 @@ const CreateEvent = () => {
               placeholder="Pin Location"
               type="text"
               {...register("mapLink", { required: false })}
+              className="mt-1"
             />
             {errors.mapLink && <span className="text-criticalRed">{errors.mapLink?.message}</span>}
           </div>
@@ -178,7 +186,7 @@ const CreateEvent = () => {
               Event Environment
             </label>
             <Select {...register("environment", { required: false })}>
-              <SelectTrigger ref={componentRef}>
+              <SelectTrigger ref={componentRef} className="mt-1">
                 <SelectValue placeholder="Indoor/Outdoor" />
               </SelectTrigger>
               <SelectContent ref={componentRef}>
@@ -207,6 +215,7 @@ const CreateEvent = () => {
                 const startDate = moment(date).format("YYYY-MM-DD")
                 setValue("startDate", startDate)
               }}
+              className="mt-1"
             />
             {errors.startDate && (
               <span className="text-criticalRed">{errors.startDate?.message}</span>
@@ -221,6 +230,7 @@ const CreateEvent = () => {
                 const endDate = moment(date).format("YYYY-MM-DD")
                 setValue("endDate", endDate)
               }}
+              className="mt-1"
             />
             {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
           </div>
@@ -228,17 +238,17 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               Start Time
             </label>
-            {/* <DatePicker name="startDate" /> */}
-            {/* {errors.startDate && (
-              <span className="text-criticalRed">{errors.startDate?.message}</span>
-            )} */}
+            <TimePicker time="10:00" setTime={(time) => setValue("startTime", time)} />
+            {errors.startTime && (
+              <span className="text-criticalRed">{errors.startTime?.message}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="name" className="text-neutralDark">
               End Time
             </label>
-            {/* <DatePicker name="endDate" /> */}
-            {/* {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>} */}
+            <TimePicker time="" setTime={(time) => setValue("endTime", time)} />
+            {errors.endTime && <span className="text-criticalRed">{errors.endTime?.message}</span>}
           </div>
         </div>
       </div>
