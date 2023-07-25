@@ -1,3 +1,4 @@
+import React, { useRef, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -18,9 +19,11 @@ import { createEventFn } from "@/src/apiCalls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
-import { useState } from "react"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate } from "react-router-dom"
+import { Button } from "@/src/components/ui/button"
+import FileUploadModal from "@/src/components/FileUpload"
+import { TimePicker } from "@/src/components/ui/timePicker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -32,6 +35,8 @@ const schema = yup.object({
   environment: yup.string().notRequired(),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
+  startTime: yup.string().default("12:00").required("Start time is required"),
+  endTime: yup.string().default("12:00").required("End time is required"),
 })
 
 const CreateEvent = () => {
@@ -39,6 +44,7 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
+  const componentRef = useRef(null)
 
   const navigate = useNavigate()
   const {
@@ -71,18 +77,21 @@ const CreateEvent = () => {
       <div className="text-neutralDark">
         <div className="w-full flex flex-row items-center justify-between">
           <h2 className="text-[23px] font-semibold">Create Event</h2>
-          <CustomButton className="mt-[1em] w-auto flex" onClick={handleSubmit(onSubmit)}>
-            {isLoading ? (
-              <>
-                Creating... <Loader2 className="animate-spin" />
-              </>
-            ) : (
-              "Save"
-            )}
-          </CustomButton>
+          <div className="flex flex-flow items-center">
+            <Button variant="ghost">Cancel</Button>
+            <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)}>
+              {isLoading ? (
+                <>
+                  Creating... <Loader2 className="animate-spin" />
+                </>
+              ) : (
+                "Save"
+              )}
+            </CustomButton>
+          </div>
         </div>
       </div>
-      <div className="w-full min-h-screen">
+      <div className="w-full min-h-screen mt-[1em]">
         <div className="flex flex-row items-center justify-between w-full">
           <div className="w-[48%]">
             <label htmlFor="name" className="text-neutralDark">
@@ -94,6 +103,7 @@ const CreateEvent = () => {
               type="text"
               required
               {...register("name", { required: true })}
+              className="mt-1"
             />
             {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
           </div>
@@ -107,6 +117,7 @@ const CreateEvent = () => {
               type="number"
               required
               {...register("ageLimit", { required: false })}
+              className="mt-1"
             />
             {errors.ageLimit && (
               <span className="text-criticalRed">{errors.ageLimit?.message}</span>
@@ -122,6 +133,7 @@ const CreateEvent = () => {
               id="description"
               placeholder="A brief description of the event"
               {...register("description", { required: true })}
+              className="mt-1"
             />
             {errors.description && (
               <span className="text-criticalRed">{errors.description?.message}</span>
@@ -133,13 +145,7 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               Upload Poster
             </label>
-            <Input
-              id="name"
-              placeholder="A brief description of the event"
-              type="file"
-              className="h-[80px] border border-dashed flex flex-col items-center justify-center text-center"
-              {...register("poster", { required: false })}
-            />
+            <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
             {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
           </div>
         </div>
@@ -153,6 +159,7 @@ const CreateEvent = () => {
               placeholder="Event Location"
               type="text"
               {...register("location", { required: true })}
+              className="mt-1"
             />
             {errors.location && (
               <span className="text-criticalRed">{errors.location?.message}</span>
@@ -167,21 +174,29 @@ const CreateEvent = () => {
               placeholder="Pin Location"
               type="text"
               {...register("mapLink", { required: false })}
+              className="mt-1"
             />
             {errors.mapLink && <span className="text-criticalRed">{errors.mapLink?.message}</span>}
           </div>
-          <div className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2">
+          <div
+            className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2"
+            ref={componentRef}
+          >
             <label htmlFor="name" className="text-neutralDark">
               Event Environment
             </label>
             <Select {...register("environment", { required: false })}>
-              <SelectTrigger>
+              <SelectTrigger ref={componentRef} className="mt-1">
                 <SelectValue placeholder="Indoor/Outdoor" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="indoor">Indoor</SelectItem>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
+              <SelectContent ref={componentRef}>
+                <SelectGroup ref={componentRef}>
+                  <SelectItem value="indoor" ref={componentRef}>
+                    Indoor
+                  </SelectItem>
+                  <SelectItem value="outdoor" ref={componentRef}>
+                    Outdoor
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -200,6 +215,7 @@ const CreateEvent = () => {
                 const startDate = moment(date).format("YYYY-MM-DD")
                 setValue("startDate", startDate)
               }}
+              className="mt-1"
             />
             {errors.startDate && (
               <span className="text-criticalRed">{errors.startDate?.message}</span>
@@ -214,6 +230,7 @@ const CreateEvent = () => {
                 const endDate = moment(date).format("YYYY-MM-DD")
                 setValue("endDate", endDate)
               }}
+              className="mt-1"
             />
             {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
           </div>
@@ -221,17 +238,17 @@ const CreateEvent = () => {
             <label htmlFor="name" className="text-neutralDark">
               Start Time
             </label>
-            {/* <DatePicker name="startDate" /> */}
-            {/* {errors.startDate && (
-              <span className="text-criticalRed">{errors.startDate?.message}</span>
-            )} */}
+            <TimePicker time="12:00" setTime={(time) => setValue("startTime", time)} />
+            {errors.startTime && (
+              <span className="text-criticalRed">{errors.startTime?.message}</span>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="name" className="text-neutralDark">
               End Time
             </label>
-            {/* <DatePicker name="endDate" /> */}
-            {/* {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>} */}
+            <TimePicker time="12:00" setTime={(time) => setValue("endTime", time)} />
+            {errors.endTime && <span className="text-criticalRed">{errors.endTime?.message}</span>}
           </div>
         </div>
       </div>

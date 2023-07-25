@@ -1,6 +1,7 @@
 import clsx from "clsx"
+import React from "react"
 
-const MainContainer = ({ children, className }: any) => {
+const MainContainer: React.FC<any> = ({ children, className }: any) => {
   return (
     <div
       className={clsx(

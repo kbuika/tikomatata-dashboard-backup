@@ -1,6 +1,6 @@
-import { LogOut, User } from "lucide-react"
+import { ChevronDownIcon, LogOut, User } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 import {
   DropdownMenu,
@@ -13,6 +13,8 @@ import {
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
 import MainLogo from "../assets/logos/tikomatata.svg"
+import { getUserAvatar } from "../apiCalls"
+import { removeCookie } from "../lib/utils"
 
 const SideBarRoutes = [
   {
@@ -34,25 +36,25 @@ const SideBarRoutes = [
       </svg>
     ),
   },
-  {
-    path: "/payments",
-    icon: "CreditCard",
-    label: "Payments",
-    svg: (
-      <svg
-        width="18"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M13.6364 10.0938C12.7273 10.0938 11.9545 9.78385 11.3182 9.16406C10.6818 8.54427 10.3636 7.79167 10.3636 6.90625C10.3636 6.02083 10.6818 5.26823 11.3182 4.64844C11.9545 4.02865 12.7273 3.71875 13.6364 3.71875C14.5455 3.71875 15.3182 4.02865 15.9545 4.64844C16.5909 5.26823 16.9091 6.02083 16.9091 6.90625C16.9091 7.79167 16.5909 8.54427 15.9545 9.16406C15.3182 9.78385 14.5455 10.0938 13.6364 10.0938ZM4.90909 13.8125C4.45909 13.8125 4.07386 13.6564 3.75341 13.3443C3.43295 13.0322 3.27273 12.657 3.27273 12.2188V1.59375C3.27273 1.15547 3.43295 0.780273 3.75341 0.468164C4.07386 0.156055 4.45909 0 4.90909 0H22.3636C22.8136 0 23.1989 0.156055 23.5193 0.468164C23.8398 0.780273 24 1.15547 24 1.59375V12.2188C24 12.657 23.8398 13.0322 23.5193 13.3443C23.1989 13.6564 22.8136 13.8125 22.3636 13.8125H4.90909ZM7.63636 12.2188H19.6364C19.6364 11.475 19.9 10.8464 20.4273 10.3328C20.9545 9.81927 21.6 9.5625 22.3636 9.5625V4.25C21.6 4.25 20.9545 3.99323 20.4273 3.47969C19.9 2.96615 19.6364 2.3375 19.6364 1.59375H7.63636C7.63636 2.3375 7.37273 2.96615 6.84545 3.47969C6.31818 3.99323 5.67273 4.25 4.90909 4.25V9.5625C5.67273 9.5625 6.31818 9.81927 6.84545 10.3328C7.37273 10.8464 7.63636 11.475 7.63636 12.2188ZM1.63636 17C1.18636 17 0.801136 16.8439 0.480682 16.5318C0.160227 16.2197 0 15.8445 0 15.4062V3.98438C0 3.75859 0.0788636 3.56934 0.236591 3.4166C0.394336 3.26387 0.589791 3.1875 0.822955 3.1875C1.05614 3.1875 1.25 3.26387 1.40455 3.4166C1.55909 3.56934 1.63636 3.75859 1.63636 3.98438V15.4062H19.9091C20.1409 15.4062 20.3352 15.4831 20.492 15.6367C20.6489 15.7903 20.7273 15.9807 20.7273 16.2078C20.7273 16.4349 20.6489 16.6237 20.492 16.7742C20.3352 16.9247 20.1409 17 19.9091 17H1.63636Z"
-          className="fill-neutralDark group-hover:fill-neutralWhite group-focus:fill-neutralWhite"
-        />
-      </svg>
-    ),
-  },
+  // {
+  //   path: "/payments",
+  //   icon: "CreditCard",
+  //   label: "Payments",
+  //   svg: (
+  //     <svg
+  //       width="18"
+  //       height="20"
+  //       viewBox="0 0 24 24"
+  //       fill="none"
+  //       xmlns="http://www.w3.org/2000/svg"
+  //     >
+  //       <path
+  //         d="M13.6364 10.0938C12.7273 10.0938 11.9545 9.78385 11.3182 9.16406C10.6818 8.54427 10.3636 7.79167 10.3636 6.90625C10.3636 6.02083 10.6818 5.26823 11.3182 4.64844C11.9545 4.02865 12.7273 3.71875 13.6364 3.71875C14.5455 3.71875 15.3182 4.02865 15.9545 4.64844C16.5909 5.26823 16.9091 6.02083 16.9091 6.90625C16.9091 7.79167 16.5909 8.54427 15.9545 9.16406C15.3182 9.78385 14.5455 10.0938 13.6364 10.0938ZM4.90909 13.8125C4.45909 13.8125 4.07386 13.6564 3.75341 13.3443C3.43295 13.0322 3.27273 12.657 3.27273 12.2188V1.59375C3.27273 1.15547 3.43295 0.780273 3.75341 0.468164C4.07386 0.156055 4.45909 0 4.90909 0H22.3636C22.8136 0 23.1989 0.156055 23.5193 0.468164C23.8398 0.780273 24 1.15547 24 1.59375V12.2188C24 12.657 23.8398 13.0322 23.5193 13.3443C23.1989 13.6564 22.8136 13.8125 22.3636 13.8125H4.90909ZM7.63636 12.2188H19.6364C19.6364 11.475 19.9 10.8464 20.4273 10.3328C20.9545 9.81927 21.6 9.5625 22.3636 9.5625V4.25C21.6 4.25 20.9545 3.99323 20.4273 3.47969C19.9 2.96615 19.6364 2.3375 19.6364 1.59375H7.63636C7.63636 2.3375 7.37273 2.96615 6.84545 3.47969C6.31818 3.99323 5.67273 4.25 4.90909 4.25V9.5625C5.67273 9.5625 6.31818 9.81927 6.84545 10.3328C7.37273 10.8464 7.63636 11.475 7.63636 12.2188ZM1.63636 17C1.18636 17 0.801136 16.8439 0.480682 16.5318C0.160227 16.2197 0 15.8445 0 15.4062V3.98438C0 3.75859 0.0788636 3.56934 0.236591 3.4166C0.394336 3.26387 0.589791 3.1875 0.822955 3.1875C1.05614 3.1875 1.25 3.26387 1.40455 3.4166C1.55909 3.56934 1.63636 3.75859 1.63636 3.98438V15.4062H19.9091C20.1409 15.4062 20.3352 15.4831 20.492 15.6367C20.6489 15.7903 20.7273 15.9807 20.7273 16.2078C20.7273 16.4349 20.6489 16.6237 20.492 16.7742C20.3352 16.9247 20.1409 17 19.9091 17H1.63636Z"
+  //         className="fill-neutralDark group-hover:fill-neutralWhite group-focus:fill-neutralWhite"
+  //       />
+  //     </svg>
+  //   ),
+  // },
   {
     path: "/settings",
     icon: "Settings",
@@ -78,11 +80,21 @@ export default function SideBar() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLargeView, setIsLargeView] = useState(true)
   const [width, setWidth] = useState(window.innerWidth)
+  const [userAvatar, setUserAvatar] = useState<string>("")
+
+  const navigate = useNavigate()
+
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
+    fetchAvatar()
     return () => window.removeEventListener("resize", handleResize)
   }, [width])
+
+  const fetchAvatar = async () => {
+    const avatar = await getUserAvatar()
+    setUserAvatar(avatar)
+  }
 
   return (
     <>
@@ -103,7 +115,7 @@ export default function SideBar() {
               <li key={route.label}>
                 <Link
                   to={route.path}
-                  className="h-[40px] w-[200px] max-[980px]:w-[50px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-neutralDark hover:text-neutralWhite active:text-neutralWhite active:bg-neutralDark focus:text-neutralWhite focus:bg-neutralDark"
+                  className="h-[40px] w-[200px] max-[980px]:w-[50px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-mainPrimary hover:text-neutralWhite active:text-neutralWhite active:bg-mainPrimary focus:text-neutralWhite focus:bg-mainPrimary"
                 >
                   {route.svg}
                   {width < 980 ? "" : <span className="ml-3">{route.label}</span>}
@@ -112,14 +124,17 @@ export default function SideBar() {
             ))}
           </ul>
 
-          <div className="px-2 absolute bottom-0 mb-16">
+          <div className="px-2 absolute bottom-0 mb-16 w-[90%]">
             <Separator className="my-4" />
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar>
-                  <AvatarImage src="https://github.com/kibuikaCodes.png" />
-                  <AvatarFallback>SK</AvatarFallback>
-                </Avatar>
+              <DropdownMenuTrigger asChild className="cursor-pointer mb-2">
+                <div className="flex flex-row w-[50%] items-center justify-between">
+                  <Avatar>
+                    <AvatarImage src={userAvatar} alt="avatar" />
+                    <AvatarFallback>SK</AvatarFallback>
+                  </Avatar>
+                  <ChevronDownIcon color="#80807E" />
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 ml-1">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -135,7 +150,12 @@ export default function SideBar() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    removeCookie("accessToken")
+                    navigate("/")
+                  }}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>

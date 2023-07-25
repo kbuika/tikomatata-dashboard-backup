@@ -17,7 +17,7 @@ export default function EventSideBar() {
             <li key={element.name}>
               <Link
                 to={`?tab=${element.tabName}`}
-                className="h-[40px] w-[180px] max-sidebar:w-[70px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-navBar hover:text-neutralDark active:text-neutralDark active:bg-navBar focus:text-neutralDark focus:bg-navBar"
+                className="h-[40px] w-[180px] max-sidebar:w-[70px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-mainPrimary hover:text-white active:text-white active:bg-mainPrimary focus:text-white focus:bg-mainPrimary"
               >
                 {element.icon}
                 {width < 980 ? "" : <span className="ml-3">{element.label}</span>}

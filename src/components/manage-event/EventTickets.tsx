@@ -45,22 +45,7 @@ const EventTickets = () => {
           <h2 className="text-[18px] font-semibold">event Tickets</h2>
           <div>
             {createTicketView ? (
-              <>
-                <CustomButton
-                  className="mr-2 bg-neutralWhite text-mainSecondary"
-                  onClick={() => setCreateTicketView(false)}
-                >
-                  Cancel
-                </CustomButton>
-                <CustomButton
-                  onClick={() => {
-                    // handleSubmit(submit)
-                    // setCreateTicketView(false)
-                  }}
-                >
-                  Save
-                </CustomButton>
-              </>
+              <></>
             ) : (
               <CustomButton className="" onClick={() => setCreateTicketView(true)}>
                 Create Ticket
@@ -82,7 +67,7 @@ const EventTickets = () => {
                 ))}
               </div>
             ) : (
-              <div className="h-auto w-auto flex flex-col items-start mt-[3em]">
+              <div className="h-auto w-auto flex flex-col items-start my-4 p-2">
                 <div className="flex flex-col items-start">
                   <h2 className="text-[1.2em] font-semibold">
                     Oops! You have not created any tickets for this event

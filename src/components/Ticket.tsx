@@ -7,6 +7,7 @@ import { DatePicker } from "./ui/datePicker"
 import CustomButton from "./ui/CustomButton"
 import { TicketDataType } from "../types"
 import moment from "moment"
+import { TimePicker } from "./ui/timePicker"
 
 interface EventTicketProps {
   ticketData: TicketDataType
@@ -88,18 +89,18 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   <DatePicker className="w-full" />
                                 </div>
                               </div>
-                              <div className="flex flex-row items-center justify-between w-full mt-6">
-                                <div className="flex flex-col w-[48%]">
+                              <div className="flex flex-row items-center justify-between w-[50%] mt-6">
+                                <div className="flex flex-col w-auto">
                                   <label htmlFor="name" className="text-neutralDark">
                                     Sale Start Time
                                   </label>
-                                  <DatePicker className="w-full" />
+                                  <TimePicker time="12:00" setTime={(time) => console.log(time)} />
                                 </div>
-                                <div className="flex flex-col w-[48%]">
+                                <div className="flex flex-col w-auto ml-8">
                                   <label htmlFor="name" className="text-neutralDark">
                                     Sale End Time
                                   </label>
-                                  <DatePicker className="w-full" />
+                                  <TimePicker time="12:00" setTime={(time) => console.log(time)} />
                                 </div>
                               </div>
                               <div className="flex justify-end">

@@ -3,6 +3,7 @@ import { getCookie } from "../lib/utils"
 import { EventDataType, TicketDataType, UserLoginObj, UserRegisterObj } from "../types"
 import axios from "axios"
 import qs from "qs"
+import axiosInstance from "./axios-interceptor"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -15,17 +16,18 @@ export const registerUser = async (user: UserRegisterObj) => {
   })
   const config = {
     method: "post",
-    url: `https://cors-anywhere.herokuapp.com/${baseUrl}/api/v1/auth/signup`,
+    url: `${baseUrl}/api/v1/auth/signup`,
     data,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
     },
   }
   try {
     const response = await axios.request(config)
-    return response.data
+    return response?.data
   } catch (error: any) {
-    return error.response?.data?.data
+    return error?.response?.data
   }
 }
 
@@ -68,10 +70,47 @@ export const forgetPassord = async (email: string) => {
   }
   try {
     const response = await axios.request(config)
-    console.log("response", response)
     return response
   } catch (error: any) {
     return error
+  }
+}
+
+export const getUserInfo = async () => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/user-info`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+  try {
+    const response = await axiosInstance.request(config)
+    return response?.data
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const getUserAvatar = async () => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/user-info`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+  try {
+    const response = await axiosInstance.request(config)
+    if (response?.data.status === 200) {
+      return response?.data?.data?.imageUrl
+    }
+  } catch (error: any) {
+    return ""
   }
 }
 
@@ -79,22 +118,12 @@ export const createEventFn = async (eventData: EventDataType) => {
   const eventPoster: File = eventData?.poster?.[0]
   const payload = JSON.stringify(eventData)
 
-  eventData = {
-    ...eventData,
-    startTime: "10:00:00",
-    endTime: "18:00:00",
-  }
-
-  console.log(eventPoster, "event poster")
-  console.log("event data", eventData)
-
   const data = new FormData()
   data.append("payload", new Blob([payload], { type: "application/json" }))
   data.set("Content-Type", "application/json")
 
   data.append("file", eventPoster, "poster")
 
-  console.log("from data", data)
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -106,7 +135,7 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 
   try {
-    const response = await axios.post(config.url, data, config)
+    const response = await axiosInstance.post(config.url, data, config)
     return response
   } catch (error: any) {
     return error
@@ -124,8 +153,7 @@ export const fetchUserEventsFn = async (page = 0, size = 5) => {
   }
 
   try {
-    const response = await axios.request(config)
-    console.log(response)
+    const response = await axiosInstance.request(config)
     if (response.status === 200) {
       return response.data
     } else {
@@ -137,8 +165,6 @@ export const fetchUserEventsFn = async (page = 0, size = 5) => {
 }
 
 export const createTicketFn = async (ticketData: TicketDataType) => {
-  const data = { ...ticketData, saleStartTime: "18:00:00", saleEndTime: "10:00:00", eventId: 8 }
-
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -147,12 +173,11 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
-    data: JSON.stringify(data),
+    data: JSON.stringify(ticketData),
   }
 
   try {
-    const response = await axios.request(config)
-    console.log(response)
+    const response = await axiosInstance.request(config)
     return response
   } catch (error: any) {
     return error
@@ -170,7 +195,7 @@ export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0,
   }
 
   try {
-    const response = await axios.request(config)
+    const response = await axiosInstance.request(config)
     if (response.status === 200) {
       return response.data
     } else {
