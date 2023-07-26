@@ -1,6 +1,12 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
-import { getCookie } from "../lib/utils"
-import { EventDataType, TicketDataType, UserLoginObj, UserRegisterObj } from "../types"
+import { getCookie, getInitials } from "../lib/utils"
+import {
+  EventDataType,
+  ResetPasswordArgs,
+  TicketDataType,
+  UserLoginObj,
+  UserRegisterObj,
+} from "../types"
 import axios from "axios"
 import qs from "qs"
 import axiosInstance from "./axios-interceptor"
@@ -48,7 +54,7 @@ export const loginUser = async (user: UserLoginObj) => {
   }
   try {
     const response = await axios.request(config)
-    return response
+    return response?.data
   } catch (error: any) {
     return error
   }
@@ -76,6 +82,26 @@ export const forgetPassord = async (email: string) => {
   }
 }
 
+export const resetPassword = async (payload: ResetPasswordArgs) => {
+  const data = JSON.stringify(payload)
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/auth/update-password`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
+    },
+    data: data,
+  }
+  try {
+    const response = await axios.request(config)
+    return response
+  } catch (error: any) {
+    return error?.response?.data
+  }
+}
+
 export const getUserInfo = async () => {
   const config = {
     method: "get",
@@ -94,7 +120,7 @@ export const getUserInfo = async () => {
   }
 }
 
-export const getUserAvatar = async () => {
+export const getUserAvatarAndInitials = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -107,10 +133,13 @@ export const getUserAvatar = async () => {
   try {
     const response = await axiosInstance.request(config)
     if (response?.data.status === 200) {
-      return response?.data?.data?.imageUrl
+      return {
+        imageUrl: response?.data?.data?.imageUrl,
+        initials: getInitials(response?.data?.data?.fullName),
+      }
     }
   } catch (error: any) {
-    return ""
+    return error
   }
 }
 

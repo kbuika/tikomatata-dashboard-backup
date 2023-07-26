@@ -43,14 +43,14 @@ export default function SignIn({ setToken }: ISignInProps) {
         ...data,
       }
       const res = await loginUser(userData)
-      if (res?.status === 200 && res?.data?.status === 200) {
+      if (res?.status === 200) {
         successToast("Login Successful")
         setToken(res?.data?.token)
         navigate("/events")
       }
-      if (res?.status !== 200 || res?.data?.status !== 200) {
-        errorToast(res?.message || res?.data?.message)
-        setErrorMessage(res?.message || res?.data?.message)
+      if (res?.status !== 200) {
+        errorToast(res?.message)
+        setErrorMessage(res?.message)
       }
     } catch (err) {
       setRegError(err)

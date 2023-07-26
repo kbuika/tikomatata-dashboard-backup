@@ -1,7 +1,7 @@
-import { ChevronDownIcon, LogOut, User } from "lucide-react"
+import { ChevronDownIcon, LogOut, User, User2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, Outlet, useNavigate } from "react-router-dom"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Avatar } from "../components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
 import MainLogo from "../assets/logos/tikomatata.svg"
-import { getUserAvatar } from "../apiCalls"
+// import { getUserAvatarAndInitials } from "../apiCalls"
 import { removeCookie } from "../lib/utils"
 
 const SideBarRoutes = [
@@ -80,21 +80,21 @@ export default function SideBar() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLargeView, setIsLargeView] = useState(true)
   const [width, setWidth] = useState(window.innerWidth)
-  const [userAvatar, setUserAvatar] = useState<string>("")
+  // const [userAvatarObject, setUserAvatarObject] = useState<{imageUrl: string, initials: string} | undefined>()
 
   const navigate = useNavigate()
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
-    fetchAvatar()
+    // fetchAvatar() //TODO: only fetch avatar once!!
     return () => window.removeEventListener("resize", handleResize)
   }, [width])
 
-  const fetchAvatar = async () => {
-    const avatar = await getUserAvatar()
-    setUserAvatar(avatar)
-  }
+  // const fetchAvatar = async () => {
+  //   const avatarObj = await getUserAvatarAndInitials()
+  //   setUserAvatarObject(avatarObj)
+  // }
 
   return (
     <>
@@ -130,8 +130,9 @@ export default function SideBar() {
               <DropdownMenuTrigger asChild className="cursor-pointer mb-2">
                 <div className="flex flex-row w-[50%] items-center justify-between">
                   <Avatar>
-                    <AvatarImage src={userAvatar} alt="avatar" />
-                    <AvatarFallback>SK</AvatarFallback>
+                    {/* <AvatarImage src={userAvatarObject?.imageUrl} alt="avatar" /> */}
+                    <User2 className="h-8 w-6" />
+                    {/* <AvatarFallback>{userAvatarObject?.initials}</AvatarFallback> */}
                   </Avatar>
                   <ChevronDownIcon color="#80807E" />
                 </div>

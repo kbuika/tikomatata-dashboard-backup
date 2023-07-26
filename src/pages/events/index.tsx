@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import MainContainer from "../../components/ui/CustomContainer"
 import CustomButton from "../../components/ui/CustomButton"
 import CalendarImage from "../../assets/images/calendar.png"
-import { Helmet } from "react-helmet"
 import { Link } from "react-router-dom"
 import { Switch } from "../../components/ui/switch"
 import {
@@ -48,11 +47,6 @@ const Events = () => {
 
   return (
     <MainContainer>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Manage your events | Tikomatata</title>
-        <link rel="canonical" href="https://tikomatata.com/events" />
-      </Helmet>
       <div className="text-neutralDark ml-[30px] min-[980px]:ml-0">
         <div className="w-full flex flex-row items-center justify-between">
           <h2 className="text-[23px] font-semibold">My Events</h2>

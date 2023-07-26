@@ -10,6 +10,12 @@ export interface UserLoginObj {
   password: string
 }
 
+export interface ResetPasswordArgs {
+  email: string | null
+  password: string
+  code: number
+}
+
 export interface EventDataType {
   eventId?: number
   name: string

@@ -14,19 +14,20 @@ type IFormInput = yup.InferType<typeof schema>
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | any>("")
-  const [resetLinkSent, setResetLinkSent] = useState(true)
+  const [resetLinkSent, setResetLinkSent] = useState(false)
+  const [email, setEmail] = useState<string>("")
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({ resolver: yupResolver(schema) })
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data)
     try {
       setLoading(true)
+      setEmail(data?.email)
       const res = await forgetPassord(data?.email)
       if (res?.status === 200 && res?.data?.status === 200) {
-        successToast("Reset Code was sent to your email")
+        successToast(`Reset Code was sent to ${data?.email}`)
         setResetLinkSent(true)
       }
       if (res?.status !== 200 || res?.data?.status !== 200) {
@@ -47,19 +48,27 @@ export default function ForgotPassword() {
           <>
             <div className="flex flex-col items-center">
               <h2 className="text-[30px] font-normal text-neutralDark">Check your email</h2>
-              <p className="mt-2 text-center text-neutralDark">
-                A reset password link has been sent to [email here]
+              <p className="mt-2 text-center text-green-700">
+                A reset password code has been sent to {email}
               </p>
             </div>
-            <div className="w-full mt-[40px]">
+            <div className="w-full mt-[40px] flex flex-col">
               <a
-                href="/sign-in"
+                href={`/reset-password?email=${email}`}
                 className="flex items-center justify-center text-secondary text-[14px]"
               >
                 <button className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-sm font-medium rounded-sm text-white bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2">
-                  Back to Login
+                  Reset Password
                 </button>
               </a>
+              <div className="flex w-full justify-end mt-2">
+                <a
+                  onClick={handleSubmit(onSubmit)}
+                  style={{ textDecoration: "underline", cursor: "pointer" }}
+                >
+                  Resend code
+                </a>
+              </div>
             </div>
           </>
         ) : (
