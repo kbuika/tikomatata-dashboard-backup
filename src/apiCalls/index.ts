@@ -171,7 +171,35 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 }
 
-export const fetchUserEventsFn = async (page = 0, size = 5) => {
+export const updateEventFn = async (eventData: EventDataType) => {
+  const eventPoster: File = eventData?.poster?.[0]
+  const payload = JSON.stringify(eventData)
+
+  const data = new FormData()
+  data.append("payload", new Blob([payload], { type: "application/json" }))
+  data.set("Content-Type", "application/json")
+
+  data.append("file", eventPoster, "poster")
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/create`,
+    headers: {
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+      "Content-Type": "multipart/form-data", // Updated header value
+    },
+  }
+
+  try {
+    const response = await axiosInstance.post(config.url, data, config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const fetchUserEventsFn = async (page = 0, size = 10) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -198,6 +226,26 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/api/v1/ticket/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(ticketData),
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const updateTicketFn = async (ticketData: TicketDataType) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/edit`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getCookie("accessToken")}`,

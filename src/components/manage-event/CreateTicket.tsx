@@ -57,7 +57,6 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
         errorToast(res?.data?.message)
         if (res?.response?.data?.data?.errors) {
           setCreateTicketError(res?.response?.data?.data?.errors)
-          console.log(res?.response?.data?.data?.errors)
         }
       }
     } catch (err) {

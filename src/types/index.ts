@@ -34,6 +34,7 @@ export interface EventDataType {
 
 export interface TicketDataType {
   eventId: number
+  ticketId?: number
   name: string
   price: string
   quantity: string

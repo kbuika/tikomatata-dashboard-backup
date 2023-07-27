@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -17,6 +18,11 @@ import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
 import FileUploadModal from "../FileUpload"
 import moment from "moment"
 import { TimePicker } from "../ui/timePicker"
+import { useEffect, useState } from "react"
+import { errorToast, successToast } from "@/src/lib/utils"
+import { useNavigate, useParams } from "react-router-dom"
+import { updateEventFn } from "@/src/apiCalls"
+import { EventDataType } from "@/src/types"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -31,16 +37,56 @@ const schema = yup.object({
   startTime: yup.string().required("Start time is required"),
   endTime: yup.string().required("End time is required"),
 })
-type IEventDetails = yup.InferType<typeof schema>
 
 const EventDetails = () => {
+  // const [isLoading, setIsLoading] = useState(false)
+  // const params = useParams()
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<IEventDetails>({ resolver: yupResolver(schema) })
-  const onSubmit: SubmitHandler<IEventDetails> = (data) => console.log(data)
+  } = useForm<EventDataType>({ resolver: yupResolver(schema) })
+
+  useEffect(() => {
+    // fetchEvents(params.id)
+  }, [])
+
+  // const fetchEvents = async (eventId: string | undefined) => {
+  // setIsLoading(true)
+  // try {
+  //   const res = await getEventDetails(eventId)
+  //   if (res.status === 200) {
+  //     // setEventTickets(res.data)
+  //   } else {
+  //     // setTicketsError(res.message)
+  //     errorToast("Could not fetch this event's tickets. Try again later.")
+  //   }
+  // } catch (error) {
+  //   errorToast("Could not fetch this event's tickets. Try again later.")
+  // } finally {
+  //   setIsLoading(false)
+  // }
+  // }
+  const onSubmit: SubmitHandler<EventDataType> = async (data) => {
+    // setIsLoading(true)
+    try {
+      const res = await updateEventFn(data)
+      if (res.status === 200) {
+        successToast("Event has been update successfully!")
+        navigate("/events")
+      } else {
+        // setCreateEventError(res.message)
+        errorToast(res?.message)
+      }
+    } catch (err) {
+      // setCreateEventError(err)
+    } finally {
+      // setIsLoading(false)
+    }
+  }
   return (
     <>
       <div className="text-neutralDark mt-2">
@@ -131,10 +177,10 @@ const EventDetails = () => {
                 id="name"
                 placeholder="Pin Location"
                 type="text"
-                {...register("mapsLink", { required: false })}
+                {...register("mapLink", { required: false })}
               />
-              {errors.mapsLink && (
-                <span className="text-criticalRed">{errors.mapsLink?.message}</span>
+              {errors.mapLink && (
+                <span className="text-criticalRed">{errors.mapLink?.message}</span>
               )}
             </div>
             <div className="w-[32%]">

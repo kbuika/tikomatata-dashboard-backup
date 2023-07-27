@@ -12,13 +12,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/pop
 type DatePickerProps = {
   className?: any
   onChange?: (date: Date | undefined) => void // Add the onChange prop
+  defaultDate?: Date | string | undefined
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ className, onChange, ...props }) => {
-  const [date, setDate] = React.useState<Date>()
+const DatePicker: React.FC<DatePickerProps> = ({
+  className,
+  onChange,
+  defaultDate = new Date(),
+  ...props
+}) => {
+  const [date, setDate] = React.useState<Date | null>(new Date(defaultDate))
 
   const handleDateSelect = (selectedDate?: Date) => {
-    setDate(selectedDate || undefined)
+    setDate(selectedDate || null)
     if (onChange) {
       onChange(selectedDate || undefined)
     }
@@ -42,7 +48,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ className, onChange, ...props }
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
+          selected={date || undefined}
           onSelect={handleDateSelect}
           initialFocus
           disabled={{ before: new Date() }}
