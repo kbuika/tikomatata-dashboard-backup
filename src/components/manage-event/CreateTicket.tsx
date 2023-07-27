@@ -10,7 +10,7 @@ import CustomButton from "../ui/CustomButton"
 // import { Switch } from "../ui/switch"
 import { TicketDataType } from "@/src/types"
 import { createTicketFn } from "@/src/apiCalls"
-import { errorToast, successToast } from "@/src/lib/utils"
+import { checkRegistrationError, errorToast, successToast } from "@/src/lib/utils"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useParams } from "react-router-dom"
@@ -34,7 +34,7 @@ type CreateTicketProps = {
 const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [createTicketError, setCreateTicketError] = useState<any>(null)
+  const [createTicketError, setCreateTicketError] = useState<any>([])
   const params = useParams()
 
   // const [groupTicket, setGroupTicket] = useState<boolean>(false)
@@ -48,14 +48,17 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
   const submit: SubmitHandler<TicketDataType> = async (data) => {
     setIsLoading(true)
     try {
-      data = { ...data, eventId: parseInt(params?.eventId || "") }
+      data = { ...data, eventId: parseInt(params?.id || "") }
       const res = await createTicketFn(data)
-      if (res.status === 200) {
+      if (res?.data?.status === 200) {
         successToast("Ticket has been created successfully!")
         setCreateTicketView(false)
       } else {
-        setCreateTicketError(res.message)
-        errorToast(res?.message)
+        errorToast(res?.data?.message)
+        if (res?.response?.data?.data?.errors) {
+          setCreateTicketError(res?.response?.data?.data?.errors)
+          console.log(res?.response?.data?.data?.errors)
+        }
       }
     } catch (err) {
       setCreateTicketError(err)
@@ -78,6 +81,11 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             className="mt-1"
           />
           {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
+          {checkRegistrationError("name", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("name", createTicketError)?.message}
+            </span>
+          )}
         </div>
       </div>
       <div className="flex flex-row items-center justify-between w-full mt-6">
@@ -93,6 +101,11 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             className="mt-1"
           />
           {errors.quantity && <span className="text-criticalRed">{errors.quantity?.message}</span>}
+          {checkRegistrationError("quantity", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("quantity", createTicketError)?.message}
+            </span>
+          )}
         </div>
         <div className="w-[48%]">
           <label htmlFor="price" className="text-neutralDark">
@@ -106,6 +119,11 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             className="mt-1"
           />
           {errors.price && <span className="text-criticalRed">{errors.price?.message}</span>}
+          {checkRegistrationError("price", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("price", createTicketError)?.message}
+            </span>
+          )}
         </div>
       </div>
       {/* <div className='flex flex-row items-center justify-between w-full mt-6'>
@@ -133,11 +151,22 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             onChange={(date: Date | undefined) => {
               const startDate = moment(date).format("YYYY-MM-DD")
               setValue("saleStartDate", startDate)
+              setCreateTicketError([])
             }}
             className="w-full mt-1"
           />
           {errors.saleStartDate && (
             <span className="text-criticalRed">{errors.saleEndDate?.message}</span>
+          )}
+          {checkRegistrationError("saleStartDate", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("saleStartDate", createTicketError)?.message}
+            </span>
+          )}
+          {checkRegistrationError("saleStartDate, saleEndDate", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("saleStartDate, saleEndDate", createTicketError)?.message}
+            </span>
           )}
         </div>
         <div className="flex flex-col w-[48%]">
@@ -148,11 +177,17 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             onChange={(date: Date | undefined) => {
               const endDate = moment(date).format("YYYY-MM-DD")
               setValue("saleEndDate", endDate)
+              setCreateTicketError([])
             }}
             className="w-full mt-1"
           />
           {errors.saleEndDate && (
             <span className="text-criticalRed">{errors.saleEndDate?.message}</span>
+          )}
+          {checkRegistrationError("saleEndDate", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("saleEndDate", createTicketError)?.message}
+            </span>
           )}
         </div>
       </div>
@@ -162,12 +197,28 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
             Sale Start Time
           </label>
           <TimePicker time="12:00" setTime={(time) => setValue("saleStartTime", time)} />
+          {errors.saleStartTime && (
+            <span className="text-criticalRed">{errors.saleStartTime?.message}</span>
+          )}
+          {checkRegistrationError("saleStartTime", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("saleStartTime", createTicketError)?.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col w-[48%]">
           <label htmlFor="name" className="text-neutralDark">
             Sale End Time
           </label>
           <TimePicker time="12:00" setTime={(time) => setValue("saleEndTime", time)} />
+          {errors.saleEndTime && (
+            <span className="text-criticalRed">{errors.saleEndTime?.message}</span>
+          )}
+          {checkRegistrationError("saleEndTime", createTicketError)?.hasError && (
+            <span className="text-criticalRed">
+              {checkRegistrationError("saleEndTime", createTicketError)?.message}
+            </span>
+          )}
         </div>
       </div>
       <div className="mt-4 flex flex-row justify-end">
