@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { EventSideBarElements } from "../constants/EventSideBarRoutes"
+import { EventSideBarElements } from "../constants/event-sidebar-routes"
 
 export default function EventSideBar() {
   return (

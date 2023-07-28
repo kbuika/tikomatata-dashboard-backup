@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react"
-import CustomButton from "../ui/CustomButton"
-import CreateTicket from "./CreateTicket"
-import EventTicketCard from "../Ticket"
-import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
+import CustomButton from "../ui/custom-button"
+import CreateTicket from "./create-ticket"
+import EventTicketCard from "../ticket"
+import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
 import { fetchEventTicketsFn } from "@/src/apiCalls"
 import { TicketDataType } from "@/src/types"
 import { errorToast } from "@/src/lib/utils"

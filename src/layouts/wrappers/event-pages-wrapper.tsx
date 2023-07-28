@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import AppSidebar from "../app-sidebar"
 import AppHeader from "../app-header"
 import MainContainer from "@/src/components/ui/main-container"
-import EventSideBar from "../EventSideBar"
-import VerticalEventNavBar from "../VerticalEventNavBar"
+import EventSideBar from "../event-sidebar"
+import VerticalEventNavBar from "../horizontal-event-navbar"
 
 type Props = {
   children?: React.ReactNode

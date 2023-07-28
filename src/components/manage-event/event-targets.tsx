@@ -1,5 +1,5 @@
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import CustomButton from "../ui/CustomButton"
+import CustomButton from "../ui/custom-button"
 import Input from "../ui/Input"
 import {
   Dialog,

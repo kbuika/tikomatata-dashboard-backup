@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
-import MainContainer from "../../components/ui/CustomContainer"
-import CustomButton from "../../components/ui/CustomButton"
+import MainContainer from "../../components/ui/custom-container"
+import CustomButton from "../../components/ui/custom-button"
 import CalendarImage from "../../assets/images/calendar.png"
 import { Link } from "react-router-dom"
 import { Switch } from "../../components/ui/switch"
@@ -18,7 +18,7 @@ import { fetchUserEventsFn } from "@/src/apiCalls"
 import { errorToast } from "@/src/lib/utils"
 import { EventDataType } from "@/src/types"
 import moment from "moment"
-import LoadingScreen from "@/src/components/LoadingScreen"
+import LoadingScreen from "@/src/components/loading-screen"
 
 const Events = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)

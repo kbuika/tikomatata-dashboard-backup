@@ -1,4 +1,4 @@
-import MainContainer from "../../components/ui/CustomContainer"
+import MainContainer from "../../components/ui/custom-container"
 
 const Payments = () => {
   return (

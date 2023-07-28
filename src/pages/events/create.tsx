@@ -2,8 +2,8 @@ import React, { useRef, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import MainContainer from "../../components/ui/CustomContainer"
-import CustomButton from "../../components/ui/CustomButton"
+import MainContainer from "../../components/ui/custom-container"
+import CustomButton from "../../components/ui/custom-button"
 import Input from "../../components/ui/Input"
 import {
   Select,
@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
-import { DatePicker } from "../../components/ui/datePicker"
+import { DatePicker } from "../../components/ui/date-picker"
 import { createEventFn } from "@/src/apiCalls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
@@ -22,8 +22,8 @@ import moment from "moment"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
-import FileUploadModal from "@/src/components/FileUpload"
-import { TimePicker } from "@/src/components/ui/timePicker"
+import FileUploadModal from "@/src/components/file-upload"
+import { TimePicker } from "@/src/components/ui/time-picker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),

@@ -1,10 +1,10 @@
 import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
-import EventDashBoard from "@/src/components/manage-event/EventDashBoard"
-import EventTickets from "@/src/components/manage-event/EventTickets"
-import EventDetails from "@/src/components/manage-event/EventDetails"
-import EventCollaborators from "@/src/components/manage-event/EventCollaborators"
-import EventTargets from "@/src/components/manage-event/EventTargets"
+import EventDashBoard from "@/src/components/manage-event/event-dashboard"
+import EventTickets from "@/src/components/manage-event/event-tickets"
+import EventDetails from "@/src/components/manage-event/event-details"
+import EventCollaborators from "@/src/components/manage-event/event-collaborators"
+import EventTargets from "@/src/components/manage-event/event-targets"
 
 const ManageEvent = () => {
   const [searchParams] = useSearchParams()

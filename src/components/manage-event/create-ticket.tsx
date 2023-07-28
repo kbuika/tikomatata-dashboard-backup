@@ -5,8 +5,8 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import moment from "moment"
 import Input from "../ui/Input"
 import { Button } from "../ui/button"
-import { DatePicker } from "../ui/datePicker"
-import CustomButton from "../ui/CustomButton"
+import { DatePicker } from "../ui/date-picker"
+import CustomButton from "../ui/custom-button"
 // import { Switch } from "../ui/switch"
 import { TicketDataType } from "@/src/types"
 import { createTicketFn } from "@/src/apiCalls"
@@ -14,7 +14,7 @@ import { checkRegistrationError, errorToast, successToast } from "@/src/lib/util
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useParams } from "react-router-dom"
-import { TimePicker } from "../ui/timePicker"
+import { TimePicker } from "../ui/time-picker"
 
 const schema = yup.object({
   name: yup.string().required("Ticket name is required"),

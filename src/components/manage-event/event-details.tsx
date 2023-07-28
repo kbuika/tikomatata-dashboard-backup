@@ -3,9 +3,9 @@ import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import CustomButton from "../ui/CustomButton"
+import CustomButton from "../ui/custom-button"
 import Input from "../ui/Input"
-import { DatePicker } from "../ui/datePicker"
+import { DatePicker } from "../ui/date-picker"
 import {
   Select,
   SelectContent,
@@ -15,10 +15,10 @@ import {
   SelectValue,
 } from "../ui/select"
 import { Textarea } from "../ui/textarea"
-import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
-import FileUploadModal from "../FileUpload"
+import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
+import FileUploadModal from "../file-upload"
 import moment from "moment"
-import { TimePicker } from "../ui/timePicker"
+import { TimePicker } from "../ui/time-picker"
 import { useEffect, useState } from "react"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate, useParams } from "react-router-dom"

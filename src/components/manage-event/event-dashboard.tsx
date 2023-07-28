@@ -1,4 +1,4 @@
-import CustomButton from "../ui/CustomButton"
+import CustomButton from "../ui/custom-button"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import CalendarImage from "../../assets/images/calendar.png"
 import { InformationCircleIcon } from "@heroicons/react/solid"
