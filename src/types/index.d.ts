@@ -10,6 +10,12 @@ export interface UserLoginObj {
   password: string
 }
 
+export interface ResetPasswordArgs {
+  email: string | null
+  password: string
+  code: number
+}
+
 export interface EventDataType {
   eventId?: number
   name: string
@@ -28,6 +34,7 @@ export interface EventDataType {
 
 export interface TicketDataType {
   eventId: number
+  ticketId?: number
   name: string
   price: string
   quantity: string

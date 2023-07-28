@@ -43,14 +43,14 @@ export default function SignIn({ setToken }: ISignInProps) {
         ...data,
       }
       const res = await loginUser(userData)
-      if (res?.status === 200 && res?.data?.status === 200) {
+      if (res?.status === 200) {
         successToast("Login Successful")
         setToken(res?.data?.token)
         navigate("/events")
       }
-      if (res?.status !== 200 || res?.data?.status !== 200) {
-        errorToast(res?.message || res?.data?.message)
-        setErrorMessage(res?.message || res?.data?.message)
+      if (res?.status !== 200) {
+        errorToast(res?.message)
+        setErrorMessage(res?.message)
       }
     } catch (err) {
       setRegError(err)
@@ -69,7 +69,7 @@ export default function SignIn({ setToken }: ISignInProps) {
 
   return (
     <div className="bg-gradient-to-r from-criticalBg to-successBg h-screen w-screen flex items-start justify-center lg:p-[100px] pt-[100px]">
-      <div className="h-auto w-[38%] max-[730px]:w-[80%] lg:w-1/3 flex flex-col items-center">
+      <div className="h-auto w-[68%] max-[730px]:w-[80%] lg:w-[50%] flex flex-col items-center">
         <div>
           <h2 className="text-[30px] font-normal text-neutralDark">Hey, Welcome Back</h2>
         </div>

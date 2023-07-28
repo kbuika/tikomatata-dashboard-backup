@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react"
-import CustomButton from "../ui/CustomButton"
-import CreateTicket from "./CreateTicket"
-import EventTicketCard from "../Ticket"
-import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
+import CustomButton from "../ui/custom-button"
+import CreateTicket from "./create-ticket"
+import EventTicketCard from "../ticket-card"
+import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
 import { fetchEventTicketsFn } from "@/src/apiCalls"
 import { TicketDataType } from "@/src/types"
 import { errorToast } from "@/src/lib/utils"
 import { useParams } from "react-router-dom"
+import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 
 const EventTickets = () => {
   const [createTicketView, setCreateTicketView] = useState(false)
@@ -39,23 +40,31 @@ const EventTickets = () => {
   }
 
   return (
-    <>
-      <div className="text-neutralDark mt-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[18px] font-semibold">event Tickets</h2>
-          <div>
-            {createTicketView ? (
-              <></>
-            ) : (
-              <CustomButton className="" onClick={() => setCreateTicketView(true)}>
-                Create Ticket
-              </CustomButton>
-            )}
+    <EventPagesWrapper
+      left={
+        <div className="text-neutralDark mt-2">
+          <div className="w-full flex flex-row items-center justify-between">
+            <h2 className="text-[18px] font-semibold">event Tickets</h2>
           </div>
         </div>
-      </div>
-      <VerticalEventNavBar />
-      <div className="border h-auto rounded-md mt-[3em] p-4">
+      }
+      right={
+        <div className="text-neutralDark mt-2">
+          <div className="w-full flex flex-row items-center justify-between">
+            <div>
+              {createTicketView ? (
+                <></>
+              ) : (
+                <CustomButton className="" onClick={() => setCreateTicketView(true)}>
+                  Create Ticket
+                </CustomButton>
+              )}
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <div className="border h-auto rounded-md p-4">
         {createTicketView ? (
           <CreateTicket setCreateTicketView={setCreateTicketView} />
         ) : (
@@ -84,7 +93,7 @@ const EventTickets = () => {
           </>
         )}
       </div>
-    </>
+    </EventPagesWrapper>
   )
 }
 

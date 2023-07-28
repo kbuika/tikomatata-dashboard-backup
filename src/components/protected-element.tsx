@@ -8,7 +8,7 @@ interface IProtectedProps {
 
 const Protected: React.FC<IProtectedProps> = ({ isSignedIn, children }) => {
   if (!isSignedIn) {
-    return <Navigate to='/' replace />
+    return <Navigate to="/" replace />
   }
   return <>{children}</>
 }

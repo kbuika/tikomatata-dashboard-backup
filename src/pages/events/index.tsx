@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react"
-import MainContainer from "../../components/ui/CustomContainer"
-import CustomButton from "../../components/ui/CustomButton"
+import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
+import MainContainer from "../../components/ui/custom-container"
+import CustomButton from "../../components/ui/custom-button"
 import CalendarImage from "../../assets/images/calendar.png"
-import { Helmet } from "react-helmet"
 import { Link } from "react-router-dom"
 import { Switch } from "../../components/ui/switch"
 import {
@@ -18,7 +18,7 @@ import { fetchUserEventsFn } from "@/src/apiCalls"
 import { errorToast } from "@/src/lib/utils"
 import { EventDataType } from "@/src/types"
 import moment from "moment"
-import LoadingScreen from "@/src/components/LoadingScreen"
+import LoadingScreen from "@/src/components/loading-screen"
 
 const Events = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -47,20 +47,21 @@ const Events = () => {
   }
 
   return (
-    <MainContainer>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Manage your events | Tikomatata</title>
-        <link rel="canonical" href="https://tikomatata.com/events" />
-      </Helmet>
-      <div className="text-neutralDark ml-[30px] min-[980px]:ml-0">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[23px] font-semibold">My Events</h2>
+    <MainAppWrapper
+      left={
+        <div>
+          <h2 className="text-[17px] md:text-[16px] font-semibold">My Events</h2>
+        </div>
+      }
+      right={
+        <div className="flex flex-row items-center">
           <Link to={"/create-event"}>
-            <CustomButton className="mt-[1em]">Create Event</CustomButton>
+            <CustomButton className="text-[13px] md:text-[13px] p-0">Create Event</CustomButton>
           </Link>
         </div>
-
+      }
+    >
+      <div className="text-neutralDark px-[30px] min-[768px]:ml-0">
         {userEvents.length > 0 ? (
           <div className="mt-[20px] h-[90vh]">
             {userEvents?.map((event: EventDataType) => {
@@ -139,7 +140,7 @@ const Events = () => {
           </>
         )}
       </div>
-    </MainContainer>
+    </MainAppWrapper>
   )
 }
 

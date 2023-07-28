@@ -56,4 +56,13 @@ export const removeCookie = (cookieName: string) => {
   Cookies.remove(cookieName)
 }
 
-// TODO: Create middleware to handle errors
+export const getInitials = (fullName: string) => {
+  // Split the full name into an array of individual words
+  const words = fullName.trim().split(/\s+/)
+
+  // Get the first letter of each word and capitalize it
+  const initials = words.map((word) => word.charAt(0).toUpperCase())
+
+  // Join the initials together to form the result
+  return initials.join("")
+}

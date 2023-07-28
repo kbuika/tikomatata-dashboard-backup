@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom"
 import clsx from "clsx"
-import { EventSideBarElements } from "../constants/EventSideBarRoutes"
+import { EventSideBarElements } from "../constants/event-sidebar-routes"
 
 export default function VerticalEventNavBar() {
   const [searchParams] = useSearchParams()

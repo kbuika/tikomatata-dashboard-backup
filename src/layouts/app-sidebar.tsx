@@ -1,7 +1,7 @@
-import { ChevronDownIcon, LogOut, User } from "lucide-react"
+import { ChevronDownIcon, LogOut, User, User2, X } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link, Outlet, useNavigate } from "react-router-dom"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Link, useNavigate } from "react-router-dom"
+import { Avatar } from "../components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
 import MainLogo from "../assets/logos/tikomatata.svg"
-import { getUserAvatar } from "../apiCalls"
+// import { getUserAvatarAndInitials } from "../apiCalls"
 import { removeCookie } from "../lib/utils"
 
 const SideBarRoutes = [
@@ -76,49 +76,61 @@ const SideBarRoutes = [
   },
 ]
 
-export default function SideBar() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLargeView, setIsLargeView] = useState(true)
+type Props = {
+  children?: React.ReactNode
+  toggleSidebar: boolean
+  setToggleSidebar: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
   const [width, setWidth] = useState(window.innerWidth)
-  const [userAvatar, setUserAvatar] = useState<string>("")
+  // const [userAvatarObject, setUserAvatarObject] = useState<{imageUrl: string, initials: string} | undefined>()
 
   const navigate = useNavigate()
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
-    fetchAvatar()
+    // fetchAvatar() //TODO: only fetch avatar once!!
     return () => window.removeEventListener("resize", handleResize)
   }, [width])
 
-  const fetchAvatar = async () => {
-    const avatar = await getUserAvatar()
-    setUserAvatar(avatar)
-  }
+  // const fetchAvatar = async () => {
+  //   const avatarObj = await getUserAvatarAndInitials()
+  //   setUserAvatarObject(avatarObj)
+  // }
 
   return (
     <>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 w-[230px] max-sidebar:w-[80px] h-screen transition-transform justify-center duration-300 sm:translate-x-0"
+        className={`fixed inset-y-0 w-[230px] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-20 
+    ${width > 768 ? "" : toggleSidebar ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Sidebar"
         style={{}}
       >
-        <div className="h-full px-3 py-6 overflow-y-auto bg-neutralWhite relative dark:bg-gray-800">
-          <a href="/" className="flex items-center pl-2.5 mb-5 h-[80px]">
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white">
-              {width < 980 ? "TIKO" : <img src={MainLogo} alt="logo" className="h-7 w-15" />}
-            </span>
-          </a>
+        <div className="h-full px-3 pb-6 overflow-y-auto bg-neutralWhite relative dark:bg-gray-800">
+          <div className="flex flex-row items-center justify-between mb-5 h-[10vh] pl-2.5">
+            <a href="/" className="flex items-center justify-start ">
+              <span className="self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white">
+                <img src={MainLogo} alt="logo" className="h-5 w-15" />
+              </span>
+            </a>
+            <button onClick={() => setToggleSidebar(!toggleSidebar)} className="min-[768px]:hidden">
+              <X />
+            </button>
+          </div>
+
           <ul className="space-y-2 font-medium">
             {SideBarRoutes.map((route) => (
               <li key={route.label}>
                 <Link
                   to={route.path}
-                  className="h-[40px] w-[200px] max-[980px]:w-[50px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-mainPrimary hover:text-neutralWhite active:text-neutralWhite active:bg-mainPrimary focus:text-neutralWhite focus:bg-mainPrimary"
+                  className="h-[40px] w-[200px] flex items-center p-2 text-neutralDark rounded-sm group hover:bg-mainPrimary hover:text-neutralWhite active:text-neutralWhite active:bg-mainPrimary focus:text-neutralWhite focus:bg-mainPrimary"
                 >
                   {route.svg}
-                  {width < 980 ? "" : <span className="ml-3">{route.label}</span>}
+                  <span className="ml-3">{route.label}</span>
                 </Link>
               </li>
             ))}
@@ -130,8 +142,9 @@ export default function SideBar() {
               <DropdownMenuTrigger asChild className="cursor-pointer mb-2">
                 <div className="flex flex-row w-[50%] items-center justify-between">
                   <Avatar>
-                    <AvatarImage src={userAvatar} alt="avatar" />
-                    <AvatarFallback>SK</AvatarFallback>
+                    {/* <AvatarImage src={userAvatarObject?.imageUrl} alt="avatar" /> */}
+                    <User2 className="h-8 w-6" />
+                    {/* <AvatarFallback>{userAvatarObject?.initials}</AvatarFallback> */}
                   </Avatar>
                   <ChevronDownIcon color="#80807E" />
                 </div>
@@ -164,9 +177,8 @@ export default function SideBar() {
           </div>
         </div>
       </aside>
-      <main>
-        <Outlet />
-      </main>
     </>
   )
 }
+
+export default AppSidebar
