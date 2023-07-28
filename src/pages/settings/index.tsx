@@ -32,7 +32,7 @@ const Settings = () => {
     <MainAppWrapper
       left={
         <div>
-          <h1 className="text-[23px] font-semibold text-center text-neutralDark">
+          <h1 className="text-[17px] md:text-[16px] font-semibold text-center text-neutralDark">
             Profile Settings
           </h1>
         </div>
@@ -47,7 +47,7 @@ const Settings = () => {
           <div className="flex flex-col items-center justify-center w-full px-8">
             <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <h3 className="text-xl font-semibold">Profile Picture</h3>
+                <h3 className="text-base font-semibold">Profile Picture</h3>
               </div>
               <div className="mt-2 md:w-[60%] lg:w-[70%]">
                 <img src={userDetails?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-md" />
@@ -56,7 +56,7 @@ const Settings = () => {
             </div>
             <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <h3 className="text-xl font-semibold">Full Name</h3>
+                <h3 className="text-base font-semibold">Full Name</h3>
               </div>
               <div className="mt-2 md:w-[60%] lg:w-[70%]">
                 <input
@@ -72,7 +72,7 @@ const Settings = () => {
             </div>
             <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <h3 className="text-xl font-semibold">Phone Number</h3>
+                <h3 className="text-base font-semibold">Phone Number</h3>
               </div>
               <div className="md:w-[60%] lg:w-[70%]">
                 <div className="flex items-center mt-2">
@@ -93,7 +93,7 @@ const Settings = () => {
             </div>
             <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <h3 className="text-xl font-semibold">Email</h3>
+                <h3 className="text-base font-semibold">Email</h3>
               </div>
               <div className="mt-2 md:w-[60%] lg:w-[70%]">
                 <input

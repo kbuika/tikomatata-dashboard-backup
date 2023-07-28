@@ -1,4 +1,4 @@
-import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
+import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import CustomButton from "../ui/CustomButton"
 import Input from "../ui/Input"
 import {
@@ -22,11 +22,18 @@ import {
 const EventCollaborators = () => {
   const comingSoon = true
   return (
-    <>
-      <div className="text-neutralDark mt-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[18px] font-semibold">Collaborators</h2>
-          {/* <Dialog>
+    <EventPagesWrapper
+      left={
+        <div className="text-neutralDark">
+          <div className="w-full flex flex-row items-center justify-between">
+            <h2 className="text-[18px] font-semibold">Collaborators</h2>
+          </div>
+        </div>
+      }
+      right={
+        <div className="text-neutralDark">
+          <div className="w-full flex flex-row items-center justify-between">
+            {/* <Dialog>
             <DialogTrigger asChild>
               <CustomButton className="">Add Collaborator</CustomButton>
             </DialogTrigger>
@@ -77,10 +84,11 @@ const EventCollaborators = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog> */}
+          </div>
         </div>
-      </div>
-      <VerticalEventNavBar />
-      <div className="mt-[3em] border rounded-md p-4">
+      }
+    >
+      <div className="border rounded-md p-4">
         <div className="h-auto w-auto flex flex-col items-start">
           {comingSoon ? (
             <div className="flex flex-col items-start justify-center">
@@ -150,7 +158,7 @@ const EventCollaborators = () => {
           )}
         </div>
       </div>
-    </>
+    </EventPagesWrapper>
   )
 }
 

@@ -1,5 +1,5 @@
 import CustomButton from "../ui/CustomButton"
-import VerticalEventNavBar from "@/src/layouts/VerticalEventNavBar"
+import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import CalendarImage from "../../assets/images/calendar.png"
 import { InformationCircleIcon } from "@heroicons/react/solid"
 import {
@@ -38,7 +38,6 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog"
-import { setCookie } from "@/src/lib/utils"
 
 type Kpi = {
   title: string
@@ -155,7 +154,6 @@ export const AttendeesList: Attendee[] = [
 const EventDashBoard = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selectedKpi = kpiList[selectedIndex]
-  console.log(setCookie("token", "1234567890"))
 
   const areaChartArgs = {
     className: "mt-5 h-72",
@@ -168,10 +166,16 @@ const EventDashBoard = () => {
     yAxisWidth: 56,
   }
   return (
-    <>
-      <div className="text-neutralDark mt-2">
-        <div className="w-full flex flex-row items-center justify-between relative">
-          <h2 className="text-[18px] font-semibold">AfroFest 2023</h2>
+    <EventPagesWrapper
+      left={
+        <div className="text-neutralDark">
+          <div className="w-full flex flex-row items-center justify-between relative">
+            <h2 className="text-[18px] font-semibold">AfroFest 2023</h2>
+          </div>
+        </div>
+      }
+      right={
+        <div className="text-neutralDark">
           <div>
             <Dialog>
               <DialogTrigger>
@@ -197,9 +201,9 @@ const EventDashBoard = () => {
             </Dialog>
           </div>
         </div>
-      </div>
-      <VerticalEventNavBar />
-      <div className="border p-4 rounded-md mt-[3em]">
+      }
+    >
+      <div className="border p-4 rounded-md">
         {
           // eslint-disable-next-line no-constant-condition
           true ? (
@@ -210,7 +214,7 @@ const EventDashBoard = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <Grid numItemsLg={2} className="mt-6 gap-6 flex flex-row max-[730px]:flex-col">
+                  <Grid numItemsLg={2} className="mt-6 gap-6 flex flex-row max-[860px]:flex-col">
                     {kpiData.map((item) => (
                       <Card key={item.title}>
                         <Flex alignItems="start">
@@ -333,7 +337,7 @@ const EventDashBoard = () => {
           )
         }
       </div>
-    </>
+    </EventPagesWrapper>
   )
 }
 

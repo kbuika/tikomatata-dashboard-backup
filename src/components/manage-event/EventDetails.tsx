@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -88,17 +89,25 @@ const EventDetails = () => {
     }
   }
   return (
-    <>
-      <div className="text-neutralDark mt-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[18px] font-semibold">event details</h2>
-          <CustomButton className=" w-[5em]" onClick={handleSubmit(onSubmit)}>
-            Update
-          </CustomButton>
+    <EventPagesWrapper
+      left={
+        <div className="text-neutralDark">
+          <div className="w-full flex flex-row items-center justify-between">
+            <h2 className="text-[18px] font-semibold">event details</h2>
+          </div>
         </div>
-      </div>
-      <VerticalEventNavBar />
-      <div className="border rounded-md mt-[3em] p-4 h-auto mb-8">
+      }
+      right={
+        <div className="text-neutralDark">
+          <div className="w-full flex flex-row items-center justify-between">
+            <CustomButton className=" w-[5em]" onClick={handleSubmit(onSubmit)}>
+              Update
+            </CustomButton>
+          </div>
+        </div>
+      }
+    >
+      <div className="border rounded-md p-4 h-auto mb-8">
         <div className="w-full h-auto">
           <div className="flex flex-row items-center justify-between w-full">
             <div className="w-[48%]">
@@ -245,7 +254,7 @@ const EventDetails = () => {
           </div>
         </div>
       </div>
-    </>
+    </EventPagesWrapper>
   )
 }
 

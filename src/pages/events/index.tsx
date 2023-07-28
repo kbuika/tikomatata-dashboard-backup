@@ -50,18 +50,18 @@ const Events = () => {
     <MainAppWrapper
       left={
         <div>
-          <h2 className="text-[23px] font-semibold">My Events</h2>
+          <h2 className="text-[17px] md:text-[16px] font-semibold">My Events</h2>
         </div>
       }
       right={
         <div className="flex flex-row items-center">
           <Link to={"/create-event"}>
-            <CustomButton className="mt-[1em]">Create Event</CustomButton>
+            <CustomButton className="text-[13px] md:text-[13px] p-0">Create Event</CustomButton>
           </Link>
         </div>
       }
     >
-      <div className="text-neutralDark ml-[30px] min-[768px]:ml-0">
+      <div className="text-neutralDark px-[30px] min-[768px]:ml-0">
         {userEvents.length > 0 ? (
           <div className="mt-[20px] h-[90vh]">
             {userEvents?.map((event: EventDataType) => {

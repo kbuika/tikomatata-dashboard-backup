@@ -1,12 +1,10 @@
 import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
-import EventSideBar from "@/src/layouts/EventSideBar"
 import EventDashBoard from "@/src/components/manage-event/EventDashBoard"
 import EventTickets from "@/src/components/manage-event/EventTickets"
 import EventDetails from "@/src/components/manage-event/EventDetails"
 import EventCollaborators from "@/src/components/manage-event/EventCollaborators"
 import EventTargets from "@/src/components/manage-event/EventTargets"
-import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 
 const ManageEvent = () => {
   const [searchParams] = useSearchParams()
@@ -17,10 +15,9 @@ const ManageEvent = () => {
   }, [])
   //FIXME: Add menu on manage event pages [could be an "EventsWrapper" component"]
   return (
-    <MainAppWrapper noHeader={true}>
+    <>
       <div className="flex min-h-screen">
-        <EventSideBar />
-        <div className="w-full pl-[30px]">
+        <div className="w-full">
           {activeTab === "dashboard" && <EventDashBoard />}
           {activeTab === "details" && <EventDetails />}
           {activeTab === "tickets" && <EventTickets />}
@@ -28,7 +25,7 @@ const ManageEvent = () => {
           {activeTab === "collaborators" && <EventCollaborators />}
         </div>
       </div>
-    </MainAppWrapper>
+    </>
   )
 }
 

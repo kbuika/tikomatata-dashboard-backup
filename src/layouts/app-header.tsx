@@ -1,4 +1,4 @@
-import { MenuSquare } from "lucide-react"
+import { Menu } from "lucide-react"
 
 type Props = {
   left?: JSX.Element
@@ -9,16 +9,18 @@ type Props = {
 
 const AppHeader: React.FC<Props> = ({ left, right, noHeader, setToggleSidebar }) => {
   return (
-    // eslint-disable-next-line quotes
     <div
-      className={`w-full flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] max-sidebarLayout:pl-[20px] border-b-2 ${
+      className={`w-full flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] max-sidebarLayout:px-[30px] border-b-2 ${
         noHeader ? "hidden" : ""
       }`}
     >
       <div className="flex flex-row items-center justify-center">
         <div className="mr-4 hidden max-sidebarLayout:block">
-          <button onClick={() => setToggleSidebar((prevData) => !prevData)}>
-            <MenuSquare className="h-9 w-10 text-neutralPrimary" />
+          <button
+            onClick={() => setToggleSidebar((prevData) => !prevData)}
+            className="flex flex-row items-center justify-center"
+          >
+            <Menu className="h-8 w-7 text-neutralPrimary" />
           </button>
         </div>
         {left}
