@@ -44,14 +44,21 @@ const Settings = () => {
         </div>
       ) : (
         <>
-          <div className="mt-[3em] flex flex-col w-[38%]">
-            <div className="flex flex-row items-center justify-center">
-              <img src={userDetails?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-[50%]" />
-              {/* <CustomButton className="ml-8 h-8 flex items-center">Change Avatar</CustomButton> */}
-            </div>
-            <div className="w-full mt-[26px]">
+          <div className="flex flex-col items-center justify-center w-full px-8">
+            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <label className="text-neutralDark">Full Name</label>
+                <h3 className="text-xl font-semibold">Profile Picture</h3>
+              </div>
+              <div className="mt-2 md:w-[60%] lg:w-[70%]">
+                <img src={userDetails?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-md" />
+                {/* <CustomButton className="ml-8 h-8 flex items-center">Change Avatar</CustomButton> */}
+              </div>
+            </div>
+            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="text-xl font-semibold">Full Name</h3>
+              </div>
+              <div className="mt-2 md:w-[60%] lg:w-[70%]">
                 <input
                   id="name"
                   type="text"
@@ -63,13 +70,15 @@ const Settings = () => {
                 ></input>
               </div>
             </div>
-            <div className="w-full mt-[26px]">
+            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <label className="text-neutralDark">Phone Number</label>
-                <div className="flex items-center">
+                <h3 className="text-xl font-semibold">Phone Number</h3>
+              </div>
+              <div className="md:w-[60%] lg:w-[70%]">
+                <div className="flex items-center mt-2">
                   <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-sm border rounded-r-none border-gray-600">
                     <img src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                    +254
+                    <span className="max-[400px]:hidden">+254</span>
                   </span>
                   <input
                     id="phone"
@@ -82,9 +91,11 @@ const Settings = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full mt-[26px]">
+            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
-                <label className="text-neutralDark">Email Address</label>
+                <h3 className="text-xl font-semibold">Email</h3>
+              </div>
+              <div className="mt-2 md:w-[60%] lg:w-[70%]">
                 <input
                   id="email"
                   type="email"
