@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import CustomButton from "../ui/custom-button"
 import CreateTicket from "./create-ticket"
-import EventTicketCard from "../ticket"
+import EventTicketCard from "../ticket-card"
 import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
 import { fetchEventTicketsFn } from "@/src/apiCalls"
 import { TicketDataType } from "@/src/types"
