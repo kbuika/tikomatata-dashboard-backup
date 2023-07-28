@@ -1,9 +1,9 @@
-import MainContainer from "../../components/ui/CustomContainer"
-import KenyaIcon from "../../assets/icons/kenya.png"
 import { useEffect, useState } from "react"
+import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import { getUserInfo } from "@/src/apiCalls"
 import { errorToast } from "@/src/lib/utils"
 import LoadingScreen from "@/src/components/LoadingScreen"
+import KenyaIcon from "../../assets/icons/kenya.png"
 
 const Settings = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -29,18 +29,21 @@ const Settings = () => {
     }
   }
   return (
-    <MainContainer className="flex flex-col items-start w-screen min-h-screen">
+    <MainAppWrapper
+      left={
+        <div>
+          <h1 className="text-[23px] font-semibold text-center text-neutralDark">
+            Profile Settings
+          </h1>
+        </div>
+      }
+    >
       {isLoading ? (
         <div className="mt-[20px] h-[50vh] w-full">
           <LoadingScreen />
         </div>
       ) : (
         <>
-          <div className="mt-4">
-            <h1 className="text-[23px] font-semibold text-center text-neutralDark">
-              Profile Settings
-            </h1>
-          </div>
           <div className="mt-[3em] flex flex-col w-[38%]">
             <div className="flex flex-row items-center justify-center">
               <img src={userDetails?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-[50%]" />
@@ -96,7 +99,7 @@ const Settings = () => {
           </div>
         </>
       )}
-    </MainContainer>
+    </MainAppWrapper>
   )
 }
 

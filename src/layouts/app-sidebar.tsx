@@ -1,6 +1,6 @@
-import { ChevronDownIcon, LogOut, User, User2 } from "lucide-react"
+import { ChevronDownIcon, LogOut, User, User2, X } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link, Outlet, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Avatar } from "../components/ui/avatar"
 import {
   DropdownMenu,
@@ -76,9 +76,14 @@ const SideBarRoutes = [
   },
 ]
 
-export default function SideBar() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLargeView, setIsLargeView] = useState(true)
+type Props = {
+  children?: React.ReactNode
+  toggleSidebar: boolean
+  setToggleSidebar: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
   const [width, setWidth] = useState(window.innerWidth)
   // const [userAvatarObject, setUserAvatarObject] = useState<{imageUrl: string, initials: string} | undefined>()
 
@@ -100,16 +105,23 @@ export default function SideBar() {
     <>
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 w-[230px] h-screen transition-transform justify-center duration-300 sm:translate-x-0 border-r-2"
+        className={`fixed inset-y-0 w-[230px] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-20 
+    ${width > 768 ? "" : toggleSidebar ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Sidebar"
         style={{}}
       >
-        <div className="h-full px-3 py-6 overflow-y-auto bg-neutralWhite relative dark:bg-gray-800">
-          <a href="/" className="flex items-center pl-2.5 mb-5 h-[80px]">
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white">
-              <img src={MainLogo} alt="logo" className="h-5 w-15" />
-            </span>
-          </a>
+        <div className="h-full px-3 pb-6 overflow-y-auto bg-neutralWhite relative dark:bg-gray-800">
+          <div className="flex flex-row items-center justify-between mb-5 h-[10vh] pl-2.5">
+            <a href="/" className="flex items-center justify-start ">
+              <span className="self-center text-xl font-semibold whitespace-nowrap text-neutralDark dark:text-white">
+                <img src={MainLogo} alt="logo" className="h-5 w-15" />
+              </span>
+            </a>
+            <button onClick={() => setToggleSidebar(!toggleSidebar)} className="min-[768px]:hidden">
+              <X />
+            </button>
+          </div>
+
           <ul className="space-y-2 font-medium">
             {SideBarRoutes.map((route) => (
               <li key={route.label}>
@@ -165,9 +177,8 @@ export default function SideBar() {
           </div>
         </div>
       </aside>
-      <main>
-        <Outlet />
-      </main>
     </>
   )
 }
+
+export default AppSidebar

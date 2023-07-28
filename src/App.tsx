@@ -7,7 +7,6 @@ import OAuth2RedirectHandler from "./auth/OAuth2RedirectHandler"
 import ResetPassword from "./auth/ResetPassword"
 import SignIn from "./auth/SignIn"
 import SignUp from "./auth/SignUp"
-import SideBarLayout from "./layouts/SideBarLayout"
 import Events from "./pages/events"
 import CreateEvent from "./pages/events/create"
 import ManageEvent from "./pages/events/manage"
@@ -28,48 +27,46 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler setToken={setToken} />} />
-          <Route element={<SideBarLayout />}>
-            <Route
-              path="/settings"
-              element={
-                <Protected isSignedIn={!!token}>
-                  <Settings />
-                </Protected>
-              }
-            />
-            <Route
-              path="/payments"
-              element={
-                <Protected isSignedIn={!!token}>
-                  <Payments />
-                </Protected>
-              }
-            />
-            <Route
-              path="/events"
-              element={
-                <Protected isSignedIn={!!token}>
-                  <Events />
-                </Protected>
-              }
-            />
-            <Route
-              path="/create-event"
-              element={
-                <Protected isSignedIn={!!token}>
-                  <CreateEvent />
-                </Protected>
-              }
-            />
-            <Route
-              path="/events/manage/:id"
-              element={
-                <Protected isSignedIn={!!token}>
-                  <ManageEvent />
-                </Protected>
-              }
-            />
-          </Route>
+          <Route
+            path="/settings"
+            element={
+              <Protected isSignedIn={!!token}>
+                <Settings />
+              </Protected>
+            }
+          />
+          <Route
+            path="/payments"
+            element={
+              <Protected isSignedIn={!!token}>
+                <Payments />
+              </Protected>
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <Protected isSignedIn={!!token}>
+                <Events />
+              </Protected>
+            }
+          />
+          <Route
+            path="/create-event"
+            element={
+              <Protected isSignedIn={!!token}>
+                <CreateEvent />
+              </Protected>
+            }
+          />
+          <Route
+            path="/events/manage/:id"
+            element={
+              <Protected isSignedIn={!!token}>
+                <ManageEvent />
+              </Protected>
+            }
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

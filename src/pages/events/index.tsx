@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react"
+import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import MainContainer from "../../components/ui/CustomContainer"
 import CustomButton from "../../components/ui/CustomButton"
 import CalendarImage from "../../assets/images/calendar.png"
@@ -46,15 +47,21 @@ const Events = () => {
   }
 
   return (
-    <MainContainer>
-      <div className="text-neutralDark ml-[30px] min-[980px]:ml-0">
-        <div className="w-full flex flex-row items-center justify-between">
+    <MainAppWrapper
+      left={
+        <div>
           <h2 className="text-[23px] font-semibold">My Events</h2>
+        </div>
+      }
+      right={
+        <div className="flex flex-row items-center">
           <Link to={"/create-event"}>
             <CustomButton className="mt-[1em]">Create Event</CustomButton>
           </Link>
         </div>
-
+      }
+    >
+      <div className="text-neutralDark ml-[30px] min-[768px]:ml-0">
         {userEvents.length > 0 ? (
           <div className="mt-[20px] h-[90vh]">
             {userEvents?.map((event: EventDataType) => {
@@ -133,7 +140,7 @@ const Events = () => {
           </>
         )}
       </div>
-    </MainContainer>
+    </MainAppWrapper>
   )
 }
 

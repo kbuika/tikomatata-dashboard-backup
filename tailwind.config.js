@@ -17,6 +17,7 @@ module.exports = {
   theme: {
     screens: {
       sidebar: "980px",
+      sidebarLayout: "768px",
     },
     container: {
       center: true,
