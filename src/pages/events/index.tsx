@@ -12,7 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../components/ui/tooltip"
-import { ExternalLink, Loader2 } from "lucide-react"
+import { ExternalLink, Loader2, Plus } from "lucide-react"
 import testImage from "../../assets/images/Chapo.jpg"
 import { fetchUserEventsFn } from "@/src/apiCalls"
 import { errorToast } from "@/src/lib/utils"
@@ -56,7 +56,9 @@ const Events = () => {
       right={
         <div className="flex flex-row items-center">
           <Link to={"/create-event"}>
-            <CustomButton className="text-[13px] md:text-[13px] p-0">Create Event</CustomButton>
+            <CustomButton>
+              <Plus size={20} className="mr-2" /> Create Event
+            </CustomButton>
           </Link>
         </div>
       }
