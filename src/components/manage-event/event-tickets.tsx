@@ -9,6 +9,7 @@ import { TicketDataType } from "@/src/types"
 import { errorToast } from "@/src/lib/utils"
 import { useParams } from "react-router-dom"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
+import { Plus } from "lucide-react"
 
 const EventTickets = () => {
   const [createTicketView, setCreateTicketView] = useState(false)
@@ -42,21 +43,21 @@ const EventTickets = () => {
   return (
     <EventPagesWrapper
       left={
-        <div className="text-neutralDark mt-2">
+        <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">
             <h2 className="text-[18px] font-semibold">event Tickets</h2>
           </div>
         </div>
       }
       right={
-        <div className="text-neutralDark mt-2">
+        <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">
             <div>
               {createTicketView ? (
                 <></>
               ) : (
                 <CustomButton className="" onClick={() => setCreateTicketView(true)}>
-                  Create Ticket
+                  <Plus size={20} className="mr-2" /> Create Ticket
                 </CustomButton>
               )}
             </div>

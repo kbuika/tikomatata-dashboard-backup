@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { Badge } from "@tremor/react"
-import { Loader2, Pencil } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { Sheet, SheetTrigger, SheetHeader, SheetContent } from "./ui/sheet"
 import Input from "./ui/Input"
 import { DatePicker } from "./ui/date-picker"
@@ -77,9 +77,9 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                     <div className="ml-auto">
                       <Sheet open={editSheetOpen} onOpenChange={setEditSheetOpen}>
                         <SheetTrigger onClick={() => setEditSheetOpen(true)}>
-                          <Pencil size={18} className="cursor-pointer" />
+                          <p className="underline underline-offset-4">edit</p>
                         </SheetTrigger>
-                        <SheetContent className="w-[50%]">
+                        <SheetContent className="w-[90%]">
                           <SheetHeader>Edit Ticket Details</SheetHeader>
                           {isLoading ? (
                             <div className="flex items-center justify-center min-h-[40vh]">
