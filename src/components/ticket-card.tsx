@@ -12,7 +12,7 @@ import { TicketDataType } from "../types"
 import moment from "moment"
 import { TimePicker } from "./ui/time-picker"
 import { checkRegistrationError, errorToast, successToast } from "../lib/utils"
-import { updateTicketFn } from "../apiCalls"
+import { updateTicketFn } from "../api-calls"
 import { Button } from "./ui/button"
 
 const schema = yup.object({

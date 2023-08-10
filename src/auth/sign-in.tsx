@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { errorToast, successToast } from "../lib/utils"
-import { loginUser } from "../apiCalls"
+import { loginUser } from "../api-calls"
 
 interface ISignInProps {
   setToken: (userToken: string) => void

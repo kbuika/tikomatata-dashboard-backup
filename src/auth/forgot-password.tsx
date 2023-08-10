@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { forgetPassord } from "../apiCalls"
+import { forgetPassord } from "../api-calls"
 import { errorToast, successToast } from "../lib/utils"
 import { Loader2 } from "lucide-react"
 

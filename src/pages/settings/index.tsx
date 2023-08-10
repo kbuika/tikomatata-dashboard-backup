@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
-import { getUserInfo } from "@/src/apiCalls"
+import { getUserInfo } from "@/src/api-calls"
 import { errorToast } from "@/src/lib/utils"
 import LoadingScreen from "@/src/components/loading-screen"
 import KenyaIcon from "../../assets/icons/kenya.png"

@@ -14,7 +14,7 @@ import {
 } from "../../components/ui/tooltip"
 import { ExternalLink, Loader2, Plus } from "lucide-react"
 import testImage from "../../assets/images/Chapo.jpg"
-import { fetchUserEventsFn } from "@/src/apiCalls"
+import { fetchUserEventsFn } from "@/src/api-calls"
 import { errorToast } from "@/src/lib/utils"
 import { EventDataType } from "@/src/types"
 import moment from "moment"

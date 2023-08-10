@@ -15,7 +15,7 @@ import {
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { DatePicker } from "../../components/ui/date-picker"
-import { createEventFn } from "@/src/apiCalls"
+import { createEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"

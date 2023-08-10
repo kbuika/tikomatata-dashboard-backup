@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { resetPassword } from "../apiCalls"
+import { resetPassword } from "../api-calls"
 import { checkRegistrationError, errorToast, successToast } from "../lib/utils"
 import { Loader2 } from "lucide-react"
 

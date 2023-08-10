@@ -22,7 +22,7 @@ import { TimePicker } from "../ui/time-picker"
 import { useEffect, useState } from "react"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate, useParams } from "react-router-dom"
-import { updateEventFn } from "@/src/apiCalls"
+import { updateEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 
 const schema = yup.object({

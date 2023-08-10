@@ -1,5 +1,5 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
-import { getCookie, getInitials } from "../lib/utils"
+import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
   EventDataType,
   ResetPasswordArgs,
@@ -135,7 +135,7 @@ export const getUserAvatarAndInitials = async () => {
     if (response?.data.status === 200) {
       return {
         imageUrl: response?.data?.data?.imageUrl,
-        initials: getInitials(response?.data?.data?.fullName),
+        initials: getUserNameInitials(response?.data?.data?.fullName),
       }
     }
   } catch (error: any) {

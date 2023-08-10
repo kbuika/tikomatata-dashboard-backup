@@ -1,7 +1,6 @@
-import { ChevronDownIcon, LogOut, User, User2, X } from "lucide-react"
+import { ChevronDownIcon, LogOut, User, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Avatar } from "../components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +12,9 @@ import {
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
 import MainLogo from "../assets/logos/tikomatata.svg"
-// import { getUserAvatarAndInitials } from "../apiCalls"
 import { removeCookie } from "../lib/utils"
+import { UserProvider } from "../contexts/user.context"
+import UserAvatar from "../components/ui/user-avatar"
 
 const SideBarRoutes = [
   {
@@ -85,24 +85,17 @@ type Props = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
   const [width, setWidth] = useState(window.innerWidth)
-  // const [userAvatarObject, setUserAvatarObject] = useState<{imageUrl: string, initials: string} | undefined>()
-
   const navigate = useNavigate()
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
-    // fetchAvatar() //TODO: only fetch avatar once!!
     return () => window.removeEventListener("resize", handleResize)
   }, [width])
 
-  // const fetchAvatar = async () => {
-  //   const avatarObj = await getUserAvatarAndInitials()
-  //   setUserAvatarObject(avatarObj)
-  // }
 
   return (
-    <>
+    <UserProvider>
       <aside
         id="logo-sidebar"
         className={`fixed inset-y-0 w-[230px] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-20 
@@ -141,11 +134,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="cursor-pointer mb-2">
                 <div className="flex flex-row w-[50%] items-center justify-between">
-                  <Avatar>
-                    {/* <AvatarImage src={userAvatarObject?.imageUrl} alt="avatar" /> */}
-                    <User2 className="h-8 w-6" />
-                    {/* <AvatarFallback>{userAvatarObject?.initials}</AvatarFallback> */}
-                  </Avatar>
+                  <UserAvatar />
                   <ChevronDownIcon color="#80807E" />
                 </div>
               </DropdownMenuTrigger>
@@ -177,7 +166,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
           </div>
         </div>
       </aside>
-    </>
+    </UserProvider>
   )
 }
 
