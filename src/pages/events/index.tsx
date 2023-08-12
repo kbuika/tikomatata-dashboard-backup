@@ -4,7 +4,7 @@ import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import MainContainer from "../../components/ui/custom-container"
 import CustomButton from "../../components/ui/custom-button"
 import CalendarImage from "../../assets/images/calendar.png"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Switch } from "../../components/ui/switch"
 import {
   Tooltip,
@@ -19,23 +19,28 @@ import { errorToast } from "@/src/lib/utils"
 import { EventDataType } from "@/src/types"
 import moment from "moment"
 import LoadingScreen from "@/src/components/loading-screen"
-import { useUserStore } from "@/src/stores/user-store"
+import { useEventsStore } from "@/src/stores/events-store"
 
 const Events = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [userEvents, setUserEvents] = useState<[]>([])
   const [eventsError, setEventsError] = useState<string>("")
+  const navigate = useNavigate()
+  // stores
+  const setAllEvents = useEventsStore((state) => state.setAllEvents)
+  const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
 
   useEffect(() => {
     fetchEvents()
   }, [])
-
+  // TODO: consider using SWR for this keeping in mind the need to update the events list when a new event is created
   const fetchEvents = async () => {
     setIsLoading(true)
     try {
       const res = await fetchUserEventsFn()
       if (res.status === 200) {
         setUserEvents(res.data)
+        setAllEvents(res.data)
       } else {
         setEventsError(res.message)
         errorToast("Could not fetch your events. Try again later.")
@@ -45,6 +50,12 @@ const Events = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const goToEvent = (eventId: number | undefined, event: EventDataType) => {
+    // set active event and navigate to event page
+    setSelectedEvent(event)
+    navigate(`/events/manage/${eventId}`)
   }
 
   return (
@@ -71,9 +82,9 @@ const Events = () => {
               return (
                 <div className="flex flex-col w-full space-y-4 mb-4" key={event?.name}>
                   <div className="h-full w-full flex flex-row items-center justify-between rounded bg-gray-100">
-                    <Link
-                      to={`/events/manage/${event?.eventId}`}
-                      className="w-full h-full px-4 py-2 flex flex-row items-center"
+                    <div
+                      className="w-full h-full px-4 py-2 flex flex-row items-center cursor-pointer"
+                      onClick={() => goToEvent(event?.eventId, event)}
                     >
                       <div className="h-10 w-10 bg-neutralDark rounded">
                         <img
@@ -86,7 +97,7 @@ const Events = () => {
                           {event?.name} on {moment(event?.startDate)?.format("Do MMMM YYYY")}
                         </p>
                       </div>
-                    </Link>
+                    </div>
                     <div className="pr-4 flex flex-row items-center justify-center">
                       <TooltipProvider>
                         <Tooltip>

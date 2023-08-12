@@ -1,12 +1,12 @@
 import LoadingScreen from "@/src/components/loading-screen"
 import useUser from "@/src/hooks/use-user"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
-import { useUserStore } from "@/src/stores/user-store"
+import { useUserDetailsStore } from "@/src/stores/user-details-store"
 import KenyaIcon from "../../assets/icons/kenya.png"
 
 const Settings = () => {
   const {isUserLoading} = useUser()
-  const user = useUserStore((state) => state.user)
+  const user = useUserDetailsStore((state) => state.user)
 
   return (
     <MainAppWrapper

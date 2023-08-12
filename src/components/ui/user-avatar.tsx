@@ -1,8 +1,8 @@
-import { useUserStore } from "@/src/stores/user-store"
+import { useUserDetailsStore } from "@/src/stores/user-details-store"
 import { Avatar, AvatarImage } from "./avatar"
 
 const UserAvatar = () => {
-  const user = useUserStore((state) => state.user)
+  const user = useUserDetailsStore((state) => state.user)
   return (
     <Avatar>
       <AvatarImage src={user?.imageUrl} alt="avatar" />

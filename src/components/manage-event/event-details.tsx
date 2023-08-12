@@ -24,6 +24,7 @@ import { errorToast, successToast } from "@/src/lib/utils"
 import { useNavigate, useParams } from "react-router-dom"
 import { updateEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
+import { useEventsStore } from "@/src/stores/events-store"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -38,10 +39,11 @@ const schema = yup.object({
   startTime: yup.string().required("Start time is required"),
   endTime: yup.string().required("End time is required"),
 })
-
+// TODO: Clean up and make sure errors are handled properly and conditional rendering is done properly
 const EventDetails = () => {
   // const [isLoading, setIsLoading] = useState(false)
   // const params = useParams()
+  const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const navigate = useNavigate()
 
   const {
@@ -49,35 +51,15 @@ const EventDetails = () => {
     handleSubmit,
     setValue,
     formState: { errors },
+    
   } = useForm<EventDataType>({ resolver: yupResolver(schema) })
-
-  useEffect(() => {
-    // fetchEvents(params.id)
-  }, [])
-
-  // const fetchEvents = async (eventId: string | undefined) => {
-  // setIsLoading(true)
-  // try {
-  //   const res = await getEventDetails(eventId)
-  //   if (res.status === 200) {
-  //     // setEventTickets(res.data)
-  //   } else {
-  //     // setTicketsError(res.message)
-  //     errorToast("Could not fetch this event's tickets. Try again later.")
-  //   }
-  // } catch (error) {
-  //   errorToast("Could not fetch this event's tickets. Try again later.")
-  // } finally {
-  //   setIsLoading(false)
-  // }
-  // }
+  
   const onSubmit: SubmitHandler<EventDataType> = async (data) => {
     // setIsLoading(true)
     try {
       const res = await updateEventFn(data)
       if (res.status === 200) {
         successToast("Event has been update successfully!")
-        navigate("/events")
       } else {
         // setCreateEventError(res.message)
         errorToast(res?.message)
@@ -119,6 +101,7 @@ const EventDetails = () => {
                 placeholder="Event Name"
                 type="text"
                 required
+                defaultValue={selectedEvent?.name}
                 {...register("name", { required: true })}
               />
               {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
@@ -132,6 +115,7 @@ const EventDetails = () => {
                 placeholder="Age Limit"
                 type="number"
                 required
+                defaultValue={selectedEvent?.ageLimit}
                 {...register("ageLimit", { required: true })}
               />
               {errors.ageLimit && (
@@ -148,6 +132,7 @@ const EventDetails = () => {
                 id="name"
                 placeholder="A brief description of the event"
                 {...register("description", { required: true })}
+                defaultValue={selectedEvent?.description}
               />
               {errors.description && (
                 <span className="text-criticalRed">{errors.description?.message}</span>
@@ -172,6 +157,7 @@ const EventDetails = () => {
                 id="name"
                 placeholder="Event Location"
                 type="text"
+                defaultValue={selectedEvent?.location}
                 {...register("location", { required: true })}
               />
               {errors.location && (
@@ -186,6 +172,7 @@ const EventDetails = () => {
                 id="name"
                 placeholder="Pin Location"
                 type="text"
+                defaultValue={selectedEvent?.mapLink}
                 {...register("mapLink", { required: false })}
               />
               {errors.mapLink && (
@@ -222,6 +209,7 @@ const EventDetails = () => {
                   const startDate = moment(date).format("YYYY-MM-DD")
                   setValue("startDate", startDate)
                 }}
+                defaultDate={selectedEvent?.startDate}
                 className="w-full"
               />
             </div>
@@ -234,6 +222,7 @@ const EventDetails = () => {
                   const endDate = moment(date).format("YYYY-MM-DD")
                   setValue("startDate", endDate)
                 }}
+                defaultDate={selectedEvent?.endDate}
                 className="w-full"
               />
             </div>

@@ -11,7 +11,7 @@ interface TimePickerProps {
   time: string
   setTime: (time: string) => void
 }
-
+// TODO: Create a default time for the time picker
 export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime }) => {
   const [selectedTime, setSelectedTime] = React.useState<DateTime>(
     DateTime.fromFormat(time, "HH:mm", { zone: "utc" }),

@@ -4,7 +4,7 @@ import React, { useState } from "react"
 interface FileUploadProps {
   fileChange: (file: FileList | any) => void
 }
-
+// TODO: Add a default image for the file upload
 const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
   const [files, setFiles] = useState<any[]>([])
   const [message, setMessage] = useState<string>("")
