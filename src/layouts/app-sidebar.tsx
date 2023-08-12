@@ -1,6 +1,7 @@
 import { ChevronDownIcon, LogOut, User, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import MainLogo from "../assets/logos/tikomatata.svg"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu"
 import { Separator } from "../components/ui/separator"
-import MainLogo from "../assets/logos/tikomatata.svg"
-import { removeCookie } from "../lib/utils"
-import { UserProvider } from "../contexts/user.context"
 import UserAvatar from "../components/ui/user-avatar"
+import { removeCookie } from "../lib/utils"
 
 const SideBarRoutes = [
   {
@@ -86,7 +85,7 @@ type Props = {
 const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
   const [width, setWidth] = useState(window.innerWidth)
   const navigate = useNavigate()
-
+  
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize)
@@ -95,7 +94,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
 
 
   return (
-    <UserProvider>
+    <>
       <aside
         id="logo-sidebar"
         className={`fixed inset-y-0 w-[230px] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-20 
@@ -166,7 +165,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
           </div>
         </div>
       </aside>
-    </UserProvider>
+    </>
   )
 }
 

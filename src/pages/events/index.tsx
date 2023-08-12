@@ -19,6 +19,7 @@ import { errorToast } from "@/src/lib/utils"
 import { EventDataType } from "@/src/types"
 import moment from "moment"
 import LoadingScreen from "@/src/components/loading-screen"
+import { useUserStore } from "@/src/stores/user-store"
 
 const Events = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)

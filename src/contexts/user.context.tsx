@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement } from "react"
+import React, { createContext, ReactElement, useMemo } from "react"
 
 import { KeyedMutator } from "swr"
 
@@ -14,21 +14,27 @@ interface IUserContextProps {
   userError?: any
 }
 
-export const UserContext = createContext<IUserContextProps>({} as IUserContextProps)
+export const UserContext = createContext<IUserContextProps>({
+  user: {},
+  userInitials: "",
+  isUserLoading: false,
+  mutateUser: () => {},
+  userError: null,
+} as IUserContextProps)
 
 export const UserProvider = ({ children }: { children: ReactElement }) => {
   // API to fetch user information
   const { user, userInitials, isUserLoading, userError, mutateUser } = useUser()
-
+  const value = useMemo(() => ({
+    user,
+    userInitials,
+    isUserLoading,
+    userError,
+    mutateUser,
+  }), [user, userInitials, isUserLoading, userError, mutateUser])
   return (
     <UserContext.Provider
-      value={{
-        user: userError ? undefined : user,
-        userInitials,
-        isUserLoading,
-        userError,
-        mutateUser,
-      }}
+      value={value}
     >
       {children}
     </UserContext.Provider>

@@ -1,33 +1,13 @@
-import { useEffect, useState } from "react"
-import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
-import { getUserInfo } from "@/src/api-calls"
-import { errorToast } from "@/src/lib/utils"
 import LoadingScreen from "@/src/components/loading-screen"
+import useUser from "@/src/hooks/use-user"
+import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
+import { useUserStore } from "@/src/stores/user-store"
 import KenyaIcon from "../../assets/icons/kenya.png"
 
 const Settings = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [userDetails, setUserDetails] = useState<any>({})
+  const {isUserLoading} = useUser()
+  const user = useUserStore((state) => state.user)
 
-  useEffect(() => {
-    fetchUserDetails()
-  }, [])
-
-  const fetchUserDetails = async () => {
-    setIsLoading(true)
-    try {
-      const res = await getUserInfo()
-      if (res.status === 200) {
-        setUserDetails(res.data)
-      } else {
-        errorToast("Could not fetch your details. Try again later.")
-      }
-    } catch (error) {
-      errorToast("Could not fetch your details. Try again later.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
   return (
     <MainAppWrapper
       left={
@@ -38,7 +18,7 @@ const Settings = () => {
         </div>
       }
     >
-      {isLoading ? (
+      {isUserLoading ? (
         <div className="mt-[20px] h-[50vh] w-full">
           <LoadingScreen />
         </div>
@@ -50,7 +30,7 @@ const Settings = () => {
                 <h3 className="text-base font-semibold">Profile Picture</h3>
               </div>
               <div className="mt-2 md:w-[60%] lg:w-[70%]">
-                <img src={userDetails?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-md" />
+                <img src={user?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-md" />
                 {/* <CustomButton className="ml-8 h-8 flex items-center">Change Avatar</CustomButton> */}
               </div>
             </div>
@@ -66,7 +46,7 @@ const Settings = () => {
                   className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Enter Full Name"
                   autoComplete="nope"
-                  defaultValue={userDetails?.name}
+                  defaultValue={user?.name}
                 ></input>
               </div>
             </div>
@@ -103,7 +83,7 @@ const Settings = () => {
                   className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
                   autoComplete="nope"
-                  defaultValue={userDetails?.email}
+                  defaultValue={user?.email}
                 ></input>
               </div>
             </div>

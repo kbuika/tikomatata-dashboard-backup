@@ -1,12 +1,12 @@
-import { useUserState } from "@/src/contexts/user.context"
-import { Avatar, AvatarImage, AvatarFallback } from "./avatar"
+import { useUserStore } from "@/src/stores/user-store"
+import { Avatar, AvatarImage } from "./avatar"
 
 const UserAvatar = () => {
-  const { user, userInitials } = useUserState()
+  const user = useUserStore((state) => state.user)
   return (
     <Avatar>
       <AvatarImage src={user?.imageUrl} alt="avatar" />
-      <AvatarFallback>{userInitials}</AvatarFallback>
+      {/* <AvatarFallback>{userInitials}</AvatarFallback> */}
     </Avatar>
   )
 }
