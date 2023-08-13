@@ -3,6 +3,7 @@ import React, { useState } from "react"
 
 interface FileUploadProps {
   fileChange: (file: FileList | any) => void
+  defaultImage?: string
 }
 // TODO: Add a default image for the file upload
 const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
@@ -35,7 +36,7 @@ const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
 
   return (
     <>
-      <div className="md:w-1/2 w-full rounded-md">
+<div className=" w-full rounded-md">
         <span className="flex justify-center items-center bg-white text-[12px] mb-1 text-red-500">
           {message}
         </span>
@@ -81,6 +82,8 @@ const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
           })}
         </div>
       </div>
+
+      
     </>
   )
 }

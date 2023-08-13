@@ -32,6 +32,10 @@ export interface EventDataType {
   posterUrl?: string
 }
 
+export type UpdateEventDataType = EventDataType & {
+  posterUrl: string
+}
+
 export interface TicketDataType {
   eventId: number
   ticketId?: number

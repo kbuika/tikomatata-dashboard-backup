@@ -199,6 +199,26 @@ export const updateEventFn = async (eventData: EventDataType) => {
   }
 }
 
+export const deactivateEventFn = async (eventId: string | undefined) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/deactivate`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: {eventId: eventId},
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
 export const fetchUserEventsFn = async (page = 0, size = 10) => {
   const config = {
     method: "get",

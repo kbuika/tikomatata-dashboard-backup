@@ -24,7 +24,7 @@ export const checkRegistrationError = (field: string, errors: any) => {
   return { hasError, message: errorMessage?.message }
 }
 
-export const errorToast = (message: string) => {
+export const errorToast = (message: string | unknown) => {
   toast.error(`Error: ${message}`, {
     autoClose: 4000,
     pauseOnHover: true,
@@ -66,3 +66,25 @@ export const getUserNameInitials = (fullName: string) => {
   // Join the initials together to form the result
   return initials.join("")
 }
+
+export const generateFileFromImageUrl = async(imageUrl: string, filename: string): Promise<File | null> => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `https://cors-anywhere.herokuapp.com/${imageUrl}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+  }
+  try {
+    const response = await fetch(imageUrl, config);
+    const blob = await response.blob();
+    const file = new File([blob], filename, { type: blob.type });
+    return file;
+  } catch (error) {
+    console.error("Error creating File:", error);
+    return null;
+  }
+}
+

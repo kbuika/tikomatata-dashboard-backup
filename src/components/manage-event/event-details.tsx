@@ -14,26 +14,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog"
 import { Textarea } from "../ui/textarea"
 import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
 import FileUploadModal from "../file-upload"
 import moment from "moment"
 import { TimePicker } from "../ui/time-picker"
-import { useEffect, useState } from "react"
-import { errorToast, successToast } from "@/src/lib/utils"
+import { useEffect, useRef, useState } from "react"
+import { errorToast, generateFileFromImageUrl, successToast } from "@/src/lib/utils"
 import { useNavigate, useParams } from "react-router-dom"
-import { updateEventFn } from "@/src/api-calls"
+import { deactivateEventFn, updateEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 import { useEventsStore } from "@/src/stores/events-store"
+import { AlertTriangle, Delete, Loader2, Trash } from "lucide-react"
+import { StopIcon } from "@heroicons/react/solid"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
   ageLimit: yup.number().required("Age limit is required"),
   description: yup.string().required("Description is required"),
-  poster: yup.object().required("File is required"),
+  poster: yup.mixed().required(),
   location: yup.string().required("Location is required"),
-  mapsLink: yup.string().notRequired(),
-  environment: yup.string().required("Environment is required"),
+  mapLink: yup.string().notRequired(),
+  environment: yup.string().notRequired(),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
   startTime: yup.string().required("Start time is required"),
@@ -41,33 +53,89 @@ const schema = yup.object({
 })
 // TODO: Clean up and make sure errors are handled properly and conditional rendering is done properly
 const EventDetails = () => {
-  // const [isLoading, setIsLoading] = useState(false)
-  // const params = useParams()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isDeactivating, setIsDeactivating] = useState(false)
+  const [updateEventError, setUpdateEventError] = useState<any>(null)
+  const [deactivateEventError, setDeactivateEventError] = useState<any>(null)
+  const [changePosterView, setChangePosterView] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
+  const resetAllEvents = useEventsStore((state) => state.resetAllEvents)
   const navigate = useNavigate()
+  const componentRef = useRef(null)
+  const params = useParams()
+  console.log(params, "params")
+  const defaultPosterUrl = selectedEvent?.posterUrl || ""
+  const defaultposter = generateFileFromImageUrl(defaultPosterUrl, "posterFile").then((file) => {
+    if (file) {
+      // Use the generated Blob here
+      console.log(file, "file")
+      return file
+    }
+  })
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-    
-  } = useForm<EventDataType>({ resolver: yupResolver(schema) })
-  
+  } = useForm<EventDataType>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      eventId: selectedEvent?.eventId,
+      name: selectedEvent?.name,
+      ageLimit: selectedEvent?.ageLimit,
+      description: selectedEvent?.description,
+      location: selectedEvent?.location,
+      mapLink: selectedEvent?.mapLink,
+      environment: selectedEvent?.environment,
+      startDate: selectedEvent?.startDate,
+      endDate: selectedEvent?.endDate,
+      startTime: selectedEvent?.startTime,
+      endTime: selectedEvent?.endTime,
+      poster: undefined,
+      posterUrl: selectedEvent?.posterUrl,
+    },
+  })
+
   const onSubmit: SubmitHandler<EventDataType> = async (data) => {
-    // setIsLoading(true)
+    setIsLoading(true)
+    console.log(data, "data")
+    console.log(selectedEvent, "selected event")
     try {
+      console.log(data)
       const res = await updateEventFn(data)
       if (res.status === 200) {
+        resetAllEvents()
         successToast("Event has been update successfully!")
       } else {
-        // setCreateEventError(res.message)
+        setUpdateEventError(res.message)
         errorToast(res?.message)
       }
     } catch (err) {
-      // setCreateEventError(err)
+      errorToast(err)
+      setUpdateEventError(err)
     } finally {
-      // setIsLoading(false)
+      setIsLoading(false)
+    }
+  }
+
+  const deactivateEvent = async () => {
+    setIsDeactivating(true)
+    try {
+      const res = await deactivateEventFn(params?.id)
+      if (res.status === 200) {
+        resetAllEvents()
+        successToast("Event has been deactivated successfully!")
+        navigate("/events")
+      } else {
+        setDeactivateEventError(res.message)
+        errorToast(res?.message)
+      }
+    } catch (err) {
+      errorToast(err)
+      setDeactivateEventError(err)
+    } finally {
+      setIsDeactivating(false)
     }
   }
   return (
@@ -75,16 +143,54 @@ const EventDetails = () => {
       left={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">
-            <h2 className="text-[18px] font-semibold">event details</h2>
+            <h2 className="text-[18px] font-semibold">{selectedEvent?.name}</h2>
           </div>
         </div>
       }
       right={
         <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between">
-            <CustomButton className=" w-[5em]" onClick={handleSubmit(onSubmit)}>
-              Update
+          <div className="w-full flex flex-row-reverse items-center justify-between">
+            <CustomButton className="w-auto ml-4" onClick={handleSubmit(onSubmit)}>
+              {isLoading ? (
+                <>
+                  Updating... <Loader2 className="animate-spin" />
+                </>
+              ) : (
+                "Update"
+              )}
             </CustomButton>
+            <div>
+              <Dialog>
+                <DialogTrigger>
+                  <Trash color="grey" size={18} />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg">
+                  <DialogHeader>
+                    <DialogTitle className="flex flex-row items-center">
+                      <AlertTriangle color="red" className="mr-2" /> Deactivate Event?
+                    </DialogTitle>
+                    <DialogDescription className="mt-4">
+                      <p className="mt-4 text-base text-left">
+                        Are you sure you want to deactivate this event?
+                      </p>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="flex flex-row items-center justify-end">
+                    <DialogClose className="mr-4">Cancel</DialogClose>
+
+                    <CustomButton className="w-auto bg-criticalRed hover:bg-criticalRed" onClick={deactivateEvent}>
+                      {isDeactivating ? (
+                        <>
+                          Deactivating... <Loader2 className="animate-spin" />
+                        </>
+                      ) : (
+                        "Deactivate"
+                      )}
+                    </CustomButton>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       }
@@ -142,10 +248,35 @@ const EventDetails = () => {
           <div className="flex flex-row items-center justify-between w-full mt-4">
             <div className="w-full">
               <label htmlFor="name" className="text-neutralDark">
-                Upload Poster
+                Event Poster{" "}
+                <button
+                  className="text-mainPrimary underline underline-offset-2"
+                  onClick={() => setChangePosterView(!changePosterView)}
+                >
+                  change poster
+                </button>
               </label>
-              <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
-              {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
+              {selectedEvent?.posterUrl && !changePosterView ? (
+                <div className="w-full h-[20em] bg-neutralWhite">
+                  <img
+                    src={selectedEvent?.posterUrl}
+                    alt="poster"
+                    className="object-contain w-full h-full"
+                  />
+                </div>
+              ) : (
+                <>
+                  <FileUploadModal
+                    fileChange={(files: FileList | any) => {
+                      setValue("poster", files)
+                    }}
+                    defaultImage={selectedEvent?.posterUrl}
+                  />
+                  {errors.poster && (
+                    <span className="text-criticalRed">{errors.poster?.message}</span>
+                  )}
+                </>
+              )}
             </div>
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-4">
@@ -183,14 +314,21 @@ const EventDetails = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Event Environment
               </label>
-              <Select name="environment">
-                <SelectTrigger>
-                  <SelectValue placeholder="Indoor/Outdoor" />
+              <Select {...register("environment", { required: false })} defaultValue={"indoor"}>
+                <SelectTrigger ref={componentRef}>
+                  <SelectValue
+                    placeholder="Indoor/Outdoor"
+                    defaultValue={selectedEvent?.environment}
+                  />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="indoor">Indoor</SelectItem>
-                    <SelectItem value="outdoor">Outdoor</SelectItem>
+                <SelectContent ref={componentRef}>
+                  <SelectGroup ref={componentRef}>
+                    <SelectItem value="indoor" ref={componentRef}>
+                      Indoor
+                    </SelectItem>
+                    <SelectItem value="outdoor" ref={componentRef}>
+                      Outdoor
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

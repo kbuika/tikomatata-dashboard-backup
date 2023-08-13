@@ -260,7 +260,7 @@ const EventDashBoard = () => {
                         </div>
                         {/* web */}
                         <div className="mt-8 hidden sm:block">
-                          <AreaChart {...areaChartArgs} />
+                          <AreaChart {...areaChartArgs} colors={["violet"]}/>
                         </div>
                         {/* mobile */}
                         <div className="mt-8 sm:hidden">

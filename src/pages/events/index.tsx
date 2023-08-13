@@ -22,8 +22,9 @@ import LoadingScreen from "@/src/components/loading-screen"
 import { useEventsStore } from "@/src/stores/events-store"
 
 const Events = () => {
+  const allEvents = useEventsStore((state) => state.allEvents)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [userEvents, setUserEvents] = useState<[]>([])
+  const [userEvents, setUserEvents] = useState<Array<EventDataType>>(allEvents)
   const [eventsError, setEventsError] = useState<string>("")
   const navigate = useNavigate()
   // stores
@@ -31,7 +32,11 @@ const Events = () => {
   const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
 
   useEffect(() => {
-    fetchEvents()
+    if(allEvents.length > 0) {
+      setUserEvents(allEvents)
+    }else {
+      fetchEvents()
+    }
   }, [])
   // TODO: consider using SWR for this keeping in mind the need to update the events list when a new event is created
   const fetchEvents = async () => {
@@ -75,9 +80,9 @@ const Events = () => {
         </div>
       }
     >
-      <div className="text-neutralDark px-[30px] min-[768px]:ml-0">
+      <div className="text-neutralDark px-[20px] pb-[30px] min-[768px]:ml-0 ">
         {userEvents.length > 0 ? (
-          <div className="mt-[20px] h-[90vh]">
+          <div className="mt-[10px] min-h-[90vh] h-auto mb-[20px]">
             {userEvents?.map((event: EventDataType) => {
               return (
                 <div className="flex flex-col w-full space-y-4 mb-4" key={event?.name}>
