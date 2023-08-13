@@ -10,18 +10,26 @@ import { errorToast } from "@/src/lib/utils"
 import { useParams } from "react-router-dom"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { Plus } from "lucide-react"
+import { useTicketsStore } from "@/src/stores/tickets-store"
+import { Sheet, SheetContent } from "../ui/sheet"
 
 const EventTickets = () => {
+  const allTickets = useTicketsStore((state) => state.allTickets)
+  const setAllTickets = useTicketsStore((state) => state.setAllTickets)
   const [createTicketView, setCreateTicketView] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [eventTickets, setEventTickets] = useState<[]>([])
+  const [eventTickets, setEventTickets] = useState<Array<TicketDataType>>(allTickets)
   const [fetchTicketsError, setTicketsError] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const params = useParams()
 
   useEffect(() => {
-    fetchTickets(params.id)
-  }, [])
+    if(allTickets.length > 0) {
+      setEventTickets(allTickets)
+    }else {
+      fetchTickets(params.id)
+    }
+  }, [allTickets])
 
   const fetchTickets = async (eventId: string | undefined) => {
     setIsLoading(true)
@@ -29,6 +37,7 @@ const EventTickets = () => {
       const res = await fetchEventTicketsFn(eventId)
       if (res.status === 200) {
         setEventTickets(res.data)
+        setAllTickets(res.data)
       } else {
         setTicketsError(res.message)
         errorToast("Could not fetch this event's tickets. Try again later.")

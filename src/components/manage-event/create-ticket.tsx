@@ -15,6 +15,7 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useParams } from "react-router-dom"
 import { TimePicker } from "../ui/time-picker"
+import { useTicketsStore } from "@/src/stores/tickets-store"
 
 const schema = yup.object({
   name: yup.string().required("Ticket name is required"),
@@ -37,6 +38,9 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
   const [createTicketError, setCreateTicketError] = useState<any>([])
   const params = useParams()
 
+  // store
+  const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
+
   // const [groupTicket, setGroupTicket] = useState<boolean>(false)
   const {
     register,
@@ -51,6 +55,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
       data = { ...data, eventId: parseInt(params?.id || "") }
       const res = await createTicketFn(data)
       if (res?.data?.status === 200) {
+        resetAllTickets() // reset tickets store to fetch new tickets
         successToast("Ticket has been created successfully!")
         setCreateTicketView(false)
       } else {
