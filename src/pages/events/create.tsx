@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import MainContainer from "../../components/ui/custom-container"
 import CustomButton from "../../components/ui/custom-button"
 import Input from "../../components/ui/Input"
 import {
@@ -15,15 +14,17 @@ import {
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { DatePicker } from "../../components/ui/date-picker"
-import { createEventFn } from "@/src/apiCalls"
+import { createEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
 import { errorToast, successToast } from "@/src/lib/utils"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
 import FileUploadModal from "@/src/components/file-upload"
 import { TimePicker } from "@/src/components/ui/time-picker"
+import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
+import { useEventsStore } from "@/src/stores/events-store"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -45,6 +46,8 @@ const CreateEvent = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
   const componentRef = useRef(null)
+  // stores
+  const resetAllEvents = useEventsStore((state) => state.resetAllEvents)
 
   const navigate = useNavigate()
   const {
@@ -60,6 +63,7 @@ const CreateEvent = () => {
       const res = await createEventFn(data)
       if (res.status === 200) {
         successToast("Event has been created successfully!")
+        resetAllEvents()
         navigate("/events")
       } else {
         setCreateEventError(res.message)
@@ -73,12 +77,18 @@ const CreateEvent = () => {
   }
 
   return (
-    <MainContainer>
-      <div className="text-neutralDark">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h2 className="text-[23px] font-semibold">Create Event</h2>
+    <MainAppWrapper
+      left={
+        <div className="">
+          <h2 className="text-[17px] font-semibold text-neutralDark">Create Event</h2>
+        </div>
+      }
+      right={
+        <div className="">
           <div className="flex flex-flow items-center">
-            <Button variant="ghost">Cancel</Button>
+            <Link to="/events">
+              <Button variant="ghost">Cancel</Button>
+            </Link>
             <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)}>
               {isLoading ? (
                 <>
@@ -90,8 +100,9 @@ const CreateEvent = () => {
             </CustomButton>
           </div>
         </div>
-      </div>
-      <div className="w-full min-h-screen mt-[1em]">
+      }
+    >
+      <div className="w-full min-h-screen">
         <div className="flex flex-row items-center justify-between w-full">
           <div className="w-[48%]">
             <label htmlFor="name" className="text-neutralDark">
@@ -252,7 +263,7 @@ const CreateEvent = () => {
           </div>
         </div>
       </div>
-    </MainContainer>
+    </MainAppWrapper>
   )
 }
 

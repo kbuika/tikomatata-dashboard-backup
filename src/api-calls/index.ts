@@ -1,5 +1,5 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
-import { getCookie, getInitials } from "../lib/utils"
+import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
   EventDataType,
   ResetPasswordArgs,
@@ -135,7 +135,7 @@ export const getUserAvatarAndInitials = async () => {
     if (response?.data.status === 200) {
       return {
         imageUrl: response?.data?.data?.imageUrl,
-        initials: getInitials(response?.data?.data?.fullName),
+        initials: getUserNameInitials(response?.data?.data?.fullName),
       }
     }
   } catch (error: any) {
@@ -193,6 +193,26 @@ export const updateEventFn = async (eventData: EventDataType) => {
 
   try {
     const response = await axiosInstance.post(config.url, data, config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const deactivateEventFn = async (eventId: string | undefined) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/deactivate`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: {eventId: eventId},
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
     return response
   } catch (error: any) {
     return error

@@ -38,6 +38,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog"
+import { useEventsStore } from "@/src/stores/events-store"
 
 type Kpi = {
   title: string
@@ -153,6 +154,7 @@ export const AttendeesList: Attendee[] = [
 
 const EventDashBoard = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const selectedKpi = kpiList[selectedIndex]
 
   const areaChartArgs = {
@@ -170,7 +172,7 @@ const EventDashBoard = () => {
       left={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between relative">
-            <h2 className="text-[18px] font-semibold">AfroFest 2023</h2>
+            <h2 className="text-[18px] font-semibold">{selectedEvent?.name}</h2>
           </div>
         </div>
       }
@@ -258,7 +260,7 @@ const EventDashBoard = () => {
                         </div>
                         {/* web */}
                         <div className="mt-8 hidden sm:block">
-                          <AreaChart {...areaChartArgs} />
+                          <AreaChart {...areaChartArgs} colors={["violet"]}/>
                         </div>
                         {/* mobile */}
                         <div className="mt-8 sm:hidden">

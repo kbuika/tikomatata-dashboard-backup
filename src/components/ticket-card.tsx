@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { Badge } from "@tremor/react"
+// import { Badge } from "@tremor/react"
 import { Loader2 } from "lucide-react"
 import { Sheet, SheetTrigger, SheetHeader, SheetContent } from "./ui/sheet"
 import Input from "./ui/Input"
@@ -12,8 +12,9 @@ import { TicketDataType } from "../types"
 import moment from "moment"
 import { TimePicker } from "./ui/time-picker"
 import { checkRegistrationError, errorToast, successToast } from "../lib/utils"
-import { updateTicketFn } from "../apiCalls"
+import { updateTicketFn } from "../api-calls"
 import { Button } from "./ui/button"
+import { useTicketsStore } from "../stores/tickets-store"
 
 const schema = yup.object({
   name: yup.string().required("Ticket name is required"),
@@ -36,6 +37,10 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
   const [updateTicketError, setUpdateTicketError] = useState<any>([])
   const [editSheetOpen, setEditSheetOpen] = useState<boolean>(false)
   const ticket = ticketData?.ticketData
+
+  // store
+  const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
+
   const {
     register,
     handleSubmit,
@@ -49,7 +54,10 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
       data = { ...data, eventId: ticket?.eventId, ticketId: ticket?.ticketId }
       const res = await updateTicketFn(data)
       if (res?.data?.status === 200) {
+        console.log("res", res)
+        resetAllTickets() // reset tickets in store to trigger a re-fetch
         successToast("Ticket has been created successfully!")
+        setEditSheetOpen(false)
       } else {
         errorToast(res?.data?.message)
         if (res?.response?.data?.data?.errors) {
@@ -79,14 +87,14 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                         <SheetTrigger onClick={() => setEditSheetOpen(true)}>
                           <p className="underline underline-offset-4">edit</p>
                         </SheetTrigger>
-                        <SheetContent className="w-[90%]">
+                        <SheetContent className="w-[400px]">
                           <SheetHeader>Edit Ticket Details</SheetHeader>
                           {isLoading ? (
                             <div className="flex items-center justify-center min-h-[40vh]">
                               <Loader2 className="w-10 h-10 animate-spin" />
                             </div>
                           ) : (
-                            <div className="h-auto w-full mt-6 mb-6">
+                            <div className="h-auto w-full mt-6 mb-6 w-full">
                               <div className="flex flex-row items-center justify-between w-full">
                                 <div className="w-full">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -230,14 +238,15 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}{" "}
                                 </div>
                               </div>
-                              <div className="flex flex-row items-center justify-between w-[50%] mt-6">
-                                <div className="flex flex-col w-auto">
+                              <div className="flex flex-row items-center justify-between w-full mt-6">
+                                <div className="flex flex-col">
                                   <label htmlFor="name" className="text-neutralDark">
                                     Sale Start Time
                                   </label>
                                   <TimePicker
                                     time={ticket?.saleStartTime}
                                     setTime={(time) => setValue("saleStartTime", time)}
+                                      buttonStyle={"w-[160px]"}
                                   />
                                   {errors.saleStartTime && (
                                     <span className="text-criticalRed">
@@ -254,13 +263,14 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                     </span>
                                   )}{" "}
                                 </div>
-                                <div className="flex flex-col w-auto ml-8">
+                                <div className="flex flex-col ml-2">
                                   <label htmlFor="name" className="text-neutralDark">
                                     Sale End Time
                                   </label>
                                   <TimePicker
                                     time="12:00"
                                     setTime={(time) => setValue("saleEndTime", time)}
+                                    buttonStyle={"w-[160px]"}
                                   />
                                   {errors.saleEndTime && (
                                     <span className="text-criticalRed">
@@ -283,7 +293,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   Cancel
                                 </Button>
                                 <CustomButton
-                                  className="w-1/5 ml-4"
+                                  className="w-auto ml-4"
                                   type="submit"
                                   color="primary"
                                   size="lg"
@@ -303,7 +313,8 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                     <div className="absolute rounded-full w-5 h-5 bg-neutralDark -mt-2 -left-2"></div>
                     <div className="absolute rounded-full w-5 h-5 bg-neutralDark -mt-2 -right-2"></div>
                   </div>
-                  <div className="flex flex-col py-3 items-center justify-center text-sm ">
+                  {/* TODO: Restore ticket sale count when ready */}
+                  {/* <div className="flex flex-col py-3 items-center justify-center text-sm ">
                     <h6 className="font-bold text-center">Tickets Sold</h6>
                     <div className="flex row items-center">
                       <p className="font-bold text-center text-2xl mt-2 text-gray-500">200/500</p>
@@ -311,12 +322,18 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                         12.3% Sold
                       </Badge>
                     </div>
+                  </div> */}
+                  <div className="flex flex-col py-3 justify-center text-sm ">
+                    <h6 className="font-bold text-center">Ticket Price</h6>
+                    <p className="font-bold text-center text-lg mt-1 text-gray-500">
+                      KES {ticket?.price}
+                    </p>
                   </div>
                   <div className="flex flex-col py-3 justify-center text-sm ">
                     <h6 className="font-bold text-center">Sale Period</h6>
                     <p className="font-bold text-center text-lg mt-2 text-gray-500">
-                      {moment(ticket?.saleStartDate).format("Do MMMM")} -{" "}
-                      {moment(ticket?.saleEndDate)?.format("Do MMMM")}
+                      {moment(ticket?.saleStartDate).format("Do MMM")} -{" "}
+                      {moment(ticket?.saleEndDate)?.format("Do MMM")}
                     </p>
                   </div>
                 </div>

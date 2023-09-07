@@ -12,7 +12,6 @@ const OAuth2RedirectHandler = ({ setToken }: IOAuth2RedirectHandlerProps) => {
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("token")
     if (token) {
-      localStorage.setItem(ACCESS_TOKEN, token)
       setCookie(ACCESS_TOKEN, token)
       setToken(token)
       navigate("/events")

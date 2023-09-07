@@ -10,9 +10,10 @@ import Input from "./Input"
 interface TimePickerProps {
   time: string
   setTime: (time: string) => void
+  buttonStyle?: any
 }
-
-export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime }) => {
+// TODO: Create a default time for the time picker
+export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime, buttonStyle }) => {
   const [selectedTime, setSelectedTime] = React.useState<DateTime>(
     DateTime.fromFormat(time, "HH:mm", { zone: "utc" }),
   )
@@ -33,7 +34,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime }) => {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[200px] justify-start text-left font-normal mt-1",
+            `w-[200px] justify-start text-left font-normal mt-1 ${buttonStyle}`,
             !time && "text-muted-foreground",
           )}
         >
