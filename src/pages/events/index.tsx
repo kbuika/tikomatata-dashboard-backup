@@ -32,30 +32,32 @@ const Events = () => {
   const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
 
   useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true)
+      try {
+        const res = await fetchUserEventsFn()
+        if (res.status === 200) {
+          setUserEvents(res.data)
+          setAllEvents(res.data)
+        } else {
+          setEventsError(res.message)
+          errorToast("Could not fetch your events. Try again later.")
+        }
+      } catch (error) {
+        errorToast("Could not fetch your events. Try again later.")
+      } finally {
+        setIsLoading(false)
+      }
+    }
     if(allEvents.length > 0) {
       setUserEvents(allEvents)
     }else {
       fetchEvents()
     }
+
+    return () => {}
   }, [])
-  // TODO: consider using SWR for this keeping in mind the need to update the events list when a new event is created
-  const fetchEvents = async () => {
-    setIsLoading(true)
-    try {
-      const res = await fetchUserEventsFn()
-      if (res.status === 200) {
-        setUserEvents(res.data)
-        setAllEvents(res.data)
-      } else {
-        setEventsError(res.message)
-        errorToast("Could not fetch your events. Try again later.")
-      }
-    } catch (error) {
-      errorToast("Could not fetch your events. Try again later.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  
 
   const goToEvent = (eventId: number | undefined, event: EventDataType) => {
     // set active event and navigate to event page
