@@ -10,7 +10,7 @@ type Props = {
 const AppHeader: React.FC<Props> = ({ left, right, noHeader, setToggleSidebar }) => {
   return (
     <div
-      className={`w-full flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] max-sidebarLayout:px-[30px] border-b-2 ${
+      className={`sticky top-0 bg-white z-20 w-full flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] max-sidebarLayout:px-[30px] border-b-2 ${
         noHeader ? "hidden" : ""
       }`}
     >
