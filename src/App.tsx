@@ -14,6 +14,7 @@ import Payments from "./pages/payments"
 import Settings from "./pages/settings"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import Auth from "./auth/auth"
 
 const App = () => {
   const { token, setToken } = useToken()
@@ -21,7 +22,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SignIn setToken={setToken} />} />
+          <Route path="/" element={<Auth setToken={setToken}/>} />
           <Route path="/sign-in" element={<SignIn setToken={setToken} />} />
           <Route path="/register" element={<SignUp setToken={setToken} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
