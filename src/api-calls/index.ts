@@ -302,3 +302,23 @@ export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0,
     return error
   }
 }
+
+export const publishEventFn = async (eventId: number | undefined) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/event/publish`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: { eventId: eventId },
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}

@@ -63,12 +63,10 @@ const EventDetails = () => {
   const navigate = useNavigate()
   const componentRef = useRef(null)
   const params = useParams()
-  console.log(params, "params")
   const defaultPosterUrl = selectedEvent?.posterUrl || ""
   const defaultposter = generateFileFromImageUrl(defaultPosterUrl, "posterFile").then((file) => {
     if (file) {
       // Use the generated Blob here
-      console.log(file, "file")
       return file
     }
   })
@@ -99,10 +97,7 @@ const EventDetails = () => {
 
   const onSubmit: SubmitHandler<EventDataType> = async (data) => {
     setIsLoading(true)
-    console.log(data, "data")
-    console.log(selectedEvent, "selected event")
     try {
-      console.log(data)
       const res = await updateEventFn(data)
       if (res.status === 200) {
         resetAllEvents()

@@ -27,7 +27,7 @@ import {
   TableRow,
 } from "@tremor/react"
 import { useState } from "react"
-import { Download, Rocket } from "lucide-react"
+import { Download, Loader2, Rocket } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -39,6 +39,8 @@ import {
 } from "../ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { useEventsStore } from "@/src/stores/events-store"
+import { publishEventFn } from "@/src/api-calls"
+import { errorToast, successToast } from "@/src/lib/utils"
 
 type Kpi = {
   title: string
@@ -153,6 +155,7 @@ export const AttendeesList: Attendee[] = [
 ]
 
 const EventDashBoard = () => {
+  const [publishEventLoading, setPublishEventLoading] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const selectedKpi = kpiList[selectedIndex]
@@ -166,6 +169,23 @@ const EventDashBoard = () => {
     showLegend: false,
     valueFormatter: formatters[selectedKpi],
     yAxisWidth: 56,
+  }
+
+  const onPublishEvent = async () => {
+    setPublishEventLoading(true)
+    try {
+      const res = await publishEventFn(selectedEvent?.eventId)
+      console.log(res)
+      if (res?.data?.status === 200) {
+        successToast("Your event is live!")
+      } else {
+        errorToast(res?.data?.message)
+      }
+    } catch (err) {
+      errorToast("Could not publish event. Try again later.")
+    } finally {
+      setPublishEventLoading(false)
+    }
   }
   return (
     <EventPagesWrapper
@@ -193,10 +213,17 @@ const EventDashBoard = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex flex-row items-center justify-end">
-                  <DialogClose>Cancel</DialogClose>
-                  <CustomButton className="mt-auto w-auto ml-4 flex flex-row items-center">
+                  <DialogClose className="mr-4">Cancel</DialogClose>
+                  <CustomButton className="mt-auto w-auto ml-4 flex flex-row items-center" onClick={onPublishEvent}>
+                    {publishEventLoading ? <>
+                    <Loader2 size={15} className="animate-spin"/>
+                    <span className="ml-2">Publishing...</span>
+                    </>
+                    : (<>
                     <Rocket size={15} />
                     <span className="ml-2">Publish</span>
+                    </>)}
+                    
                   </CustomButton>
                 </DialogFooter>
               </DialogContent>
