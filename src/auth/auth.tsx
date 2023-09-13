@@ -50,6 +50,11 @@ export default function Auth({ setToken }: IAuthProps) {
                   Login
                 </CustomButton>
             </DialogTrigger>
+            <Link to="https://tikomatata.com/contact">
+              <CustomButton className="bg-transparent border border-white mt-4 w-[20em]">
+                Talk to Us
+              </CustomButton>
+            </Link>
           </div>
           <DialogContent className="max-[768px]:w-[90%] rounded">
             <DialogTitle className=" flex items-center justify-center">
