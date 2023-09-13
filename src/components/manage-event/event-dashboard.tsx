@@ -54,18 +54,18 @@ type Kpi = {
 const kpiData: Kpi[] = [
   {
     title: "Sales",
-    metric: "KES 12,699",
+    metric: "KES 0",
     progress: 15.9,
     target: "KES 80,000",
-    delta: "13.2%",
+    delta: "0%",
     deltaType: "moderateIncrease",
   },
   {
     title: "Attendees",
-    metric: "1,072",
+    metric: "0",
     progress: 53.6,
     target: "2,000",
-    delta: "10.1%",
+    delta: "0%",
     deltaType: "moderateDecrease",
   },
 ]
@@ -98,26 +98,26 @@ export type DailyPerformance = {
 }
 
 export const performance: DailyPerformance[] = [
-  {
-    date: "2023-05-01",
-    Sales: 900.73,
-    Attendees: 73,
-  },
-  {
-    date: "2023-05-02",
-    Sales: 1000.74,
-    Attendees: 74,
-  },
-  {
-    date: "2023-05-03",
-    Sales: 1100.93,
-    Attendees: 293,
-  },
-  {
-    date: "2023-05-04",
-    Sales: 1200.9,
-    Attendees: 29,
-  },
+  // {
+  //   date: "2023-05-01",
+  //   Sales: 900.73,
+  //   Attendees: 73,
+  // },
+  // {
+  //   date: "2023-05-02",
+  //   Sales: 1000.74,
+  //   Attendees: 74,
+  // },
+  // {
+  //   date: "2023-05-03",
+  //   Sales: 1100.93,
+  //   Attendees: 293,
+  // },
+  // {
+  //   date: "2023-05-04",
+  //   Sales: 1200.9,
+  //   Attendees: 29,
+  // },
 ]
 
 export type Attendee = {
@@ -128,30 +128,30 @@ export type Attendee = {
 }
 
 export const AttendeesList: Attendee[] = [
-  {
-    name: "Peter Doe",
-    email: "peter@doe.com",
-    dateOfPurchase: "23/07",
-    ticketType: "Regular",
-  },
-  {
-    name: "Peter Doe",
-    email: "peter@doe.com",
-    dateOfPurchase: "23/07",
-    ticketType: "Regular",
-  },
-  {
-    name: "Peter Doe",
-    email: "peter@doe.com",
-    dateOfPurchase: "23/07",
-    ticketType: "Regular",
-  },
-  {
-    name: "Peter Doe",
-    email: "peter@doe.com",
-    dateOfPurchase: "23/07",
-    ticketType: "Regular",
-  },
+  // {
+  //   name: "Peter Doe",
+  //   email: "peter@doe.com",
+  //   dateOfPurchase: "23/07",
+  //   ticketType: "Regular",
+  // },
+  // {
+  //   name: "Peter Doe",
+  //   email: "peter@doe.com",
+  //   dateOfPurchase: "23/07",
+  //   ticketType: "Regular",
+  // },
+  // {
+  //   name: "Peter Doe",
+  //   email: "peter@doe.com",
+  //   dateOfPurchase: "23/07",
+  //   ticketType: "Regular",
+  // },
+  // {
+  //   name: "Peter Doe",
+  //   email: "peter@doe.com",
+  //   dateOfPurchase: "23/07",
+  //   ticketType: "Regular",
+  // },
 ]
 
 const EventDashBoard = () => {
@@ -175,7 +175,6 @@ const EventDashBoard = () => {
     setPublishEventLoading(true)
     try {
       const res = await publishEventFn(selectedEvent?.eventId)
-      console.log(res)
       if (res?.data?.status === 200) {
         successToast("Your event is live!")
       } else {
@@ -272,7 +271,7 @@ const EventDashBoard = () => {
                               justifyContent="start"
                               alignItems="center"
                             >
-                              <Title> Sales History </Title>
+                              <Title> Sales History ( work in progress) </Title>
                             </Flex>
                             <Text> Daily change for sales </Text>
                           </div>
@@ -309,11 +308,11 @@ const EventDashBoard = () => {
                       <>
                         <div className="flex flex-row">
                           <Flex className="space-x-0.5" justifyContent="start" alignItems="center">
-                            <Title> Attendees List </Title>
+                            <Title> Attendees List (Work in progress)</Title>
                             <Icon
                               icon={InformationCircleIcon}
                               variant="simple"
-                              tooltip="Shows sales performance per employee"
+                              tooltip="Shows a list of tickets purchased for this event"
                             />
                           </Flex>
                           <div className="flex flex-row items-center text-sm cursor-pointer">

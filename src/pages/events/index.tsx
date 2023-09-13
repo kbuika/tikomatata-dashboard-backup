@@ -20,6 +20,7 @@ import { EventDataType } from "@/src/types"
 import moment from "moment"
 import LoadingScreen from "@/src/components/loading-screen"
 import { useEventsStore } from "@/src/stores/events-store"
+import { useTicketsStore } from "@/src/stores/tickets-store"
 
 const Events = () => {
   const allEvents = useEventsStore((state) => state.allEvents)
@@ -30,7 +31,7 @@ const Events = () => {
   // stores
   const setAllEvents = useEventsStore((state) => state.setAllEvents)
   const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
-
+  const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true)
@@ -62,6 +63,7 @@ const Events = () => {
   const goToEvent = (eventId: number | undefined, event: EventDataType) => {
     // set active event and navigate to event page
     setSelectedEvent(event)
+    resetAllTickets() // reset all tickets in cache
     navigate(`/events/manage/${eventId}`)
   }
 
