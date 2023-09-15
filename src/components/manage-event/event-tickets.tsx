@@ -29,7 +29,7 @@ const EventTickets = () => {
     // }else {
       fetchTickets(params.id)
     // }
-  }, [allTickets])
+  }, [])
 
   const fetchTickets = async (eventId: string | undefined) => {
     setIsLoading(true)
