@@ -26,7 +26,7 @@ export const registerUser = async (user: UserRegisterObj) => {
     data,
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
+      Authorization: "Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09"
     },
   }
   try {
@@ -49,7 +49,8 @@ export const loginUser = async (user: UserLoginObj) => {
     data: data,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic dGlrb21hdGF0YTpkR2wwYVM1dFlYUmhkR0V6TWpjek9DWWhKVUJlUUE9PQ==",
+      // eslint-disable-next-line quotes
+      Authorization: 'Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09'
     },
   }
   try {
