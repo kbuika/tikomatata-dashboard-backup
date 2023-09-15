@@ -24,11 +24,11 @@ const EventTickets = () => {
   const params = useParams()
 
   useEffect(() => {
-    if(allTickets.length > 0) {
-      setEventTickets(allTickets)
-    }else {
+    // if(allTickets.length > 0) {
+    //   setEventTickets(allTickets)
+    // }else {
       fetchTickets(params.id)
-    }
+    // }
   }, [allTickets])
 
   const fetchTickets = async (eventId: string | undefined) => {

@@ -184,7 +184,7 @@ export const updateEventFn = async (eventData: EventDataType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/api/v1/event/create`,
+    url: `${baseUrl}/api/v1/event/update`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
       "Content-Type": "multipart/form-data", // Updated header value
