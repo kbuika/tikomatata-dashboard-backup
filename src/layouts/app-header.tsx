@@ -6,7 +6,7 @@ type Props = {
   noHeader?: boolean
   setToggleSidebar: React.Dispatch<React.SetStateAction<boolean>>
 }
-
+// TODO: make the header fixed, not sticky.
 const AppHeader: React.FC<Props> = ({ left, right, noHeader, setToggleSidebar }) => {
   return (
     <div
