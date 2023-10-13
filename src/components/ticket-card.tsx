@@ -54,9 +54,8 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
       data = { ...data, eventId: ticket?.eventId, ticketId: ticket?.ticketId }
       const res = await updateTicketFn(data)
       if (res?.data?.status === 200) {
-        console.log("res", res)
         resetAllTickets() // reset tickets in store to trigger a re-fetch
-        successToast("Ticket has been created successfully!")
+        successToast("Ticket has been updated successfully!")
         setEditSheetOpen(false)
       } else {
         errorToast(res?.data?.message)
@@ -136,13 +135,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("quantity", updateTicketError)
                                     ?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError("quantity", updateTicketError)
-                                          ?.message
-                                      }
-                                    </span>
-                                  )}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError("quantity", updateTicketError)
+                                            ?.message
+                                        }
+                                      </span>
+                                    )}
                                 </div>
                                 <div className="w-[48%]">
                                   <label htmlFor="price" className="text-neutralDark">
@@ -188,26 +187,26 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleStartDate", updateTicketError)
                                     ?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError("saleStartDate", updateTicketError)
-                                          ?.message
-                                      }
-                                    </span>
-                                  )}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError("saleStartDate", updateTicketError)
+                                            ?.message
+                                        }
+                                      </span>
+                                    )}
                                   {checkRegistrationError(
                                     "saleStartDate, saleEndDate",
                                     updateTicketError,
                                   )?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError(
-                                          "saleStartDate, saleEndDate",
-                                          updateTicketError,
-                                        )?.message
-                                      }
-                                    </span>
-                                  )}{" "}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError(
+                                            "saleStartDate, saleEndDate",
+                                            updateTicketError,
+                                          )?.message
+                                        }
+                                      </span>
+                                    )}{" "}
                                 </div>
                                 <div className="flex flex-col w-[48%]">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -229,13 +228,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleEndDate", updateTicketError)
                                     ?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError("saleEndDate", updateTicketError)
-                                          ?.message
-                                      }
-                                    </span>
-                                  )}{" "}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError("saleEndDate", updateTicketError)
+                                            ?.message
+                                        }
+                                      </span>
+                                    )}{" "}
                                 </div>
                               </div>
                               <div className="flex flex-row items-center justify-between w-full mt-6">
@@ -246,7 +245,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   <TimePicker
                                     time={ticket?.saleStartTime}
                                     setTime={(time) => setValue("saleStartTime", time)}
-                                      buttonStyle={"w-[160px]"}
+                                    buttonStyle={"w-[160px]"}
                                   />
                                   {errors.saleStartTime && (
                                     <span className="text-criticalRed">
@@ -255,13 +254,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleStartTime", updateTicketError)
                                     ?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError("saleStartTime", updateTicketError)
-                                          ?.message
-                                      }
-                                    </span>
-                                  )}{" "}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError("saleStartTime", updateTicketError)
+                                            ?.message
+                                        }
+                                      </span>
+                                    )}{" "}
                                 </div>
                                 <div className="flex flex-col ml-2">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -279,13 +278,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleEndTime", updateTicketError)
                                     ?.hasError && (
-                                    <span className="text-criticalRed">
-                                      {
-                                        checkRegistrationError("saleEndTime", updateTicketError)
-                                          ?.message
-                                      }
-                                    </span>
-                                  )}{" "}
+                                      <span className="text-criticalRed">
+                                        {
+                                          checkRegistrationError("saleEndTime", updateTicketError)
+                                            ?.message
+                                        }
+                                      </span>
+                                    )}{" "}
                                 </div>
                               </div>
                               <div className="flex items-center justify-end mt-6">
