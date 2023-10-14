@@ -27,7 +27,7 @@ export interface EventDataType {
   endDate: string
   startTime?: string
   endTime?: string
-  ageLimit: number;
+  ageLimit: number | string
   poster: FileList
   posterUrl?: string
   cancelled?: boolean
@@ -35,7 +35,7 @@ export interface EventDataType {
 }
 
 export interface EventDataTypeExtended extends EventDataType {
-  poster?: FileList
+  poster: FileList | null
 }
 
 export type UpdateEventDataType = EventDataType & {
