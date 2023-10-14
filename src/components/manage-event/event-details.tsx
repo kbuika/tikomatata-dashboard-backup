@@ -131,13 +131,6 @@ const EventDetails = () => {
   }
   return (
     <EventPagesWrapper
-      left={
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between">
-            <h2 className="text-[18px] font-semibold">{selectedEvent?.name}</h2>
-          </div>
-        </div>
-      }
       right={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row-reverse items-center justify-between">

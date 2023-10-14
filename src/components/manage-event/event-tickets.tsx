@@ -12,6 +12,7 @@ import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { Plus } from "lucide-react"
 import { useTicketsStore } from "@/src/stores/tickets-store"
 import { Sheet, SheetContent } from "../ui/sheet"
+import { useEventsStore } from "@/src/stores/events-store"
 
 const EventTickets = () => {
   const allTickets = useTicketsStore((state) => state.allTickets)
@@ -21,6 +22,7 @@ const EventTickets = () => {
   const [eventTickets, setEventTickets] = useState<Array<TicketDataType>>(allTickets)
   const [fetchTicketsError, setTicketsError] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
 
   useEffect(() => {
@@ -51,13 +53,6 @@ const EventTickets = () => {
 
   return (
     <EventPagesWrapper
-      left={
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between">
-            <h2 className="text-[18px] font-semibold">event Tickets</h2>
-          </div>
-        </div>
-      }
       right={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">

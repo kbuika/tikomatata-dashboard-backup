@@ -12,13 +12,12 @@ type Props = {
   noHeader?: boolean
 }
 
-const EventPagesWrapper: React.FC<Props> = ({ children, left, right, noHeader }) => {
+const EventPagesWrapper: React.FC<Props> = ({ children, right, noHeader }) => {
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   return (
     <div>
       <AppSidebar toggleSidebar={toggleSidebar} setToggleSidebar={setToggleSidebar} />
       <AppHeader
-        left={left}
         right={right}
         setToggleSidebar={setToggleSidebar}
         noHeader={noHeader}
