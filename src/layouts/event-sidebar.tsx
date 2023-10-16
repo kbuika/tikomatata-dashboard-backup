@@ -3,7 +3,7 @@ import { EventSideBarElements } from "../constants/event-sidebar-routes"
 
 export default function EventSideBar() {
   return (
-    <div className="w-[250px] max-[1024px]:hidden">
+    <div className="fixed w-[250px] max-[1024px]:hidden">
       <div className="px-4">
         <ul className="space-y-2 font-medium">
           {EventSideBarElements.map((element) => (

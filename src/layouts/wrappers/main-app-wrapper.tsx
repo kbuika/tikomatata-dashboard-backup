@@ -30,6 +30,7 @@ const MainAppWrapper: React.FC<Props> = ({ children, left, right, noHeader }) =>
         right={right}
         setToggleSidebar={setToggleSidebar}
         noHeader={noHeader}
+        eventTab={false}
       />
       <MainContainer>{children}</MainContainer>
     </div>

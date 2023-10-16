@@ -7,14 +7,15 @@ type Props = {
   right?: JSX.Element
   noHeader?: boolean
   setToggleSidebar: React.Dispatch<React.SetStateAction<boolean>>
+  eventTab?: boolean
 }
 // TODO: make the header fixed, not sticky.
-const AppHeader: React.FC<Props> = ({ right, noHeader, setToggleSidebar }) => {
+const AppHeader: React.FC<Props> = ({ left, right, noHeader, setToggleSidebar, eventTab=true }) => {
   const navigate = useNavigate()
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   return (
     <div
-      className={`w-full flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] max-sidebarLayout:px-[30px] border-b-2 ${
+      className={`fixed w-full z-[200] flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] bg-white max-sidebarLayout:px-[30px] border-b-2 ${
         noHeader ? "hidden" : ""
       }`}
     >
@@ -27,13 +28,19 @@ const AppHeader: React.FC<Props> = ({ right, noHeader, setToggleSidebar }) => {
             <Menu className="h-8 w-7 text-neutralPrimary" />
           </button>
         </div>
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between relative">
-            <ArrowLeft className="h-5 w-8 text-dark-700 cursor-pointer" onClick={() => navigate(-1)}/>
-            <h2 className="text-[18px] font-semibold ml-2">{selectedEvent?.name}</h2>
+        {eventTab ? (
+          <div className="text-neutralDark">
+            <div className="w-full flex flex-row items-center justify-between relative">
+              <ArrowLeft
+                className="h-5 w-8 text-dark-700 cursor-pointer"
+                onClick={() => navigate(-1)}
+              />
+              <h2 className="text-[18px] font-semibold ml-2">{selectedEvent?.name}</h2>
+            </div>
           </div>
-        </div>
-      
+        ) : (
+          left
+        )}
       </div>
       {right}
     </div>
