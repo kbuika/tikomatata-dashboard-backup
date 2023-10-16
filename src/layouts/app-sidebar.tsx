@@ -137,7 +137,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
                   <ChevronDownIcon color="#80807E" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 ml-1">
+              <DropdownMenuContent className="w-48 ml-1 z-[250]">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
