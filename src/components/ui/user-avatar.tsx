@@ -7,8 +7,8 @@ const UserAvatar = () => {
   const userInitials = getUserNameInitials(user?.name)
   return (
     <Avatar>
-      <AvatarImage src={user?.imageUrl} alt="avatar" />
-      <AvatarFallback>{userInitials}</AvatarFallback>
+      {user?.imageUrl && <AvatarImage src={user?.imageUrl} alt="avatar" />}
+      <AvatarFallback>{userInitials || "You"}</AvatarFallback>
     </Avatar>
   )
 }

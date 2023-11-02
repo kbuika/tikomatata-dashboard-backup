@@ -1,7 +1,7 @@
 import MainContainer from "@/src/components/ui/main-container"
 import useUser from "@/src/hooks/use-user"
 import { useUserDetailsStore } from "@/src/stores/user-details-store"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import AppHeader from "../app-header"
 import AppSidebar from "../app-sidebar"
 
@@ -16,12 +16,14 @@ const MainAppWrapper: React.FC<Props> = ({ children, left, right, noHeader }) =>
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   const userDetailsInStore = useUserDetailsStore((state) => state.user)
   const setUser = useUserDetailsStore((state) => state.setUser)
-  if (userDetailsInStore) {
-    setUser(userDetailsInStore)
-  } else {
-    const { user } = useUser()
-    setUser(user)
-  }
+  useEffect(() => {
+    if (userDetailsInStore) {
+      setUser(userDetailsInStore)
+    } else {
+      const { user } = useUser()
+      setUser(user)
+    }
+  }, [userDetailsInStore, setUser])
   return (
     <div>
       <AppSidebar toggleSidebar={toggleSidebar} setToggleSidebar={setToggleSidebar} />
