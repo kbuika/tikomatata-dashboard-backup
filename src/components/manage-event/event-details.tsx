@@ -87,7 +87,7 @@ const EventDetails = () => {
     formState: { errors },
   } = useForm<any>({
     // resolver: yupResolver(schema),
-    defaultValues: selectedEvent
+    defaultValues: selectedEvent,
   })
 
   const onSubmit: SubmitHandler<any> = async (data) => {
@@ -146,7 +146,12 @@ const EventDetails = () => {
             <div>
               <Dialog>
                 <DialogTrigger>
-                  <Trash color="grey" size={18} />
+                  <CustomButton variant="secondary">
+                    <>
+                      <Trash color="grey" size={18} className="mr-2" />
+                      Deactivate
+                    </>
+                  </CustomButton>
                 </DialogTrigger>
                 <DialogContent className="rounded-lg">
                   <DialogHeader>
@@ -157,12 +162,19 @@ const EventDetails = () => {
                       <p className="mt-4 text-base text-left">
                         Are you sure you want to deactivate this event?
                       </p>
+                      <p className="mt-2 text-sm text-left">
+                        Once you deactivate, ticket sales will be stopped and the event will be
+                        removed from the storefront.
+                      </p>
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter className="flex flex-row items-center justify-end">
                     <DialogClose className="mr-4">Cancel</DialogClose>
 
-                    <CustomButton className="w-auto bg-criticalRed hover:bg-criticalRed" onClick={deactivateEvent}>
+                    <CustomButton
+                      className="w-auto bg-criticalRed hover:bg-criticalRed"
+                      onClick={deactivateEvent}
+                    >
                       {isDeactivating ? (
                         <>
                           Deactivating... <Loader2 className="animate-spin" />
@@ -335,13 +347,19 @@ const EventDetails = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Start Time
               </label>
-              <TimePicker time="00:00" setTime={(time) => setValue("startTime", time)} />
+              <TimePicker
+                time={selectedEvent?.startTime || "00:00"}
+                setTime={(time) => setValue("startTime", time)}
+              />
             </div>
             <div className="flex flex-col w-[48%]">
               <label htmlFor="name" className="text-neutralDark">
                 End Time
               </label>
-              <TimePicker time="00:00" setTime={(time) => setValue("endTime", time)} />
+              <TimePicker
+                time={selectedEvent?.endTime || "00:00"}
+                setTime={(time) => setValue("endTime", time)}
+              />
             </div>
           </div>
         </div>
