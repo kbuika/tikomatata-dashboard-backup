@@ -13,6 +13,7 @@ type Props = {
 const AppHeader: React.FC<Props> = ({ left, right, noHeader, setToggleSidebar, eventTab=true }) => {
   const navigate = useNavigate()
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
+
   return (
     <div
       className={`fixed w-full z-[200] flex flex-row items-center justify-between pl-[270px] h-[10vh] pr-[50px] bg-white max-sidebarLayout:px-[30px] border-b-2 ${
