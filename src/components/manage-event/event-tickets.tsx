@@ -13,6 +13,8 @@ import { Plus } from "lucide-react"
 import { useTicketsStore } from "@/src/stores/tickets-store"
 import { Sheet, SheetContent } from "../ui/sheet"
 import { useEventsStore } from "@/src/stores/events-store"
+import LoadingScreen from "../loading-screen"
+import SendComplimentaryTicket from "../send-complimentary-ticket"
 
 const EventTickets = () => {
   const allTickets = useTicketsStore((state) => state.allTickets)
@@ -29,7 +31,7 @@ const EventTickets = () => {
     // if(allTickets.length > 0) {
     //   setEventTickets(allTickets)
     // }else {
-      fetchTickets(params.id)
+    fetchTickets(params.id)
     // }
   }, [])
 
@@ -69,35 +71,45 @@ const EventTickets = () => {
         </div>
       }
     >
-      <div className="border h-auto rounded-md p-4">
-        {createTicketView ? (
-          <CreateTicket setCreateTicketView={setCreateTicketView} />
-        ) : (
-          <>
-            {eventTickets?.length > 0 ? (
-              <div className="flex flex-row flex-wrap items-start justify-between h-auto mt-[2em] mb-12 max-[680px]:items-center max-[680px]:justify-center">
-                {eventTickets?.map((ticket: TicketDataType) => (
-                  <EventTicketCard ticketData={ticket} key={ticket?.name} />
-                ))}
-              </div>
-            ) : (
-              <div className="h-auto w-auto flex flex-col items-start my-4 p-2">
-                <div className="flex flex-col items-start">
-                  <h2 className="text-[1.2em] font-semibold">
-                    Oops! You have not created any tickets for this event
-                  </h2>
-                  <p className="mt-[1em] text-[#6D7175] text-[1.1em]">
-                    Create event tickets to start selling
-                  </p>
-                  <CustomButton className="mt-4" onClick={() => setCreateTicketView(true)}>
-                    Create Ticket
-                  </CustomButton>
+      {isLoading ? (
+        <div className="border h-auto rounded-md p-4">
+          <LoadingScreen message="Fetching tickets ..." />
+        </div>
+      ) : (
+        <div className="border h-auto rounded-md p-4">
+          {createTicketView ? (
+            <CreateTicket setCreateTicketView={setCreateTicketView} />
+          ) : (
+            <>
+            <div className="w-full flex items-center justify-end">
+              <SendComplimentaryTicket />
+
+            </div>
+              {eventTickets?.length > 0 ? (
+                <div className="flex flex-row flex-wrap items-start justify-between h-auto mt-[2em] mb-12 max-[680px]:items-center max-[680px]:justify-center">
+                  {eventTickets?.map((ticket: TicketDataType) => (
+                    <EventTicketCard ticketData={ticket} key={ticket?.name} />
+                  ))}
                 </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+              ) : (
+                <div className="h-auto w-auto flex flex-col items-start my-4 p-2">
+                  <div className="flex flex-col items-start">
+                    <h2 className="text-[1.2em] font-semibold">
+                      Oops! You have not created any tickets for this event
+                    </h2>
+                    <p className="mt-[1em] text-[#6D7175] text-[1.1em]">
+                      Create event tickets to start selling
+                    </p>
+                    <CustomButton className="mt-4" onClick={() => setCreateTicketView(true)}>
+                      Create Ticket
+                    </CustomButton>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </EventPagesWrapper>
   )
 }

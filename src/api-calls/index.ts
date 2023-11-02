@@ -1,6 +1,7 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
+  CompTicketType,
   EventDataType,
   EventDataTypeExtended,
   ResetPasswordArgs,
@@ -319,6 +320,26 @@ export const publishEventFn = async (eventId: number | undefined) => {
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
     data: { eventId: eventId },
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const sendCompTicket = async (data: CompTicketType) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/generate-complimentary`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(data),
   }
 
   try {
