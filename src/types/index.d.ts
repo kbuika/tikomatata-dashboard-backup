@@ -53,3 +53,12 @@ export interface TicketDataType {
   saleStartTime: string
   saleEndTime: string
 }
+
+export interface CompTicketType {
+  name: string
+  email: string
+  phone: string
+  ticketType: string
+  quantity: number
+  eventId?: number
+}
