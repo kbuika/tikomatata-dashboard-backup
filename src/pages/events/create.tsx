@@ -28,12 +28,12 @@ import { useEventsStore } from "@/src/stores/events-store"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
-  ageLimit: yup.number().notRequired(),
+  ageLimit: yup.number().notRequired().default(18),
   description: yup.string().required("Description is required"),
   poster: yup.mixed().required(),
-  location: yup.string().required("Location is required"),
+  location: yup.string().required("Location is required").min(3, "location should be longer than 3 characters"),
   mapLink: yup.string().notRequired(),
-  environment: yup.string().notRequired(),
+  environment: yup.string().notRequired().default("Indoor"),
   startDate: yup.string().required("Start date is required"),
   endDate: yup.string().required("End date is required"),
   startTime: yup.string().default("12:00").required("Start time is required"),
@@ -45,6 +45,7 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
+  const [selectedStartDate, setSelectedStartDate] = useState<string | undefined>()
   const componentRef = useRef(null)
   // stores
   const resetAllEvents = useEventsStore((state) => state.resetAllEvents)
@@ -102,9 +103,9 @@ const CreateEvent = () => {
         </div>
       }
     >
-      <div className="w-full min-h-screen">
+      <div className="w-full min-h-screen pt-[4em] px-4 md:px-0">
         <div className="flex flex-row items-center justify-between w-full">
-          <div className="w-[48%]">
+          <div className="w-full">
             <label htmlFor="name" className="text-neutralDark">
               Event Name
             </label>
@@ -118,7 +119,7 @@ const CreateEvent = () => {
             />
             {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
           </div>
-          <div className="w-[48%]">
+          {/* <div className="w-[48%]">
             <label htmlFor="ageLimit" className="text-neutralDark">
               Age Limit
             </label>
@@ -133,7 +134,7 @@ const CreateEvent = () => {
             {errors.ageLimit && (
               <span className="text-criticalRed">{errors.ageLimit?.message}</span>
             )}
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-row items-center justify-between w-full mt-4">
           <div className="w-full">
@@ -202,10 +203,10 @@ const CreateEvent = () => {
               </SelectTrigger>
               <SelectContent ref={componentRef}>
                 <SelectGroup ref={componentRef}>
-                  <SelectItem value="indoor" ref={componentRef}>
+                  <SelectItem value="Indoor" ref={componentRef}>
                     Indoor
                   </SelectItem>
-                  <SelectItem value="outdoor" ref={componentRef}>
+                  <SelectItem value="Outdoor" ref={componentRef}>
                     Outdoor
                   </SelectItem>
                 </SelectGroup>
@@ -225,6 +226,7 @@ const CreateEvent = () => {
               onChange={(date: Date | undefined) => {
                 const startDate = moment(date).format("YYYY-MM-DD")
                 setValue("startDate", startDate)
+                setSelectedStartDate(startDate)
               }}
               className="mt-1"
             />
@@ -241,6 +243,7 @@ const CreateEvent = () => {
                 const endDate = moment(date).format("YYYY-MM-DD")
                 setValue("endDate", endDate)
               }}
+              defaultDate={selectedStartDate}
               className="mt-1"
             />
             {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
