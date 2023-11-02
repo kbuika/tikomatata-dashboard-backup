@@ -58,6 +58,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
         resetAllTickets() // reset tickets store to fetch new tickets
         successToast("Ticket has been created successfully!")
         setCreateTicketView(false)
+        window.location.reload(); // reload page to fetch new tickets FIXME: find a better way to do this
       } else {
         errorToast(res?.data?.message)
         if (res?.response?.data?.data?.errors) {
@@ -95,7 +96,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
       <div className="flex flex-row items-center justify-between w-full mt-6">
         <div className="w-[48%]">
           <label htmlFor="quantity" className="text-neutralDark">
-            Ticket Quanity
+            Number of Tickets
           </label>
           <Input
             id="quantity"

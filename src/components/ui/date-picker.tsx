@@ -13,12 +13,14 @@ type DatePickerProps = {
   className?: any
   onChange?: (date: Date | undefined) => void // Add the onChange prop
   defaultDate?: Date | string | undefined
+  popoverZIndex?: number
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
   className,
   onChange,
   defaultDate = new Date(),
+  popoverZIndex = 50,
   ...props
 }) => {
   const [date, setDate] = React.useState<Date | null>(new Date(defaultDate))
@@ -49,7 +51,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           {/* {date ? format(date, "PPP") : <span>Pick a date</span>} */}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className={cn("w-auto p-0", `${`z-[${popoverZIndex}]`}`)}>
         <Calendar
           mode="single"
           selected={defaultDate2 || undefined}
