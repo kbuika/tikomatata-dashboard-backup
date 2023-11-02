@@ -1,10 +1,11 @@
 // import clsx from "clsx"
 import { cva } from "class-variance-authority"
 import { cn } from "../../lib/utils"
+import { Loader2 } from "lucide-react"
 
 
 const customButtonVariants = cva(
-  "flex items-center justify-center bg-mainPrimary text-white p-2 rounded text-neutralDark hover:ring-none hover:border-neutralPrimary hover:bg-neutralPrimary duration-100 ease-in-out",
+  "flex items-center justify-center bg-mainPrimary text-white p-2 rounded cursor-pointer text-neutralDark hover:ring-none hover:border-neutralPrimary hover:bg-neutralPrimary duration-100 ease-in-out",
   {
     variants: {
       variant: {
@@ -20,6 +21,10 @@ const customButtonVariants = cva(
         sm: "h-9 px-3 rounded-md",
         lg: "h-11 px-8 rounded-md",
       },
+      isLoading: {
+        true: "bg-mainPrimary/75",
+        false: "bg-mainPrimary"
+      }
     },
     defaultVariants: {
       variant: "default",
@@ -28,14 +33,14 @@ const customButtonVariants = cva(
   },
 )
 
-const CustomButton = ({ children, className, variant="default", ...attributes }: any) => {
+const CustomButton = ({ children, className, variant="default", isLoading="false", ...attributes }: any) => {
   return (
-    <button
-      className={cn(customButtonVariants({ variant, className }))}
+    <div
+      className={cn(customButtonVariants({ variant, className, isLoading }))}
       {...attributes}
     >
-      {children}
-    </button>
+      {isLoading == "true" && <Loader2 className="animate-spin mr-2" />}{children}
+    </div>
   )
 }
 
