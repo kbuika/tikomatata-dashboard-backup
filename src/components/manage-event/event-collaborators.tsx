@@ -23,13 +23,6 @@ const EventCollaborators = () => {
   const comingSoon = true
   return (
     <EventPagesWrapper
-      left={
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between">
-            <h2 className="text-[18px] font-semibold">Collaborators</h2>
-          </div>
-        </div>
-      }
       right={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">

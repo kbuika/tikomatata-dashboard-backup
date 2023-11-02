@@ -12,7 +12,7 @@ import {
   TabGroup,
   TabPanel,
   TabPanels,
-  BadgeDelta,
+  // BadgeDelta,
   DeltaType,
   Flex,
   Metric,
@@ -188,13 +188,6 @@ const EventDashBoard = () => {
   }
   return (
     <EventPagesWrapper
-      left={
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between relative">
-            <h2 className="text-[18px] font-semibold">{selectedEvent?.name}</h2>
-          </div>
-        </div>
-      }
       right={
         <div className="text-neutralDark">
           <div>
@@ -250,7 +243,7 @@ const EventDashBoard = () => {
                             <Text>{item.title}</Text>
                             <Metric className="truncate">{item.metric}</Metric>
                           </div>
-                          <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta>
+                          {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
                         </Flex>
                         {/* TODO: Restore this once the "target" feature is ready */}
                         {/* <Flex className="mt-4 space-x-2">

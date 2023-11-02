@@ -97,7 +97,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
     <>
       <aside
         id="logo-sidebar"
-        className={`fixed inset-y-0 w-[230px] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-30 
+        className={`fixed inset-y-0 w-[230px] z-[250] h-screen justify-center flex-shrink-0 flex-grow-0 duration-300 border-r-2 z-30 
     ${width > 768 ? "" : toggleSidebar ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Sidebar"
         style={{}}
@@ -137,7 +137,7 @@ const AppSidebar: React.FC<Props> = ({ toggleSidebar, setToggleSidebar }) => {
                   <ChevronDownIcon color="#80807E" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 ml-1">
+              <DropdownMenuContent className="w-48 ml-1 z-[250]">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

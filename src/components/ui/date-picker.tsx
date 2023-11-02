@@ -13,18 +13,22 @@ type DatePickerProps = {
   className?: any
   onChange?: (date: Date | undefined) => void // Add the onChange prop
   defaultDate?: Date | string | undefined
+  popoverZIndex?: number
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
   className,
   onChange,
   defaultDate = new Date(),
+  popoverZIndex = 50,
   ...props
 }) => {
   const [date, setDate] = React.useState<Date | null>(new Date(defaultDate))
+  const [defaultDate2, setDefaultDate2] = React.useState<Date>(new Date(defaultDate))
 
   const handleDateSelect = (selectedDate?: Date) => {
     setDate(selectedDate || null)
+    setDefaultDate2(selectedDate || new Date(defaultDate))
     if (onChange) {
       onChange(selectedDate || undefined)
     }
@@ -37,21 +41,24 @@ const DatePicker: React.FC<DatePickerProps> = ({
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10",
-            !date && "text-muted-foreground",
+            !date || !defaultDate2 && "text-muted-foreground",
             className,
           )}
+          onClick={() => setDefaultDate2(new Date(defaultDate))}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {defaultDate2 ? format(defaultDate2, "PPP") : <>{date ? format(date, "PPP") : <span>Pick a date</span>}</>}
+          {/* {date ? format(date, "PPP") : <span>Pick a date</span>} */}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className={cn("w-auto p-0", `${`z-[${popoverZIndex}]`}`)}>
         <Calendar
           mode="single"
-          selected={date || undefined}
+          selected={defaultDate2 || undefined}
           onSelect={handleDateSelect}
           initialFocus
-          disabled={{ before: new Date() }}
+          defaultMonth={defaultDate2 || undefined}
+          disabled={{ before: defaultDate2 }}
           {...props}
         />
       </PopoverContent>

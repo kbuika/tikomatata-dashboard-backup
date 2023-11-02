@@ -58,13 +58,13 @@ export const removeCookie = (cookieName: string) => {
 
 export const getUserNameInitials = (fullName: string) => {
   // Split the full name into an array of individual words
-  const words = fullName.trim().split(/\s+/)
+  const words = fullName?.trim()?.split(/\s+/)
 
   // Get the first letter of each word and capitalize it
-  const initials = words.map((word) => word.charAt(0).toUpperCase())
+  const initials = words?.map((word) => word?.charAt(0)?.toUpperCase())
 
   // Join the initials together to form the result
-  return initials.join("")
+  return initials?.join("")
 }
 
 export const generateFileFromImageUrl = async(imageUrl: string, filename: string): Promise<File | null> => {

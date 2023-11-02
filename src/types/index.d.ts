@@ -27,9 +27,15 @@ export interface EventDataType {
   endDate: string
   startTime?: string
   endTime?: string
-  ageLimit: number
+  ageLimit: number | string
   poster: FileList
   posterUrl?: string
+  cancelled?: boolean
+  tickets?: TicketDataType[]
+}
+
+export interface EventDataTypeExtended extends EventDataType {
+  poster: FileList | null
 }
 
 export type UpdateEventDataType = EventDataType & {
@@ -46,4 +52,13 @@ export interface TicketDataType {
   saleEndDate: string
   saleStartTime: string
   saleEndTime: string
+}
+
+export interface CompTicketType {
+  name: string
+  email: string
+  phone: string
+  ticketType: string
+  quantity: number
+  eventId?: number
 }

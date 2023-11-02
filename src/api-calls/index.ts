@@ -1,7 +1,9 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
+  CompTicketType,
   EventDataType,
+  EventDataTypeExtended,
   ResetPasswordArgs,
   TicketDataType,
   UserLoginObj,
@@ -49,8 +51,7 @@ export const loginUser = async (user: UserLoginObj) => {
     data: data,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      // eslint-disable-next-line quotes
-      Authorization: 'Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09'
+      Authorization: "Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09"
     },
   }
   try {
@@ -172,20 +173,25 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 }
 
-export const updateEventFn = async (eventData: EventDataType) => {
-  const eventPoster: File = eventData?.poster?.[0]
+export const updateEventFn = async (eventData: EventDataTypeExtended) => {
   const payload = JSON.stringify(eventData)
 
-  const data = new FormData()
-  data.append("payload", new Blob([payload], { type: "application/json" }))
-  data.set("Content-Type", "application/json")
+  const formData = new FormData()
+  formData.append("payload", new Blob([payload], { type: "application/json" }))
+  // formData.set("Content-Type", "application/json")
 
-  data.append("file", eventPoster, "poster")
+  if(eventData?.poster !== null || eventData?.poster !== undefined) {
+    const eventPoster: File | undefined = eventData?.poster?.[0]
+    if(eventPoster !== undefined) {
+      formData.append("file", eventPoster, "poster")
+    }
+  }
+
 
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/api/v1/event/create`,
+    url: `${baseUrl}/api/v1/event/update`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
       "Content-Type": "multipart/form-data", // Updated header value
@@ -193,7 +199,7 @@ export const updateEventFn = async (eventData: EventDataType) => {
   }
 
   try {
-    const response = await axiosInstance.post(config.url, data, config)
+    const response = await axiosInstance.post(config.url, formData, config)
     return response
   } catch (error: any) {
     return error
@@ -314,6 +320,26 @@ export const publishEventFn = async (eventId: number | undefined) => {
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
     data: { eventId: eventId },
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const sendCompTicket = async (data: CompTicketType) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/generate-complimentary`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(data),
   }
 
   try {

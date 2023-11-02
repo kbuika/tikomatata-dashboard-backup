@@ -12,23 +12,22 @@ type Props = {
   noHeader?: boolean
 }
 
-const EventPagesWrapper: React.FC<Props> = ({ children, left, right, noHeader }) => {
+const EventPagesWrapper: React.FC<Props> = ({ children, right, noHeader }) => {
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   return (
-    <div>
+    <div className="relative">
       <AppSidebar toggleSidebar={toggleSidebar} setToggleSidebar={setToggleSidebar} />
       <AppHeader
-        left={left}
         right={right}
         setToggleSidebar={setToggleSidebar}
         noHeader={noHeader}
       />
       <MainContainer>
-        <div className="flex flex-col min-h-screen max-sidebarLayout:px-[30px]">
+        <div className="flex flex-col pt-[5em] min-h-screen max-sidebarLayout:px-[30px]">
           <VerticalEventNavBar />
           <div className="flex flex-row">
             <EventSideBar />
-            <div className="w-[80%] max-[1024px]:w-[100%]">{children}</div>
+            <div className="w-[80%] min-[1024px]:ml-[220px] max-[1024px]:w-[100%]">{children}</div>
           </div>
         </div>
       </MainContainer>
