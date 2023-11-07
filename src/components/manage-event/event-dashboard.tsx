@@ -1,33 +1,33 @@
-import CustomButton from "../ui/custom-button"
+import { publishEventFn } from "@/src/api-calls"
+import { getTotalSales } from "@/src/api-calls/dashboard"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import CalendarImage from "../../assets/images/calendar.png"
-import { InformationCircleIcon } from "@heroicons/react/solid"
+import { errorToast, successToast } from "@/src/lib/utils"
+import { useEventsStore } from "@/src/stores/events-store"
+import { DialogClose } from "@radix-ui/react-dialog"
 import {
+  AreaChart,
   Card,
-  Grid,
-  Title,
-  Text,
-  Tab,
-  TabList,
-  TabGroup,
-  TabPanel,
-  TabPanels,
+  Color,
   // BadgeDelta,
   DeltaType,
   Flex,
+  Grid,
   Metric,
-  AreaChart,
-  Color,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Text,
+  Title
 } from "@tremor/react"
-import { useState } from "react"
-import { Download, Loader2, Rocket } from "lucide-react"
+import { Loader2, Rocket } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import CalendarImage from "../../assets/images/calendar.png"
+import AttendeesTab from "../dashboard-tabs/attendees"
+import TransactionsTab from "../dashboard-tabs/transactions"
+import CustomButton from "../ui/custom-button"
 import {
   Dialog,
   DialogContent,
@@ -37,10 +37,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
-import { DialogClose } from "@radix-ui/react-dialog"
-import { useEventsStore } from "@/src/stores/events-store"
-import { publishEventFn } from "@/src/api-calls"
-import { errorToast, successToast } from "@/src/lib/utils"
 
 type Kpi = {
   title: string
@@ -51,6 +47,7 @@ type Kpi = {
   deltaType: DeltaType
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const kpiData: Kpi[] = [
   {
     title: "Sales",
@@ -157,8 +154,11 @@ export const AttendeesList: Attendee[] = [
 const EventDashBoard = () => {
   const [publishEventLoading, setPublishEventLoading] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [totalSales, setTotalSales] = useState(0)
+  const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const selectedKpi = kpiList[selectedIndex]
+  const params = useParams()
 
   const areaChartArgs = {
     className: "mt-5 h-72",
@@ -169,6 +169,30 @@ const EventDashBoard = () => {
     showLegend: false,
     valueFormatter: formatters[selectedKpi],
     yAxisWidth: 56,
+  }
+
+  useEffect(() => {
+    // if(allTickets.length > 0) {
+    //   setEventTickets(allTickets)
+    // }else {
+      fetchAllSales(params.id)
+    // }
+  }, [])
+
+  const fetchAllSales = async (eventId: string | undefined) => {
+    setIsLoadingSales(true)
+    try {
+      const res = await getTotalSales(eventId)
+      if (res.status === 200) {
+        setTotalSales(res.data.totalAmount)
+      } else {
+        errorToast("Could not fetch this event's tickets. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's tickets. Try again later.")
+    } finally {
+      setIsLoadingSales(false)
+    }
   }
 
   const onPublishEvent = async () => {
@@ -230,18 +254,22 @@ const EventDashBoard = () => {
           true ? (
             <TabGroup className="">
               <TabList color="violet">
-                <Tab>Overview</Tab>
-                <Tab>Detail</Tab>
+                <Tab>Sales</Tab>
+                <Tab>Transactions</Tab>
+                <Tab>Attendees</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
                   <Grid numItemsLg={2} className="mt-6 gap-6 flex flex-row max-[860px]:flex-col">
-                    {kpiData.map((item) => (
-                      <Card key={item.title}>
+                      <Card >
                         <Flex alignItems="start">
                           <div className="truncate">
-                            <Text>{item.title}</Text>
-                            <Metric className="truncate">{item.metric}</Metric>
+                            <Text>Sales</Text>
+                            {isLoadingSales ? (
+                              <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary"/>
+                            ) : (
+                              <Metric className="truncate">KES {usNumberformatter(totalSales)}</Metric>
+                            )}
                           </div>
                           {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
                         </Flex>
@@ -252,7 +280,6 @@ const EventDashBoard = () => {
                         </Flex>
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                       </Card>
-                    ))}
                   </Grid>
                   <div className="mt-6">
                     <Card>
@@ -264,15 +291,15 @@ const EventDashBoard = () => {
                               justifyContent="start"
                               alignItems="center"
                             >
-                              <Title> Sales History ( work in progress) </Title>
+                              <Title> Sales History </Title>
                             </Flex>
-                            <Text> Daily change for sales </Text>
+                            {/* <Text> Daily change for sales </Text> */}
                           </div>
                           <div>
                             <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
                               <TabList color="gray" variant="solid">
-                                <Tab value={""}>Sales</Tab>
-                                <Tab>Attendees</Tab>
+                                <Tab value={""}>All Sales</Tab>
+                                <Tab>Sales by Ticket</Tab>
                               </TabList>
                             </TabGroup>
                           </div>
@@ -295,52 +322,8 @@ const EventDashBoard = () => {
                     </Card>
                   </div>
                 </TabPanel>
-                <TabPanel>
-                  <div className="mt-6">
-                    <Card>
-                      <>
-                        <div className="flex flex-row">
-                          <Flex className="space-x-0.5" justifyContent="start" alignItems="center">
-                            <Title> Attendees List (Work in progress)</Title>
-                            <Icon
-                              icon={InformationCircleIcon}
-                              variant="simple"
-                              tooltip="Shows a list of tickets purchased for this event"
-                            />
-                          </Flex>
-                          <div className="flex flex-row items-center text-sm cursor-pointer">
-                            <Download size={15} />
-                            <span className="ml-2">Download</span>
-                          </div>
-                        </div>
-
-                        <Table className="mt-6">
-                          <TableHead>
-                            <TableRow>
-                              <TableHeaderCell>Name</TableHeaderCell>
-                              <TableHeaderCell className="text-left">Email</TableHeaderCell>
-                              <TableHeaderCell className="text-left">
-                                Date of Purchase
-                              </TableHeaderCell>
-                              <TableHeaderCell className="text-left">Ticket Type</TableHeaderCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {AttendeesList.map((item) => (
-                              <TableRow key={item.name}>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell className="text-left">{item.email}</TableCell>
-                                <TableCell className="text-left">{item.dateOfPurchase}</TableCell>
-                                <TableCell className="text-left">{item.ticketType}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </>
-                    </Card>
-                  </div>
-                </TabPanel>
+                <TransactionsTab />
+                <AttendeesTab />
               </TabPanels>
             </TabGroup>
           ) : (

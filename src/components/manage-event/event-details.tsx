@@ -146,9 +146,9 @@ const EventDetails = () => {
             <div>
               <Dialog>
                 <DialogTrigger>
-                  <CustomButton variant="secondary">
+                  <CustomButton variant={"secondary"} className="bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary">
                     <>
-                      <Trash color="grey" size={18} className="mr-2" />
+                      <Trash color="black" size={18} className="mr-2" />
                       Deactivate
                     </>
                   </CustomButton>

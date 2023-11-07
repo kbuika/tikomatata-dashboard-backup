@@ -16,11 +16,12 @@ const MainAppWrapper: React.FC<Props> = ({ children, left, right, noHeader }) =>
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   const userDetailsInStore = useUserDetailsStore((state) => state.user)
   const setUser = useUserDetailsStore((state) => state.setUser)
+  const { user } = useUser()
+
   useEffect(() => {
     if (userDetailsInStore) {
       setUser(userDetailsInStore)
     } else {
-      const { user } = useUser()
       setUser(user)
     }
   }, [userDetailsInStore, setUser])

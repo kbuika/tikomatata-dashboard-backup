@@ -5,14 +5,14 @@ import { Loader2 } from "lucide-react"
 
 
 const customButtonVariants = cva(
-  "flex items-center justify-center bg-mainPrimary text-white p-2 rounded cursor-pointer text-neutralDark hover:ring-none hover:border-neutralPrimary hover:bg-neutralPrimary duration-100 ease-in-out",
+  "flex items-center justify-center p-2 rounded cursor-pointer hover:ring-none hover:border-neutralPrimary duration-100 ease-in-out",
   {
     variants: {
       variant: {
-        default: "bg-mainPrimary text-primary-foreground hover:bg-neutralPrimary",
+        default: "bg-mainPrimary text-white hover:bg-neutralPrimary",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline: "border border-input hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        secondary: "bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "underline-offset-4 hover:underline text-primary",
       },
@@ -33,7 +33,7 @@ const customButtonVariants = cva(
   },
 )
 
-const CustomButton = ({ children, className, variant="default", isLoading="false", ...attributes }: any) => {
+const CustomButton = ({ children, className, variant, isLoading="false", ...attributes }: any) => {
   return (
     <div
       className={cn(customButtonVariants({ variant, className, isLoading }))}

@@ -74,7 +74,7 @@ const SendComplimentaryTicket = () => {
     <div className="ml-auto">
       <Sheet open={compSheetOpen} onOpenChange={setCompSheetOpen}>
         <SheetTrigger>
-          <CustomButton onClick={() => setCompSheetOpen(true)} variant="secondary">
+          <CustomButton onClick={() => setCompSheetOpen(true)} variant={"secondary"} className="bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary">
             Send Complimentary Ticket
           </CustomButton>
         </SheetTrigger>
