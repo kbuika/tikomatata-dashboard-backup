@@ -12,11 +12,13 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-  Title
+  Title,
+  Badge,
 } from "@tremor/react"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { StatusOnlineIcon } from "@heroicons/react/outline"
 
 interface TransactionType {
   createdAt: string
@@ -27,6 +29,8 @@ interface TransactionType {
   transactionStatus: string
 }
 
+// TODO: add pagination
+// Optimize API calls
 const TransactionsTab = () => {
   const [alltransactions, setAllTransactions] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -107,7 +111,14 @@ const TransactionsTab = () => {
                             <TableCell>{item.transactionId}</TableCell>
                             <TableCell className="text-left">{item.ticketRecipientName}</TableCell>
                             <TableCell className="text-left">{item.ticketRecipientEmail}</TableCell>
-                            <TableCell className="text-left">{item.transactionStatus}</TableCell>
+                            <TableCell className="text-left">
+                              <Badge
+                                color={item?.transactionStatus === "SUCCESSFUL" ? "emerald" : "red"}
+                                icon={StatusOnlineIcon}
+                              >
+                                {item.transactionStatus.toLowerCase()}
+                              </Badge>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </>
