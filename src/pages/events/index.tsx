@@ -112,7 +112,7 @@ const Events = () => {
                         <Tooltip>
                           <TooltipTrigger>
                             <p>
-                              <Switch />
+                              <Switch disabled={true}/>
                             </p>
                           </TooltipTrigger>
                           <TooltipContent>
