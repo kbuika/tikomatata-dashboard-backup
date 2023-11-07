@@ -5,11 +5,7 @@ import { errorToast, successToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
 import { DialogClose } from "@radix-ui/react-dialog"
 import {
-  AreaChart,
   Card,
-  Color,
-  // BadgeDelta,
-  DeltaType,
   Flex,
   Grid,
   Metric,
@@ -18,15 +14,14 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Text,
-  Title
+  Text
 } from "@tremor/react"
 import { Loader2, Rocket } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import CalendarImage from "../../assets/images/calendar.png"
-import AttendeesTab from "../dashboard-tabs/attendees"
-import TransactionsTab from "../dashboard-tabs/transactions"
+import AttendeesTab from "../dashboard/tabs/attendees"
+import TransactionsTab from "../dashboard/tabs/transactions"
 import CustomButton from "../ui/custom-button"
 import {
   Dialog,
@@ -37,35 +32,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
+import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
 
-type Kpi = {
-  title: string
-  metric: string
-  progress: number
-  target: string
-  delta: string
-  deltaType: DeltaType
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const kpiData: Kpi[] = [
-  {
-    title: "Sales",
-    metric: "KES 0",
-    progress: 15.9,
-    target: "KES 80,000",
-    delta: "0%",
-    deltaType: "moderateIncrease",
-  },
-  {
-    title: "Attendees",
-    metric: "0",
-    progress: 53.6,
-    target: "2,000",
-    delta: "0%",
-    deltaType: "moderateDecrease",
-  },
-]
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -75,101 +43,12 @@ const usNumberformatter = (number: number, decimals = 0) =>
     .format(Number(number))
     .toString()
 
-const formatters: { [key: string]: any } = {
-  Sales: (number: number) => `KES ${usNumberformatter(number)}`,
-  Attendees: (number: number) => `${usNumberformatter(number)}`,
-  Delta: (number: number) => `${usNumberformatter(number, 2)}%`,
-}
-
-const Kpis = {
-  Sales: "Sales",
-  Attendees: "Attendees",
-}
-
-const kpiList = [Kpis.Sales, Kpis.Attendees]
-
-export type DailyPerformance = {
-  date: string
-  Sales: number
-  Attendees: number
-}
-
-export const performance: DailyPerformance[] = [
-  // {
-  //   date: "2023-05-01",
-  //   Sales: 900.73,
-  //   Attendees: 73,
-  // },
-  // {
-  //   date: "2023-05-02",
-  //   Sales: 1000.74,
-  //   Attendees: 74,
-  // },
-  // {
-  //   date: "2023-05-03",
-  //   Sales: 1100.93,
-  //   Attendees: 293,
-  // },
-  // {
-  //   date: "2023-05-04",
-  //   Sales: 1200.9,
-  //   Attendees: 29,
-  // },
-]
-
-export type Attendee = {
-  name: string
-  email: string
-  dateOfPurchase: string
-  ticketType: string
-}
-
-export const AttendeesList: Attendee[] = [
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-]
-
 const EventDashBoard = () => {
   const [publishEventLoading, setPublishEventLoading] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
   const [totalSales, setTotalSales] = useState(0)
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
-  const selectedKpi = kpiList[selectedIndex]
   const params = useParams()
-
-  const areaChartArgs = {
-    className: "mt-5 h-72",
-    data: performance,
-    index: "date",
-    categories: [selectedKpi],
-    colors: ["orange"] as Color[],
-    showLegend: false,
-    valueFormatter: formatters[selectedKpi],
-    yAxisWidth: 56,
-  }
 
   useEffect(() => {
     // if(allTickets.length > 0) {
@@ -281,46 +160,7 @@ const EventDashBoard = () => {
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                       </Card>
                   </Grid>
-                  <div className="mt-6">
-                    <Card>
-                      <>
-                        <div className="md:flex justify-between">
-                          <div>
-                            <Flex
-                              className="space-x-0.5"
-                              justifyContent="start"
-                              alignItems="center"
-                            >
-                              <Title> Sales History </Title>
-                            </Flex>
-                            {/* <Text> Daily change for sales </Text> */}
-                          </div>
-                          <div>
-                            <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
-                              <TabList color="gray" variant="solid">
-                                <Tab value={""}>All Sales</Tab>
-                                <Tab>Sales by Ticket</Tab>
-                              </TabList>
-                            </TabGroup>
-                          </div>
-                        </div>
-                        {/* web */}
-                        <div className="mt-8 hidden sm:block">
-                          <AreaChart {...areaChartArgs} colors={["violet"]}/>
-                        </div>
-                        {/* mobile */}
-                        <div className="mt-8 sm:hidden">
-                          <AreaChart
-                            {...areaChartArgs}
-                            startEndOnly={true}
-                            showGradient={false}
-                            showYAxis={false}
-                            colors={["violet"]}
-                          />
-                        </div>
-                      </>
-                    </Card>
-                  </div>
+                  <TicketsSoldBarChart />
                 </TabPanel>
                 <TransactionsTab />
                 <AttendeesTab />
