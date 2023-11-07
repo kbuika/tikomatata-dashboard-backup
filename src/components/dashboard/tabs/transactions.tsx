@@ -19,13 +19,15 @@ import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { StatusOnlineIcon } from "@heroicons/react/outline"
+import moment from "moment"
 
 interface TransactionType {
-  createdAt: string
+  createdOn: string
   paidAt: string
+  amount: string
   transactionId: string
-  ticketRecipientName: string
-  ticketRecipientEmail: string
+  recipientName: string
+  recipientEmail: string
   transactionStatus: string
 }
 
@@ -85,6 +87,8 @@ const TransactionsTab = () => {
                   <TableHeaderCell>ID</TableHeaderCell>
                   <TableHeaderCell className="text-left">Name</TableHeaderCell>
                   <TableHeaderCell className="text-left">Email</TableHeaderCell>
+                  <TableHeaderCell className="text-left">Paid At</TableHeaderCell>
+                  <TableHeaderCell className="text-left">Created On</TableHeaderCell>
                   <TableHeaderCell className="text-left">Status</TableHeaderCell>
                 </TableRow>
               </TableHead>
@@ -109,8 +113,10 @@ const TransactionsTab = () => {
                         {alltransactions.map((item: TransactionType) => (
                           <TableRow key={item.transactionId}>
                             <TableCell>{item.transactionId}</TableCell>
-                            <TableCell className="text-left">{item.ticketRecipientName}</TableCell>
-                            <TableCell className="text-left">{item.ticketRecipientEmail}</TableCell>
+                            <TableCell className="text-left">{item.recipientName}</TableCell>
+                            <TableCell className="text-left">{item.recipientEmail}</TableCell>
+                            <TableCell className="text-left">{item?.paidAt ?  moment(item?.paidAt).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
+                            <TableCell className="text-left">{item?.createdOn ? moment(item?.createdOn).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
                             <TableCell className="text-left">
                               <Badge
                                 color={item?.transactionStatus === "SUCCESSFUL" ? "emerald" : "red"}
