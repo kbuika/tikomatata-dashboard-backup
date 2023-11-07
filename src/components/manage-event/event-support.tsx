@@ -1,132 +1,104 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from "react"
-import CustomButton from "../ui/custom-button"
-import CreateTicket from "./create-ticket"
-import EventTicketCard from "../ticket-card"
-import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
-import { fetchEventTicketsFn } from "@/src/api-calls"
-import { TicketDataType } from "@/src/types"
-import { errorToast } from "@/src/lib/utils"
-import { useParams } from "react-router-dom"
+import { getEventTicketEmails } from "@/src/api-calls/support"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import { Plus } from "lucide-react"
-import { useTicketsStore } from "@/src/stores/tickets-store"
-import { Sheet, SheetContent } from "../ui/sheet"
+import { errorToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
-import { StatusOnlineIcon } from "@heroicons/react/outline";
+import { StatusOnlineIcon } from "@heroicons/react/outline"
 import {
+  Badge,
   Card,
   Table,
-  TableHead,
-  TableRow,
-  TableHeaderCell,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
   Text,
   Title,
-  Badge,
-} from "@tremor/react";
+} from "@tremor/react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { Button } from "../ui/button"
 
-const data = [
-  {
-    name: "Viola Amherd",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Defence, Civil Protection and Sport (DDPS)",
-    status: "failed",
-  },
-  {
-    name: "Simonetta Sommaruga",
-    Role: "Federal Councillor",
-    departement:
-      "The Federal Department of the Environment, Transport, Energy and Communications (DETEC)",
-    status: "success",
-  },
-  {
-    name: "Alain Berset",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Home Affairs (FDHA)",
-    status: "success",
-  },
-  {
-    name: "Ignazio Cassis",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Foreign Affairs (FDFA)",
-    status: "failed",
-  },
-  {
-    name: "Ueli Maurer",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Finance (FDF)",
-    status: "success",
-  },
-  {
-    name: "Guy Parmelin",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Economic Affairs, Education and Research (EAER)",
-    status: "success",
-  },
-  {
-    name: "Karin Keller-Sutter",
-    Role: "Federal Councillor",
-    departement: "The Federal Department of Justice and Police (FDJP)",
-    status: "failed",
-  },
-];
+interface EmailDataType {
+  emailBody?: string
+  emailId: string
+  emailRecipient: number
+  emailStatus: string
+  numberOfRetries: number
+}
 
 const EventSupport = () => {
+  const [allEmails, setAllEmails] = useState([])
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
 
-  return (
-    <EventPagesWrapper
-    >
-      <div className="border h-auto rounded-md p-4">
-      
+  const params = useParams()
 
-  <Card>
-    <Title>{selectedEvent?.name} Support</Title>
-    <Table className="mt-5">
-      <TableHead>
-        <TableRow>
-          <TableHeaderCell>Name</TableHeaderCell>
-          <TableHeaderCell>Email</TableHeaderCell>
-          <TableHeaderCell>Status</TableHeaderCell>
-          <TableHeaderCell>Resend Ticket</TableHeaderCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map((item) => (
-          <TableRow key={item.name}>
-            <TableCell>{item.name}</TableCell>
-            <TableCell>
-              <Text>{item.Role}</Text>
-            </TableCell>
-            <TableCell>
-              <Badge color={item?.status === "success" ? "emerald": "red"} icon={StatusOnlineIcon}>
-                {item.status}
-              </Badge>
-            </TableCell>
-            <TableCell>
-                <div className="flex flex-row">
-                <CustomButton
-                    className="bg-mainPrimary text-white w-[6em]"
-                    onClick={() => console.log("clicked")}
-                >
-                    Message
-                </CustomButton>
-                <CustomButton
+  useEffect(() => {
+    fetchEventTicketEmails(params.id)
+  }, [])
+
+  const fetchEventTicketEmails = async (eventId: string | undefined) => {
+    try {
+      const res = await getEventTicketEmails({ eventId })
+      if (res.status === 200) {
+        setAllEmails(res.data)
+      } else {
+        errorToast("Could not fetch this event's sales. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's sales. Try again later.")
+    }
+  }
+  return (
+    <EventPagesWrapper>
+      <div className="border h-auto rounded-md p-4">
+        <Card>
+          <Title>{selectedEvent?.name} Support</Title>
+          <Table className="mt-5">
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Email ID</TableHeaderCell>
+                <TableHeaderCell>Email</TableHeaderCell>
+                <TableHeaderCell>Retries</TableHeaderCell>
+                <TableHeaderCell>Email Status</TableHeaderCell>
+                <TableHeaderCell>Resend Email</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allEmails.map((item: EmailDataType) => (
+                <TableRow key={item.emailId}>
+                  <TableCell>{item.emailId}</TableCell>
+                  <TableCell>
+                    <Text>{item.emailRecipient}</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text>{item.numberOfRetries}</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      color={item?.emailStatus === "SUCCESS" ? "emerald" : "red"}
+                      icon={StatusOnlineIcon}
+                    >
+                      {item.emailStatus.toLowerCase()}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-row">
+                      <Button disabled={true}>resend</Button>
+                      {/* <CustomButton
                     className="bg-mainPrimary text-white ml-2 w-[6em]"
                     onClick={() => console.log("clicked")}
                 >
                     Email
-                </CustomButton>
-                </div>
-                
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </Card>
+                </CustomButton> */}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
       </div>
     </EventPagesWrapper>
   )
