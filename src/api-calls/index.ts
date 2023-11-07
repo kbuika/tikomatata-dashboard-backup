@@ -292,7 +292,7 @@ export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0,
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/api/v1/ticket/event/${eventId}?page=${page}&size=${size}`,
+    url: `${baseUrl}/api/v1/ticket/user/event/${eventId}?page=${page}&size=${size}`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },

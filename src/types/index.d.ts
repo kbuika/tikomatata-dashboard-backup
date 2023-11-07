@@ -60,5 +60,5 @@ export interface CompTicketType {
   phone: string
   ticketType: string
   quantity: number
-  eventId?: number
+  eventId?: number | string
 }
