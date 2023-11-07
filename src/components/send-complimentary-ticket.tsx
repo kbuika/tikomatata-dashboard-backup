@@ -20,6 +20,7 @@ import { useEventsStore } from "../stores/events-store"
 import { errorToast, formatPhoneNumber, successToast } from "../lib/utils"
 import { CompTicketType } from "../types"
 import { sendCompTicket } from "../api-calls"
+import { useParams } from "react-router-dom"
 
 const schema = yup.object({
   name: yup.string().required("name name is required"),
@@ -34,7 +35,7 @@ const SendComplimentaryTicket = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const allTickets = useTicketsStore((state) => state.allTickets)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
-
+  const params = useParams()
   const {
     register,
     handleSubmit,
@@ -47,7 +48,7 @@ const SendComplimentaryTicket = () => {
     try {
       const compTicketData = {
         ...data,
-        eventId: selectedEvent?.eventId,
+        eventId: selectedEvent?.eventId || params.id,
         phoneNumber: formatPhoneNumber(data?.phone),
       }
       const res = await sendCompTicket(compTicketData)
