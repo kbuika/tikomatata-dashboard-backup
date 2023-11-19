@@ -41,7 +41,8 @@ const TicketsSoldBarChart = () => {
     try {
       const res = await getTotalTicketSalesByType(eventId)
       if (res.status === 200) {
-        setTicketSalesByType(res.data)
+          console.log(res, "res")
+        setTicketSalesByType(res.data.ticketsSoldByType)
       } else {
         errorToast("Could not fetch this event's ticket sales by type. Try again later.")
       }
