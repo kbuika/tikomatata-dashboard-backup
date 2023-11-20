@@ -23,8 +23,8 @@ export interface EventDataType {
   location?: string
   mapLink?: string
   environment?: string
-  startDate: string
-  endDate: string
+  startDate: string | Date
+  endDate: string | Date
   startTime?: string
   endTime?: string
   ageLimit: number | string

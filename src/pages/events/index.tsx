@@ -38,8 +38,8 @@ const Events = () => {
       try {
         const res = await fetchUserEventsFn()
         if (res.status === 200) {
-          setUserEvents(res.data)
-          setAllEvents(res.data)
+          setUserEvents(res.data.events)
+          setAllEvents(res.data.events)
         } else {
           setEventsError(res.message)
           errorToast("Could not fetch your events. Try again later.")

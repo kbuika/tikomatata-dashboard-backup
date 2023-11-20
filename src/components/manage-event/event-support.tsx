@@ -42,7 +42,7 @@ const EventSupport = () => {
     try {
       const res = await getEventTicketEmails({ eventId })
       if (res.status === 200) {
-        setAllEmails(res.data)
+        setAllEmails(res.data.emails)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }

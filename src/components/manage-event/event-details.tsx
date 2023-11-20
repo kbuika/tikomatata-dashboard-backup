@@ -37,6 +37,7 @@ import { EventDataType, EventDataTypeExtended } from "@/src/types"
 import { useEventsStore } from "@/src/stores/events-store"
 import { AlertTriangle, Delete, Loader2, Trash } from "lucide-react"
 import { StopIcon } from "@heroicons/react/solid"
+import { DateRangePicker } from "../ui/date-range-picker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -71,8 +72,8 @@ const EventDetails = () => {
       setValue("ageLimit", selectedEvent?.ageLimit)
       setValue("description", selectedEvent?.description)
       setValue("location", selectedEvent?.location)
-      setValue("mapLink", selectedEvent?.mapLink)
-      setValue("environment", selectedEvent?.environment)
+      setValue("mapLink", selectedEvent?.mapLink || "")
+      setValue("environment", selectedEvent?.environment || "Outdoor")
       setValue("startDate", selectedEvent?.startDate)
       setValue("endDate", selectedEvent?.endDate)
       setValue("startTime", selectedEvent?.startTime)
@@ -91,13 +92,14 @@ const EventDetails = () => {
   })
 
   const onSubmit: SubmitHandler<any> = async (data) => {
+    console.log(data, "update event data")
     setIsLoading(true)
     try {
       const res = await updateEventFn(data)
       if (res.status === 200) {
         resetAllEvents()
         setSelectedEvent(res?.data?.data)
-        successToast("Event has been update successfully!")
+        successToast("Event has been updated successfully!")
       } else {
         setUpdateEventError(res.message)
         errorToast(res?.message)
@@ -278,19 +280,7 @@ const EventDetails = () => {
                 {...register("location", { required: true })}
               />
             </div>
-            <div className="w-[32%]">
-              <label htmlFor="name" className="text-neutralDark">
-                Google Maps Link
-              </label>
-              <Input
-                id="name"
-                placeholder="Pin Location"
-                type="text"
-                defaultValue={selectedEvent?.mapLink}
-                {...register("mapLink", { required: false })}
-              />
-            </div>
-            <div className="w-[32%]">
+            <div className="w-[25%]">
               <label htmlFor="name" className="text-neutralDark">
                 Event Environment
               </label>
@@ -313,32 +303,21 @@ const EventDetails = () => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          <div className="flex flex-row items-center justify-between w-full mt-6">
-            <div className="flex flex-col w-[48%]">
-              <label htmlFor="startDate" className="text-neutralDark">
-                Start Date
+            <div className="w-[41%] flex flex-col">
+              <label htmlFor="name" className="text-neutralDark">
+                Google Maps Link
               </label>
-              <DatePicker
-                onChange={(date: Date | undefined) => {
-                  const startDate = moment(date).format("YYYY-MM-DD")
+              <DateRangePicker
+                onUpdate={(values) => {
+                  if (!values?.range?.from || !values?.range?.to)
+                    alert("Please make sure you select a start date and end date!")
+                  const startDate = moment(values?.range?.from).format("YYYY-MM-DD")
+                  const endDate = moment(values?.range?.to).format("YYYY-MM-DD")
                   setValue("startDate", startDate)
+                  setValue("endDate", endDate)
                 }}
-                defaultDate={selectedEvent?.startDate}
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-col w-[48%]">
-              <label htmlFor="endDate" className="text-neutralDark">
-                End Date
-              </label>
-              <DatePicker
-                onChange={(date: Date | undefined) => {
-                  const endDate = moment(date).format("YYYY-MM-DD")
-                  setValue("startDate", endDate)
-                }}
-                defaultDate={selectedEvent?.endDate}
-                className="w-full"
+                initialDateFrom={selectedEvent?.startDate}
+                initialDateTo={selectedEvent?.endDate}
               />
             </div>
           </div>

@@ -87,9 +87,9 @@ const TransactionsTab = () => {
                   <TableHeaderCell>ID</TableHeaderCell>
                   <TableHeaderCell className="text-left">Name</TableHeaderCell>
                   <TableHeaderCell className="text-left">Email</TableHeaderCell>
+                  <TableHeaderCell className="text-left">Status</TableHeaderCell>
                   <TableHeaderCell className="text-left">Paid At</TableHeaderCell>
                   <TableHeaderCell className="text-left">Created On</TableHeaderCell>
-                  <TableHeaderCell className="text-left">Status</TableHeaderCell>
                 </TableRow>
               </TableHead>
 
@@ -115,8 +115,6 @@ const TransactionsTab = () => {
                             <TableCell>{item.transactionId}</TableCell>
                             <TableCell className="text-left">{item.recipientName}</TableCell>
                             <TableCell className="text-left">{item.recipientEmail}</TableCell>
-                            <TableCell className="text-left">{item?.paidAt ?  moment(item?.paidAt).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
-                            <TableCell className="text-left">{item?.createdOn ? moment(item?.createdOn).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
                             <TableCell className="text-left">
                               <Badge
                                 color={item?.transactionStatus === "SUCCESSFUL" ? "emerald" : "red"}
@@ -125,6 +123,8 @@ const TransactionsTab = () => {
                                 {item.transactionStatus.toLowerCase()}
                               </Badge>
                             </TableCell>
+                            <TableCell className="text-left">{item?.paidAt ?  moment(item?.paidAt).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
+                            <TableCell className="text-left">{item?.createdOn ? moment(item?.createdOn).format("DD-MM-YY HH:mm") : "No date"}</TableCell>
                           </TableRow>
                         ))}
                       </>
