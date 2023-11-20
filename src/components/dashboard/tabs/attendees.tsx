@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-  Title
+  Title,
 } from "@tremor/react"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -27,16 +27,12 @@ interface AttendeesType {
 }
 
 const AttendeesTab = () => {
-const [allAttendees, setAllAttendees] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
+  const [allAttendees, setAllAttendees] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const params = useParams()
 
   useEffect(() => {
-    // if(allTickets.length > 0) {
-    //   setEventTickets(allTickets)
-    // }else {
     fetchAllAttendees(params.id)
-    // }
   }, [])
 
   const fetchAllAttendees = async (eventId: string | undefined) => {
@@ -69,16 +65,12 @@ const [allAttendees, setAllAttendees] = useState([])
                   tooltip="Shows a list of all attendees for this event"
                 />
               </Flex>
-              {/* <div className="flex flex-row items-center text-sm cursor-pointer">
-                <Download size={15} />
-                <span className="ml-2">Download</span>
-              </div> */}
             </div>
             <Table className="mt-6">
               <TableHead>
                 <TableRow>
                   {/* <TableHeaderCell>ID</TableHeaderCell> */}
-                  <TableHeaderCell>Amount</TableHeaderCell>
+                  <TableHeaderCell>Ticket Type</TableHeaderCell>
                   <TableHeaderCell className="text-left">Name</TableHeaderCell>
                   <TableHeaderCell className="text-left">Email</TableHeaderCell>
                 </TableRow>
@@ -103,7 +95,7 @@ const [allAttendees, setAllAttendees] = useState([])
                       <>
                         {allAttendees.map((item: AttendeesType) => (
                           <TableRow key={item.recipientEmail}>
-                            <TableCell>{item.amount}</TableCell>
+                            <TableCell>{item.ticketName}</TableCell>
                             <TableCell className="text-left">{item.recipientName}</TableCell>
                             <TableCell className="text-left">{item.recipientEmail}</TableCell>
                             {/* <TableCell className="text-left">{item.transactionStatus}</TableCell> */}

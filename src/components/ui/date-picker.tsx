@@ -20,7 +20,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   className,
   onChange,
   defaultDate = new Date(),
-  popoverZIndex = 50,
+  popoverZIndex = 200,
   ...props
 }) => {
   const [date, setDate] = React.useState<Date | null>(new Date(defaultDate))

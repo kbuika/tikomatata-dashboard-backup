@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
-import { DatePicker } from "../../components/ui/date-picker"
 import { createEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
@@ -25,13 +24,17 @@ import FileUploadModal from "@/src/components/file-upload"
 import { TimePicker } from "@/src/components/ui/time-picker"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import { useEventsStore } from "@/src/stores/events-store"
+import { DateRangePicker } from "@/src/components/ui/date-range-picker"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
   ageLimit: yup.number().notRequired().default(18),
   description: yup.string().required("Description is required"),
   poster: yup.mixed().required(),
-  location: yup.string().required("Location is required").min(3, "location should be longer than 3 characters"),
+  location: yup
+    .string()
+    .required("Location is required")
+    .min(3, "location should be longer than 3 characters"),
   mapLink: yup.string().notRequired(),
   environment: yup.string().notRequired().default("Indoor"),
   startDate: yup.string().required("Start date is required"),
@@ -45,7 +48,6 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [createEventError, setCreateEventError] = useState<any>(null)
-  const [selectedStartDate, setSelectedStartDate] = useState<string | undefined>()
   const componentRef = useRef(null)
   // stores
   const resetAllEvents = useEventsStore((state) => state.resetAllEvents)
@@ -56,7 +58,10 @@ const CreateEvent = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch
   } = useForm<EventDataType>({ resolver: yupResolver(schema) })
+  const startDate = watch("startDate")
+  const endDate = watch("endDate")
 
   const onSubmit: SubmitHandler<EventDataType> = async (data) => {
     setIsLoading(true)
@@ -90,10 +95,10 @@ const CreateEvent = () => {
             <Link to="/events">
               <Button variant="ghost">Cancel</Button>
             </Link>
-            <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)}>
+            <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)} isLoading={isLoading}>
               {isLoading ? (
                 <>
-                  Creating... <Loader2 className="animate-spin" />
+                  <Loader2 className="animate-spin" /> Creating...
                 </>
               ) : (
                 "Save"
@@ -103,7 +108,7 @@ const CreateEvent = () => {
         </div>
       }
     >
-      <div className="w-full min-h-screen pt-[4em] px-4 md:px-0">
+      <div className="w-full min-h-screen py-[4em] px-4 md:px-0">
         <div className="flex flex-row items-center justify-between w-full">
           <div className="w-full">
             <label htmlFor="name" className="text-neutralDark">
@@ -177,19 +182,6 @@ const CreateEvent = () => {
               <span className="text-criticalRed">{errors.location?.message}</span>
             )}
           </div>
-          <div className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2">
-            <label htmlFor="name" className="text-neutralDark">
-              Google Maps Link
-            </label>
-            <Input
-              id="mapLink"
-              placeholder="Pin Location"
-              type="text"
-              {...register("mapLink", { required: false })}
-              className="mt-1"
-            />
-            {errors.mapLink && <span className="text-criticalRed">{errors.mapLink?.message}</span>}
-          </div>
           <div
             className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2"
             ref={componentRef}
@@ -216,38 +208,30 @@ const CreateEvent = () => {
               <span className="text-criticalRed">{errors.environment?.message}</span>
             )}
           </div>
+          <div className="w-[32%] flex flex-col max-[620px]:w-full">
+            <div className="flex flex-col">
+              <label htmlFor="endDate" className="text-neutralDark mb-1">
+                Event Start and End date
+              </label>
+              <DateRangePicker
+                onUpdate={(values) => {
+                  if (!values?.range?.from || !values?.range?.to)
+                    alert("Please make sure you select a start date and end date!")
+                  const startDate = moment(values?.range?.from).format("YYYY-MM-DD")
+                  const endDate = moment(values?.range?.to).format("YYYY-MM-DD")
+                  setValue("startDate", startDate)
+                  setValue("endDate", endDate)
+                }}
+                initialDateFrom={startDate}
+                initialDateTo={endDate}
+              />
+              {errors.endDate && (
+                <span className="text-criticalRed">{errors.endDate?.message}</span>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-row flex-wrap items-center justify-between w-full mt-4">
-          <div className="flex flex-col">
-            <label htmlFor="startDate" className="text-neutralDark">
-              Start Date
-            </label>
-            <DatePicker
-              onChange={(date: Date | undefined) => {
-                const startDate = moment(date).format("YYYY-MM-DD")
-                setValue("startDate", startDate)
-                setSelectedStartDate(startDate)
-              }}
-              className="mt-1"
-            />
-            {errors.startDate && (
-              <span className="text-criticalRed">{errors.startDate?.message}</span>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="endDate" className="text-neutralDark">
-              End Date
-            </label>
-            <DatePicker
-              onChange={(date: Date | undefined) => {
-                const endDate = moment(date).format("YYYY-MM-DD")
-                setValue("endDate", endDate)
-              }}
-              defaultDate={selectedStartDate}
-              className="mt-1"
-            />
-            {errors.endDate && <span className="text-criticalRed">{errors.endDate?.message}</span>}
-          </div>
+        <div className="flex flex-row flex-wrap items-center justify-between w-[50%] mt-4">
           <div className="flex flex-col">
             <label htmlFor="name" className="text-neutralDark">
               Start Time
