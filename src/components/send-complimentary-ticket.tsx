@@ -26,7 +26,7 @@ const schema = yup.object({
   name: yup.string().required("name name is required"),
   email: yup.string().required("email is required"),
   phone: yup.string().required("phone is required"),
-  ticketType: yup.string().required("ticketType is required"),
+  ticketId: yup.string().required("ticketType is required"),
   quantity: yup.number().required("quantity is required"),
 })
 
@@ -57,7 +57,9 @@ const SendComplimentaryTicket = () => {
           `${data?.name} has been sent ${data?.quantity} Complimentary ticket${
             data.quantity > 1 ? "s " : " "
           }!!`,
+          false
         )
+        setCompSheetOpen(false)
       } else {
         errorToast(
           `Failed to send complimentary ticket${data?.quantity > 1 ? "s " : " "} to ${data?.name}`,
@@ -142,7 +144,7 @@ const SendComplimentaryTicket = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Ticket Type
               </label>
-              <Select onValueChange={(value) => setValue("ticketType", value)}>
+              <Select onValueChange={(value: string | undefined) => setValue("ticketId", value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Ticket Type" />
                 </SelectTrigger>
@@ -151,7 +153,7 @@ const SendComplimentaryTicket = () => {
                     <SelectLabel>Ticket Type</SelectLabel>
                     {allTickets.map((ticket) => {
                       return (
-                        <SelectItem value={ticket.name} key={ticket?.name}>
+                        <SelectItem value={`${ticket?.ticketId}`} key={ticket?.name}>
                           {ticket.name}
                         </SelectItem>
                       )
