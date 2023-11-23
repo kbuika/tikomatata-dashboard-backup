@@ -67,6 +67,7 @@ export const getUserNameInitials = (fullName: string) => {
   return initials?.join("")
 }
 
+// unused
 export const generateFileFromImageUrl = async(imageUrl: string, filename: string): Promise<File | null> => {
   const config = {
     method: "get",
