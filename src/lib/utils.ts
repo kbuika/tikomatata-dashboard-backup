@@ -24,9 +24,9 @@ export const checkRegistrationError = (field: string, errors: any) => {
   return { hasError, message: errorMessage?.message }
 }
 
-export const errorToast = (message: string | unknown) => {
+export const errorToast = (message: string | unknown, autoClose=true) => {
   toast.error(`Error: ${message}`, {
-    autoClose: 4000,
+    autoClose: autoClose ? 4000 : autoClose,
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
