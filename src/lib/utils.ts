@@ -32,9 +32,9 @@ export const errorToast = (message: string | unknown) => {
   })
 }
 
-export const successToast = (message: string) => {
+export const successToast = (message: string, autoClose=true) => {
   toast.success(`Yoohoo: ${message}`, {
-    autoClose: 4000,
+    autoClose: autoClose ? 4000 : autoClose,
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
@@ -67,6 +67,7 @@ export const getUserNameInitials = (fullName: string) => {
   return initials?.join("")
 }
 
+// unused
 export const generateFileFromImageUrl = async(imageUrl: string, filename: string): Promise<File | null> => {
   const config = {
     method: "get",
