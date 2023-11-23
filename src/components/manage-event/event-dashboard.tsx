@@ -14,7 +14,7 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Text
+  Text,
 } from "@tremor/react"
 import { Loader2, Rocket } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -33,7 +33,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
-
+import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -43,19 +43,24 @@ const usNumberformatter = (number: number, decimals = 0) =>
     .format(Number(number))
     .toString()
 
+const getActiveTabIndex = (tabIndex: string) : number => {
+  if(tabIndex.toLocaleLowerCase() == "sales") return 0
+  if(tabIndex.toLocaleLowerCase() == "transactions") return 1
+  if(tabIndex.toLocaleLowerCase() == "attendees") return 2
+  return 0
+}
+
 const EventDashBoard = () => {
+  const [activeTab, setActiveTab] = useSearchParamsState("dashTab", "sales")
   const [publishEventLoading, setPublishEventLoading] = useState(false)
   const [totalSales, setTotalSales] = useState(0)
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
+  const tabIndex = getActiveTabIndex(activeTab)
 
   useEffect(() => {
-    // if(allTickets.length > 0) {
-    //   setEventTickets(allTickets)
-    // }else {
-      fetchAllSales(params.id)
-    // }
+    fetchAllSales(params.id)
   }, [])
 
   const fetchAllSales = async (eventId: string | undefined) => {
@@ -109,16 +114,21 @@ const EventDashBoard = () => {
                 </DialogHeader>
                 <DialogFooter className="flex flex-row items-center justify-end">
                   <DialogClose className="mr-4">Cancel</DialogClose>
-                  <CustomButton className="mt-auto w-auto ml-4 flex flex-row items-center" onClick={onPublishEvent}>
-                    {publishEventLoading ? <>
-                    <Loader2 size={15} className="animate-spin"/>
-                    <span className="ml-2">Publishing...</span>
-                    </>
-                    : (<>
-                    <Rocket size={15} />
-                    <span className="ml-2">Publish</span>
-                    </>)}
-                    
+                  <CustomButton
+                    className="mt-auto w-auto ml-4 flex flex-row items-center"
+                    onClick={onPublishEvent}
+                  >
+                    {publishEventLoading ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" />
+                        <span className="ml-2">Publishing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Rocket size={15} />
+                        <span className="ml-2">Publish</span>
+                      </>
+                    )}
                   </CustomButton>
                 </DialogFooter>
               </DialogContent>
@@ -129,41 +139,58 @@ const EventDashBoard = () => {
     >
       <div className="border p-4 rounded-md">
         {
+          // FIXME: Proper conditional rendering
           // eslint-disable-next-line no-constant-condition
           true ? (
-            <TabGroup className="">
+            <TabGroup className="" defaultIndex={tabIndex}>
               <TabList color="violet">
-                <Tab>Sales</Tab>
-                <Tab>Transactions</Tab>
-                <Tab>Attendees</Tab>
+                <Tab onClick={() => setActiveTab("sales")} tabIndex={0}>
+                  Sales
+                </Tab>
+                <Tab onClick={() => setActiveTab("transactions")} tabIndex={1}>
+                  Transactions
+                </Tab>
+                <Tab onClick={() => setActiveTab("attendees")} tabIndex={2}>
+                  Attendees
+                </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>
-                  <Grid numItemsLg={2} className="mt-6 gap-6 flex flex-row max-[860px]:flex-col">
-                      <Card >
-                        <Flex alignItems="start">
-                          <div className="truncate">
-                            <Text>Sales</Text>
-                            {isLoadingSales ? (
-                              <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary"/>
-                            ) : (
-                              <Metric className="truncate">KES {usNumberformatter(totalSales)}</Metric>
-                            )}
-                          </div>
-                          {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
-                        </Flex>
-                        {/* TODO: Restore this once the "target" feature is ready */}
-                        {/* <Flex className="mt-4 space-x-2">
+                <TabPanel tabIndex={0}>
+                  {tabIndex === 0 && (
+                    <>
+                      <Grid
+                        numItemsLg={2}
+                        className="mt-6 gap-6 flex flex-row max-[860px]:flex-col"
+                      >
+                        <Card>
+                          <Flex alignItems="start">
+                            <div className="truncate">
+                              <Text>Sales</Text>
+                              {isLoadingSales ? (
+                                <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary" />
+                              ) : (
+                                <Metric className="truncate">
+                                  KES {usNumberformatter(totalSales)}
+                                </Metric>
+                              )}
+                            </div>
+                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
+                          </Flex>
+                          {/* TODO: Restore this once the "target" feature is ready */}
+                          {/* <Flex className="mt-4 space-x-2">
                           <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                           <Text>{item.target}</Text>
                         </Flex>
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
-                      </Card>
-                  </Grid>
-                  <TicketsSoldBarChart />
+                        </Card>
+                      </Grid>
+                      <TicketsSoldBarChart />
+                    </>
+                  )}
                 </TabPanel>
-                <TransactionsTab />
-                <AttendeesTab />
+
+                <TabPanel tabIndex={1}>{tabIndex && <TransactionsTab />}</TabPanel>
+                <TabPanel tabIndex={2}>{tabIndex && <AttendeesTab />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (
