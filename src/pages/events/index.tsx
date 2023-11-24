@@ -38,8 +38,8 @@ const Events = () => {
       try {
         const res = await fetchUserEventsFn()
         if (res.status === 200) {
-          setUserEvents(res.data)
-          setAllEvents(res.data)
+          setUserEvents(res.data.events)
+          setAllEvents(res.data.events)
         } else {
           setEventsError(res.message)
           errorToast("Could not fetch your events. Try again later.")
@@ -84,7 +84,7 @@ const Events = () => {
         </div>
       }
     >
-      <div className="text-neutralDark px-[20px] pb-[30px] min-[768px]:ml-0 ">
+      <div className="text-neutralDark px-[20px] pt-[4em] pb-[30px] min-[768px]:ml-0 ">
         {userEvents.length > 0 ? (
           <div className="mt-[10px] min-h-[90vh] h-auto mb-[20px]">
             {userEvents?.map((event: EventDataType) => {
@@ -112,7 +112,7 @@ const Events = () => {
                         <Tooltip>
                           <TooltipTrigger>
                             <p>
-                              <Switch />
+                              <Switch disabled={true}/>
                             </p>
                           </TooltipTrigger>
                           <TooltipContent>

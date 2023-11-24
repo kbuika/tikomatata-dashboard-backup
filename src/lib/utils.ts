@@ -24,17 +24,17 @@ export const checkRegistrationError = (field: string, errors: any) => {
   return { hasError, message: errorMessage?.message }
 }
 
-export const errorToast = (message: string | unknown) => {
+export const errorToast = (message: string | unknown, autoClose=true) => {
   toast.error(`Error: ${message}`, {
-    autoClose: 4000,
+    autoClose: autoClose ? 4000 : autoClose,
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
 }
 
-export const successToast = (message: string) => {
+export const successToast = (message: string, autoClose=true) => {
   toast.success(`Yoohoo: ${message}`, {
-    autoClose: 4000,
+    autoClose: autoClose ? 4000 : autoClose,
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
@@ -58,15 +58,16 @@ export const removeCookie = (cookieName: string) => {
 
 export const getUserNameInitials = (fullName: string) => {
   // Split the full name into an array of individual words
-  const words = fullName.trim().split(/\s+/)
+  const words = fullName?.trim()?.split(/\s+/)
 
   // Get the first letter of each word and capitalize it
-  const initials = words.map((word) => word.charAt(0).toUpperCase())
+  const initials = words?.map((word) => word?.charAt(0)?.toUpperCase())
 
   // Join the initials together to form the result
-  return initials.join("")
+  return initials?.join("")
 }
 
+// unused
 export const generateFileFromImageUrl = async(imageUrl: string, filename: string): Promise<File | null> => {
   const config = {
     method: "get",

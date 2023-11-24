@@ -1,33 +1,28 @@
-import CustomButton from "../ui/custom-button"
+import { getUserInfo } from "@/src/api-calls"
+import { getTotalSales } from "@/src/api-calls/dashboard"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import CalendarImage from "../../assets/images/calendar.png"
-import { InformationCircleIcon } from "@heroicons/react/solid"
+import { errorToast, successToast } from "@/src/lib/utils"
+import { useEventsStore } from "@/src/stores/events-store"
+import { DialogClose } from "@radix-ui/react-dialog"
 import {
   Card,
+  Flex,
   Grid,
-  Title,
-  Text,
+  Metric,
   Tab,
-  TabList,
   TabGroup,
+  TabList,
   TabPanel,
   TabPanels,
-  BadgeDelta,
-  DeltaType,
-  Flex,
-  Metric,
-  AreaChart,
-  Color,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
+  Text,
 } from "@tremor/react"
-import { useState } from "react"
-import { Download, Loader2, Rocket } from "lucide-react"
+import { Loader2, Rocket } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import CalendarImage from "../../assets/images/calendar.png"
+import AttendeesTab from "../dashboard/tabs/attendees"
+import TransactionsTab from "../dashboard/tabs/transactions"
+import CustomButton from "../ui/custom-button"
 import {
   Dialog,
   DialogContent,
@@ -37,38 +32,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
-import { DialogClose } from "@radix-ui/react-dialog"
-import { useEventsStore } from "@/src/stores/events-store"
-import { publishEventFn } from "@/src/api-calls"
-import { errorToast, successToast } from "@/src/lib/utils"
-
-type Kpi = {
-  title: string
-  metric: string
-  progress: number
-  target: string
-  delta: string
-  deltaType: DeltaType
-}
-
-const kpiData: Kpi[] = [
-  {
-    title: "Sales",
-    metric: "KES 0",
-    progress: 15.9,
-    target: "KES 80,000",
-    delta: "0%",
-    deltaType: "moderateIncrease",
-  },
-  {
-    title: "Attendees",
-    metric: "0",
-    progress: 53.6,
-    target: "2,000",
-    delta: "0%",
-    deltaType: "moderateDecrease",
-  },
-]
+import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
+import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
+import RequestPublishEmail from "../../email-templates/request-publish-email"
+import { render } from "@react-email/render"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -78,127 +45,94 @@ const usNumberformatter = (number: number, decimals = 0) =>
     .format(Number(number))
     .toString()
 
-const formatters: { [key: string]: any } = {
-  Sales: (number: number) => `KES ${usNumberformatter(number)}`,
-  Attendees: (number: number) => `${usNumberformatter(number)}`,
-  Delta: (number: number) => `${usNumberformatter(number, 2)}%`,
+const getActiveTabIndex = (tabIndex: string): number => {
+  if (tabIndex.toLocaleLowerCase() == "sales") return 0
+  if (tabIndex.toLocaleLowerCase() == "transactions") return 1
+  if (tabIndex.toLocaleLowerCase() == "attendees") return 2
+  return 0
 }
-
-const Kpis = {
-  Sales: "Sales",
-  Attendees: "Attendees",
-}
-
-const kpiList = [Kpis.Sales, Kpis.Attendees]
-
-export type DailyPerformance = {
-  date: string
-  Sales: number
-  Attendees: number
-}
-
-export const performance: DailyPerformance[] = [
-  // {
-  //   date: "2023-05-01",
-  //   Sales: 900.73,
-  //   Attendees: 73,
-  // },
-  // {
-  //   date: "2023-05-02",
-  //   Sales: 1000.74,
-  //   Attendees: 74,
-  // },
-  // {
-  //   date: "2023-05-03",
-  //   Sales: 1100.93,
-  //   Attendees: 293,
-  // },
-  // {
-  //   date: "2023-05-04",
-  //   Sales: 1200.9,
-  //   Attendees: 29,
-  // },
-]
-
-export type Attendee = {
-  name: string
-  email: string
-  dateOfPurchase: string
-  ticketType: string
-}
-
-export const AttendeesList: Attendee[] = [
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-  // {
-  //   name: "Peter Doe",
-  //   email: "peter@doe.com",
-  //   dateOfPurchase: "23/07",
-  //   ticketType: "Regular",
-  // },
-]
 
 const EventDashBoard = () => {
+  const [activeTab, setActiveTab] = useSearchParamsState("dashTab", "sales")
   const [publishEventLoading, setPublishEventLoading] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false)
+  const [totalSales, setTotalSales] = useState(0)
+  const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
-  const selectedKpi = kpiList[selectedIndex]
+  const params = useParams()
+  const tabIndex = getActiveTabIndex(activeTab)
 
-  const areaChartArgs = {
-    className: "mt-5 h-72",
-    data: performance,
-    index: "date",
-    categories: [selectedKpi],
-    colors: ["orange"] as Color[],
-    showLegend: false,
-    valueFormatter: formatters[selectedKpi],
-    yAxisWidth: 56,
+  useEffect(() => {
+    fetchAllSales(params.id)
+  }, [])
+
+  const fetchAllSales = async (eventId: string | undefined) => {
+    setIsLoadingSales(true)
+    try {
+      const res = await getTotalSales(eventId)
+      if (res.status === 200) {
+        setTotalSales(res.data.totalAmount)
+      } else {
+        errorToast("Could not fetch this event's tickets. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's tickets. Try again later.")
+    } finally {
+      setIsLoadingSales(false)
+    }
   }
 
-  const onPublishEvent = async () => {
+  const onRequestPublishEvent = async () => {
     setPublishEventLoading(true)
+
     try {
-      const res = await publishEventFn(selectedEvent?.eventId)
-      if (res?.data?.status === 200) {
-        successToast("Your event is live!")
+      const res = await getUserInfo()
+      if (res?.status === 200) {
+        const emailHtml = render(RequestPublishEmail({ event: selectedEvent, user: res?.data }))
+
+        const emailRes = await fetch("/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "no-cors", // disable cors
+          body: JSON.stringify({ emailHtml, subject: "Request to publish event" }),
+        })
+        if(emailRes.status === 200) {
+          successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false)
+        }
       } else {
-        errorToast(res?.data?.message)
+        errorToast(`Could not send your request to publish ${selectedEvent?.name}.`, false)
       }
     } catch (err) {
       errorToast("Could not publish event. Try again later.")
     } finally {
       setPublishEventLoading(false)
+      setPublishDialogOpen(false)
     }
   }
+
+  // const onPublishEvent = async () => {
+  //   setPublishEventLoading(true)
+  //   try {
+  //     const res = await publishEventFn(selectedEvent?.eventId)
+  //     if (res?.data?.status === 200) {
+  //       successToast("Your event is live!")
+  //     } else {
+  //       errorToast(res?.data?.message)
+  //     }
+  //   } catch (err) {
+  //     errorToast("Could not publish event. Try again later.")
+  //   } finally {
+  //     setPublishEventLoading(false)
+  //   }
+  // }
   return (
     <EventPagesWrapper
-      left={
-        <div className="text-neutralDark">
-          <div className="w-full flex flex-row items-center justify-between relative">
-            <h2 className="text-[18px] font-semibold">{selectedEvent?.name}</h2>
-          </div>
-        </div>
-      }
       right={
         <div className="text-neutralDark">
           <div>
-            <Dialog>
+            <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
               <DialogTrigger>
                 <CustomButton className=" w-auto">Publish Event</CustomButton>
               </DialogTrigger>
@@ -207,22 +141,46 @@ const EventDashBoard = () => {
                   <DialogTitle>Publish Event?</DialogTitle>
                   <DialogDescription className="mt-4">
                     <p className="mt-4 text-base text-left">
-                      This will make your event live and tickets will be visible to the public.
+                      This will send a review request before your event goes live.
                     </p>
+                    <div className="mt-4 text-base text-left mt-2">
+                      This review can take between 30 minutes to 3 hours. Incase you&apos;d like a quick review, please contact support
+                      <ul className="mt-4">
+                        <li> Dennis - {" "}
+                          <a href="mailTo:denno@tikomatata.com" className="underline">
+                            denno@tikomatata.com
+                          </a>, <a href="phone:0110733776" className="underline">
+                            0110733776
+                          </a>
+                        </li>
+                        <li>Kibuika - {" "}
+                          <a href="mailTo:kibuika@tikomatata.com" className="underline">
+                            kibuika@tikomatata.com
+                          </a>, <a href="phone:+254740459940" className="underline">
+                            0740459940
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex flex-row items-center justify-end">
                   <DialogClose className="mr-4">Cancel</DialogClose>
-                  <CustomButton className="mt-auto w-auto ml-4 flex flex-row items-center" onClick={onPublishEvent}>
-                    {publishEventLoading ? <>
-                    <Loader2 size={15} className="animate-spin"/>
-                    <span className="ml-2">Publishing...</span>
-                    </>
-                    : (<>
-                    <Rocket size={15} />
-                    <span className="ml-2">Publish</span>
-                    </>)}
-                    
+                  <CustomButton
+                    className="mt-auto w-auto ml-4 flex flex-row items-center"
+                    onClick={onRequestPublishEvent}
+                  >
+                    {publishEventLoading ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" />
+                        <span className="ml-2">Requesting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Rocket size={15} />
+                        <span className="ml-2">Request</span>
+                      </>
+                    )}
                   </CustomButton>
                 </DialogFooter>
               </DialogContent>
@@ -233,121 +191,58 @@ const EventDashBoard = () => {
     >
       <div className="border p-4 rounded-md">
         {
+          // FIXME: Proper conditional rendering
           // eslint-disable-next-line no-constant-condition
           true ? (
-            <TabGroup className="">
+            <TabGroup className="" defaultIndex={tabIndex}>
               <TabList color="violet">
-                <Tab>Overview</Tab>
-                <Tab>Detail</Tab>
+                <Tab onClick={() => setActiveTab("sales")} tabIndex={0}>
+                  Sales
+                </Tab>
+                <Tab onClick={() => setActiveTab("transactions")} tabIndex={1}>
+                  Transactions
+                </Tab>
+                <Tab onClick={() => setActiveTab("attendees")} tabIndex={2}>
+                  Attendees
+                </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>
-                  <Grid numItemsLg={2} className="mt-6 gap-6 flex flex-row max-[860px]:flex-col">
-                    {kpiData.map((item) => (
-                      <Card key={item.title}>
-                        <Flex alignItems="start">
-                          <div className="truncate">
-                            <Text>{item.title}</Text>
-                            <Metric className="truncate">{item.metric}</Metric>
-                          </div>
-                          <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta>
-                        </Flex>
-                        {/* TODO: Restore this once the "target" feature is ready */}
-                        {/* <Flex className="mt-4 space-x-2">
+                <TabPanel tabIndex={0}>
+                  {tabIndex === 0 && (
+                    <>
+                      <Grid
+                        numItemsLg={2}
+                        className="mt-6 gap-6 flex flex-row max-[860px]:flex-col"
+                      >
+                        <Card>
+                          <Flex alignItems="start">
+                            <div className="truncate">
+                              <Text>Sales</Text>
+                              {isLoadingSales ? (
+                                <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary" />
+                              ) : (
+                                <Metric className="truncate">
+                                  KES {usNumberformatter(totalSales)}
+                                </Metric>
+                              )}
+                            </div>
+                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
+                          </Flex>
+                          {/* TODO: Restore this once the "target" feature is ready */}
+                          {/* <Flex className="mt-4 space-x-2">
                           <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
                           <Text>{item.target}</Text>
                         </Flex>
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
-                      </Card>
-                    ))}
-                  </Grid>
-                  <div className="mt-6">
-                    <Card>
-                      <>
-                        <div className="md:flex justify-between">
-                          <div>
-                            <Flex
-                              className="space-x-0.5"
-                              justifyContent="start"
-                              alignItems="center"
-                            >
-                              <Title> Sales History ( work in progress) </Title>
-                            </Flex>
-                            <Text> Daily change for sales </Text>
-                          </div>
-                          <div>
-                            <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
-                              <TabList color="gray" variant="solid">
-                                <Tab value={""}>Sales</Tab>
-                                <Tab>Attendees</Tab>
-                              </TabList>
-                            </TabGroup>
-                          </div>
-                        </div>
-                        {/* web */}
-                        <div className="mt-8 hidden sm:block">
-                          <AreaChart {...areaChartArgs} colors={["violet"]}/>
-                        </div>
-                        {/* mobile */}
-                        <div className="mt-8 sm:hidden">
-                          <AreaChart
-                            {...areaChartArgs}
-                            startEndOnly={true}
-                            showGradient={false}
-                            showYAxis={false}
-                            colors={["violet"]}
-                          />
-                        </div>
-                      </>
-                    </Card>
-                  </div>
+                        </Card>
+                      </Grid>
+                      <TicketsSoldBarChart />
+                    </>
+                  )}
                 </TabPanel>
-                <TabPanel>
-                  <div className="mt-6">
-                    <Card>
-                      <>
-                        <div className="flex flex-row">
-                          <Flex className="space-x-0.5" justifyContent="start" alignItems="center">
-                            <Title> Attendees List (Work in progress)</Title>
-                            <Icon
-                              icon={InformationCircleIcon}
-                              variant="simple"
-                              tooltip="Shows a list of tickets purchased for this event"
-                            />
-                          </Flex>
-                          <div className="flex flex-row items-center text-sm cursor-pointer">
-                            <Download size={15} />
-                            <span className="ml-2">Download</span>
-                          </div>
-                        </div>
 
-                        <Table className="mt-6">
-                          <TableHead>
-                            <TableRow>
-                              <TableHeaderCell>Name</TableHeaderCell>
-                              <TableHeaderCell className="text-left">Email</TableHeaderCell>
-                              <TableHeaderCell className="text-left">
-                                Date of Purchase
-                              </TableHeaderCell>
-                              <TableHeaderCell className="text-left">Ticket Type</TableHeaderCell>
-                            </TableRow>
-                          </TableHead>
-
-                          <TableBody>
-                            {AttendeesList.map((item) => (
-                              <TableRow key={item.name}>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell className="text-left">{item.email}</TableCell>
-                                <TableCell className="text-left">{item.dateOfPurchase}</TableCell>
-                                <TableCell className="text-left">{item.ticketType}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </>
-                    </Card>
-                  </div>
-                </TabPanel>
+                <TabPanel tabIndex={1}>{tabIndex && <TransactionsTab />}</TabPanel>
+                <TabPanel tabIndex={2}>{tabIndex && <AttendeesTab />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (

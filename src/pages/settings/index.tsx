@@ -24,7 +24,7 @@ const Settings = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center justify-center w-full px-8">
+          <div className="flex flex-col items-center pt-[3em] justify-center w-full px-8">
             <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
                 <h3 className="text-base font-semibold">Profile Picture</h3>

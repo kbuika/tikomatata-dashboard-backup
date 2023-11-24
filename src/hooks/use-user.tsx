@@ -6,12 +6,16 @@ import { CURRENT_USER } from "../constants/fetch-keys";
 import { getUserNameInitials } from "../lib/utils";
 // types
 // import type { ICurrentUserResponse, IUser } from "types";
-export default function useUser({ options = {} } = {}) {
+export default function useUser() {
   // API to fetch user information
   const { data, isLoading, error, mutate } = useSWR<any>(
     CURRENT_USER,
     () => userService.currentUser(),
-    options
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: false,
+      // revalidateIfStale: false,
+    }
   );
 
   const user = error ? undefined : data;

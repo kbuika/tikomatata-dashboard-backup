@@ -1,7 +1,9 @@
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
+  CompTicketType,
   EventDataType,
+  EventDataTypeExtended,
   ResetPasswordArgs,
   TicketDataType,
   UserLoginObj,
@@ -171,15 +173,20 @@ export const createEventFn = async (eventData: EventDataType) => {
   }
 }
 
-export const updateEventFn = async (eventData: EventDataType) => {
-  const eventPoster: File = eventData?.poster?.[0]
+export const updateEventFn = async (eventData: EventDataTypeExtended) => {
   const payload = JSON.stringify(eventData)
 
-  const data = new FormData()
-  data.append("payload", new Blob([payload], { type: "application/json" }))
-  data.set("Content-Type", "application/json")
+  const formData = new FormData()
+  formData.append("payload", new Blob([payload], { type: "application/json" }))
+  // formData.set("Content-Type", "application/json")
 
-  data.append("file", eventPoster, "poster")
+  if(eventData?.poster !== null || eventData?.poster !== undefined) {
+    const eventPoster: File | undefined = eventData?.poster?.[0]
+    if(eventPoster !== undefined) {
+      formData.append("file", eventPoster, "poster")
+    }
+  }
+
 
   const config = {
     method: "post",
@@ -192,7 +199,7 @@ export const updateEventFn = async (eventData: EventDataType) => {
   }
 
   try {
-    const response = await axiosInstance.post(config.url, data, config)
+    const response = await axiosInstance.post(config.url, formData, config)
     return response
   } catch (error: any) {
     return error
@@ -285,7 +292,7 @@ export const fetchEventTicketsFn = async (eventId: string | undefined, page = 0,
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/api/v1/ticket/event/${eventId}?page=${page}&size=${size}`,
+    url: `${baseUrl}/api/v1/ticket/user/event/${eventId}?page=${page}&size=${size}`,
     headers: {
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
@@ -313,6 +320,26 @@ export const publishEventFn = async (eventId: number | undefined) => {
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
     data: { eventId: eventId },
+  }
+
+  try {
+    const response = await axiosInstance.request(config)
+    return response
+  } catch (error: any) {
+    return error
+  }
+}
+
+export const sendCompTicket = async (data: CompTicketType) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/generate-complimentary`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
+    data: JSON.stringify(data),
   }
 
   try {
