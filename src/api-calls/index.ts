@@ -14,6 +14,7 @@ import qs from "qs"
 import axiosInstance from "./axios-interceptor"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
+const authToken = import.meta.env.VITE_API_AUTH_TOKEN
 
 export const registerUser = async (user: UserRegisterObj) => {
   const data = JSON.stringify({
@@ -28,7 +29,7 @@ export const registerUser = async (user: UserRegisterObj) => {
     data,
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09"
+      Authorization: `Basic ${authToken}`
     },
   }
   try {
@@ -51,7 +52,7 @@ export const loginUser = async (user: UserLoginObj) => {
     data: data,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic dGlrb21hdGF0YV9vcmdhbml6ZXI6ZENGcmIyMUFkRUIwUUM1amJ5RnJaUT09"
+      Authorization: `Basic ${authToken}`
     },
   }
   try {
