@@ -176,7 +176,7 @@ export const createEventFn = async (eventData: EventDataType) => {
 
 export const updateEventFn = async (eventData: EventDataTypeExtended) => {
   const payload = JSON.stringify(eventData)
-
+  console.log("update event", payload)
   const formData = new FormData()
   formData.append("payload", new Blob([payload], { type: "application/json" }))
   // formData.set("Content-Type", "application/json")
