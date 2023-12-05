@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { getEventTicketEmails } from "@/src/api-calls/support"
+import { getEventTicketEmails, resendOrderEmail } from "@/src/api-calls/support"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import { errorToast } from "@/src/lib/utils"
+import { errorToast, successToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
 import { StatusOnlineIcon } from "@heroicons/react/outline"
 import {
@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Button } from "../ui/button"
+import { Loader2 } from "lucide-react"
 
 interface EmailDataType {
   emailBody?: string
@@ -30,6 +31,8 @@ interface EmailDataType {
 
 const EventSupport = () => {
   const [allEmails, setAllEmails] = useState([])
+  const [resendingEmail, setResendingEmail] = useState(false)
+  const [selectedEmailOrder, setSelectedEmailOrder] = useState<EmailDataType>()
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
 
   const params = useParams()
@@ -50,6 +53,26 @@ const EventSupport = () => {
       errorToast("Could not fetch this event's sales. Try again later.")
     }
   }
+
+  const resendUserOrderEmail = async (emailOrder: EmailDataType) => {
+    setSelectedEmailOrder(emailOrder)
+    setResendingEmail(true)
+    const eventId = params.id
+    const emailId = emailOrder?.emailId
+    try {
+      const res = await resendOrderEmail({ eventId, emailId })
+      if (res.status === 200) {
+        successToast(`Order email resent to ${emailOrder?.emailRecipient}`)
+      } else {
+        errorToast(`Could not resend email to ${emailOrder?.emailRecipient}`)
+      }
+    } catch (error) {
+      errorToast(`Could not resend email to ${emailOrder?.emailRecipient}`)
+    } finally {
+      setResendingEmail(false)
+    }
+  }
+  
   return (
     <EventPagesWrapper>
       <div className="border h-auto rounded-md p-4">
@@ -85,7 +108,7 @@ const EventSupport = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-row">
-                      <Button disabled={true}>resend</Button>
+                      <Button onClick={() => resendUserOrderEmail(item)} disabled={selectedEmailOrder?.emailId === item?.emailId && resendingEmail} className="bg-mainPrimary">{selectedEmailOrder?.emailId === item?.emailId && resendingEmail ? <Loader2 className="animate-spin"/> : "Resend"}</Button>
                       {/* <CustomButton
                     className="bg-mainPrimary text-white ml-2 w-[6em]"
                     onClick={() => console.log("clicked")}
