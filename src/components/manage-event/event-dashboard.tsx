@@ -36,6 +36,7 @@ import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
 import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 import RequestPublishEmail from "../../email-templates/request-publish-email"
 import { render } from "@react-email/render"
+import { Button } from "../ui/button"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -149,6 +150,7 @@ const EventDashBoard = () => {
       right={
         <div className="text-neutralDark">
           <div>
+            {selectedEvent?.published ? <Button disabled={true} className="bg-mainPrimary">Unpublish</Button> : 
             <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
               <DialogTrigger>
                 <CustomButton className=" w-auto">Publish Event</CustomButton>
@@ -202,6 +204,7 @@ const EventDashBoard = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+      }
           </div>
         </div>
       }
