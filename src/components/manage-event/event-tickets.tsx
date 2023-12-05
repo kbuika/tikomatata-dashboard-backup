@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from "react"
-import CustomButton from "../ui/custom-button"
-import CreateTicket from "./create-ticket"
-import EventTicketCard from "../ticket-card"
-import VerticalEventNavBar from "@/src/layouts/horizontal-event-navbar"
 import { fetchEventTicketsFn } from "@/src/api-calls"
-import { TicketDataType } from "@/src/types"
-import { errorToast } from "@/src/lib/utils"
-import { useParams } from "react-router-dom"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
-import { Plus } from "lucide-react"
-import { useTicketsStore } from "@/src/stores/tickets-store"
-import { Sheet, SheetContent } from "../ui/sheet"
+import { errorToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
+import { useTicketsStore } from "@/src/stores/tickets-store"
+import { TicketDataType } from "@/src/types"
+import { Plus } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import LoadingScreen from "../loading-screen"
 import SendComplimentaryTicket from "../send-complimentary-ticket"
+import EventTicketCard from "../ticket-card"
+import CustomButton from "../ui/custom-button"
+import CreateTicket from "./create-ticket"
 
 const EventTickets = () => {
   const allTickets = useTicketsStore((state) => state.allTickets)
@@ -58,6 +56,9 @@ const EventTickets = () => {
       right={
         <div className="text-neutralDark">
           <div className="w-full flex flex-row items-center justify-between">
+            <div className="mr-4">
+              <SendComplimentaryTicket />
+            </div>
             <div>
               {createTicketView ? (
                 <></>
@@ -81,10 +82,6 @@ const EventTickets = () => {
             <CreateTicket setCreateTicketView={setCreateTicketView} />
           ) : (
             <>
-            <div className="w-full flex items-center justify-end">
-              <SendComplimentaryTicket />
-
-            </div>
               {eventTickets?.length > 0 ? (
                 <div className="flex flex-row flex-wrap items-start justify-between h-auto mt-[2em] mb-12 max-[680px]:items-center max-[680px]:justify-center">
                   {eventTickets?.map((ticket: TicketDataType) => (
