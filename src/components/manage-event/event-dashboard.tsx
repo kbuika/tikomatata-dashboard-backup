@@ -73,10 +73,10 @@ const EventDashBoard = () => {
       if (res.status === 200) {
         setTotalSales(res.data.totalAmount)
       } else {
-        errorToast("Could not fetch this event's tickets. Try again later.")
+        errorToast("Could not fetch this event's sales. Try again later.")
       }
     } catch (error) {
-      errorToast("Could not fetch this event's tickets. Try again later.")
+      errorToast("Could not fetch this event's sales. Try again later.")
     } finally {
       setIsLoadingSales(false)
     }

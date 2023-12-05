@@ -68,6 +68,7 @@ const EventDetails = () => {
 
   useEffect(() => {
     if (selectedEvent) {
+      console.log(selectedEvent)
       setValue("name", selectedEvent.name)
       setValue("ageLimit", selectedEvent?.ageLimit)
       setValue("description", selectedEvent?.description)
@@ -92,7 +93,6 @@ const EventDetails = () => {
   })
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data, "update event data")
     setIsLoading(true)
     try {
       const res = await updateEventFn(data)
@@ -112,25 +112,25 @@ const EventDetails = () => {
     }
   }
 
-  const deactivateEvent = async () => {
-    setIsDeactivating(true)
-    try {
-      const res = await deactivateEventFn(params?.id)
-      if (res.status === 200) {
-        resetAllEvents()
-        successToast("Event has been deactivated successfully!")
-        navigate("/events")
-      } else {
-        setDeactivateEventError(res.message)
-        errorToast(res?.message)
-      }
-    } catch (err) {
-      errorToast(err)
-      setDeactivateEventError(err)
-    } finally {
-      setIsDeactivating(false)
-    }
-  }
+  // const deactivateEvent = async () => {
+  //   setIsDeactivating(true)
+  //   try {
+  //     const res = await deactivateEventFn(params?.id)
+  //     if (res.status === 200) {
+  //       resetAllEvents()
+  //       successToast("Event has been deactivated successfully!")
+  //       navigate("/events")
+  //     } else {
+  //       setDeactivateEventError(res.message)
+  //       errorToast(res?.message)
+  //     }
+  //   } catch (err) {
+  //     errorToast(err)
+  //     setDeactivateEventError(err)
+  //   } finally {
+  //     setIsDeactivating(false)
+  //   }
+  // }
   return (
     <EventPagesWrapper
       right={
@@ -146,7 +146,7 @@ const EventDetails = () => {
               )}
             </CustomButton>
             <div>
-              <Dialog>
+              {/* <Dialog>
                 <DialogTrigger>
                   <CustomButton variant={"secondary"} className="bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary">
                     <>
@@ -187,7 +187,7 @@ const EventDetails = () => {
                     </CustomButton>
                   </DialogFooter>
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </div>
           </div>
         </div>
