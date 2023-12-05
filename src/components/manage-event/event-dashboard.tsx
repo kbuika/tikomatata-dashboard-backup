@@ -1,5 +1,5 @@
 import { getUserInfo } from "@/src/api-calls"
-import { getTotalSales } from "@/src/api-calls/dashboard"
+import { getTotalSales, getTotalTicketSalesByType } from "@/src/api-calls/dashboard"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
@@ -57,6 +57,8 @@ const EventDashBoard = () => {
   const [publishEventLoading, setPublishEventLoading] = useState(false)
   const [publishDialogOpen, setPublishDialogOpen] = useState(false)
   const [totalSales, setTotalSales] = useState(0)
+  const [ticketSalesByType, setTicketSalesByType] = useState([])
+  const [totalTicketsSale, setTotalTicketsSale] = useState(0)
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
@@ -64,6 +66,7 @@ const EventDashBoard = () => {
 
   useEffect(() => {
     fetchAllSales(params.id)
+    fetchTicketSalesByType(params.id)
   }, [])
 
   const fetchAllSales = async (eventId: string | undefined) => {
@@ -109,6 +112,20 @@ const EventDashBoard = () => {
     } finally {
       setPublishEventLoading(false)
       setPublishDialogOpen(false)
+    }
+  }
+
+  const fetchTicketSalesByType = async (eventId: string | undefined) => {
+    try {
+      const res = await getTotalTicketSalesByType(eventId)
+      if (res.status === 200) {
+        setTicketSalesByType(res.data.ticketsSoldByType)
+        setTotalTicketsSale(res.data.totalTicketsSold)
+      } else {
+        errorToast("Could not fetch this event's ticket sales by type. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's ticket sales by type. Try again later.")
     }
   }
 
@@ -235,8 +252,29 @@ const EventDashBoard = () => {
                         </Flex>
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                         </Card>
+                        <Card>
+                          <Flex alignItems="start">
+                            <div className="truncate">
+                              <Text>Total Tickets Sold</Text>
+                              {isLoadingSales ? (
+                                <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary" />
+                              ) : (
+                                <Metric className="truncate">
+                                  {usNumberformatter(totalTicketsSale)}
+                                </Metric>
+                              )}
+                            </div>
+                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
+                          </Flex>
+                          {/* TODO: Restore this once the "target" feature is ready */}
+                          {/* <Flex className="mt-4 space-x-2">
+                          <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
+                          <Text>{item.target}</Text>
+                        </Flex>
+                        <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
+                        </Card>
                       </Grid>
-                      <TicketsSoldBarChart />
+                      <TicketsSoldBarChart ticketSalesByType={ticketSalesByType}/>
                     </>
                   )}
                 </TabPanel>
