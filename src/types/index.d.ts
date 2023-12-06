@@ -32,6 +32,7 @@ export interface EventDataType {
   posterUrl?: string
   cancelled?: boolean
   tickets?: TicketDataType[]
+  published?: boolean
 }
 
 export interface EventDataTypeExtended extends EventDataType {

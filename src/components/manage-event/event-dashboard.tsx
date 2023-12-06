@@ -1,5 +1,5 @@
 import { getUserInfo } from "@/src/api-calls"
-import { getTotalSales } from "@/src/api-calls/dashboard"
+import { getTotalSales, getTotalTicketSalesByType } from "@/src/api-calls/dashboard"
 import EventPagesWrapper from "@/src/layouts/wrappers/event-pages-wrapper"
 import { errorToast, successToast } from "@/src/lib/utils"
 import { useEventsStore } from "@/src/stores/events-store"
@@ -36,6 +36,7 @@ import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
 import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 import RequestPublishEmail from "../../email-templates/request-publish-email"
 import { render } from "@react-email/render"
+import { Button } from "../ui/button"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -57,6 +58,8 @@ const EventDashBoard = () => {
   const [publishEventLoading, setPublishEventLoading] = useState(false)
   const [publishDialogOpen, setPublishDialogOpen] = useState(false)
   const [totalSales, setTotalSales] = useState(0)
+  const [ticketSalesByType, setTicketSalesByType] = useState([])
+  const [totalTicketsSale, setTotalTicketsSale] = useState(0)
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
@@ -64,6 +67,7 @@ const EventDashBoard = () => {
 
   useEffect(() => {
     fetchAllSales(params.id)
+    fetchTicketSalesByType(params.id)
   }, [])
 
   const fetchAllSales = async (eventId: string | undefined) => {
@@ -112,6 +116,20 @@ const EventDashBoard = () => {
     }
   }
 
+  const fetchTicketSalesByType = async (eventId: string | undefined) => {
+    try {
+      const res = await getTotalTicketSalesByType(eventId)
+      if (res.status === 200) {
+        setTicketSalesByType(res.data.ticketsSoldByType)
+        setTotalTicketsSale(res.data.totalTicketsSold)
+      } else {
+        errorToast("Could not fetch this event's ticket sales by type. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's ticket sales by type. Try again later.")
+    }
+  }
+
   // const onPublishEvent = async () => {
   //   setPublishEventLoading(true)
   //   try {
@@ -132,6 +150,7 @@ const EventDashBoard = () => {
       right={
         <div className="text-neutralDark">
           <div>
+            {selectedEvent?.published ? <Button disabled={true} className="bg-mainPrimary">Unpublish</Button> : 
             <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
               <DialogTrigger>
                 <CustomButton className=" w-auto">Publish Event</CustomButton>
@@ -185,6 +204,7 @@ const EventDashBoard = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+      }
           </div>
         </div>
       }
@@ -235,8 +255,29 @@ const EventDashBoard = () => {
                         </Flex>
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                         </Card>
+                        <Card>
+                          <Flex alignItems="start">
+                            <div className="truncate">
+                              <Text>Total Tickets Sold</Text>
+                              {isLoadingSales ? (
+                                <Loader2 size={25} className="animate-spin mt-4 text-mainPrimary" />
+                              ) : (
+                                <Metric className="truncate">
+                                  {usNumberformatter(totalTicketsSale)}
+                                </Metric>
+                              )}
+                            </div>
+                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
+                          </Flex>
+                          {/* TODO: Restore this once the "target" feature is ready */}
+                          {/* <Flex className="mt-4 space-x-2">
+                          <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
+                          <Text>{item.target}</Text>
+                        </Flex>
+                        <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
+                        </Card>
                       </Grid>
-                      <TicketsSoldBarChart />
+                      <TicketsSoldBarChart ticketSalesByType={ticketSalesByType}/>
                     </>
                   )}
                 </TabPanel>
