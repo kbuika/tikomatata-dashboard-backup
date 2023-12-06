@@ -1,4 +1,4 @@
-import { getSuccessfulSalesInPeriod, getTotalTicketSalesByType } from "@/src/api-calls/dashboard"
+import { getSuccessfulSalesInPeriod } from "@/src/api-calls/dashboard"
 import { errorToast } from "@/src/lib/utils"
 import { Card, Title, Subtitle, BarChart, Tab, TabGroup, TabList, Flex } from "@tremor/react"
 import moment from "moment"
@@ -8,9 +8,9 @@ import { useParams } from "react-router-dom"
 const valueFormatter = (number: number) =>
   `${new Intl.NumberFormat("us").format(number).toString()}`
 
-const TicketsSoldBarChart = () => {
+const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
   const [totalSales, setTotalSales] = useState([])
-  const [ticketSalesByType, setTicketSalesByType] = useState([])
+  // const [ticketSalesByType, setTicketSalesByType] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedPeriod, setSelectedPeriod] = useState({
@@ -21,7 +21,6 @@ const TicketsSoldBarChart = () => {
 
   useEffect(() => {
     fetchSalesInPeriod(params.id)
-    fetchTicketSalesByType(params.id)
   }, [])
 
   const fetchSalesInPeriod = async (eventId: string | undefined) => {
@@ -37,18 +36,6 @@ const TicketsSoldBarChart = () => {
     }
   }
 
-  const fetchTicketSalesByType = async (eventId: string | undefined) => {
-    try {
-      const res = await getTotalTicketSalesByType(eventId)
-      if (res.status === 200) {
-        setTicketSalesByType(res.data.ticketsSoldByType)
-      } else {
-        errorToast("Could not fetch this event's ticket sales by type. Try again later.")
-      }
-    } catch (error) {
-      errorToast("Could not fetch this event's ticket sales by type. Try again later.")
-    }
-  }
 
   return (
     <div className="mt-6">
