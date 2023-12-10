@@ -142,7 +142,7 @@ export const getAllPageViews = async ({
   const config = {
     method: "GET",
     maxBodyLength: Infinity,
-    url: `https://cors-anywhere.herokuapp.com/http://localhost:3003/api/views?eventId=${eventId}&startDate=${selectedPeriod.startDate}&endDate=${selectedPeriod.endDate}`,
+    url: `/api/views?eventId=${eventId}&startDate=${selectedPeriod.startDate}&endDate=${selectedPeriod.endDate}`,
     headers: {
       "Content-Type": "application/json",
     },
