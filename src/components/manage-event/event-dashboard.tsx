@@ -37,6 +37,7 @@ import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 import RequestPublishEmail from "../../email-templates/request-publish-email"
 import { render } from "@react-email/render"
 import { Button } from "../ui/button"
+import PageViewsBarChart from "../dashboard/charts/pageviews-barchart"
 
 const usNumberformatter = (number: number, decimals = 0) =>
   Intl.NumberFormat("us", {
@@ -50,6 +51,7 @@ const getActiveTabIndex = (tabIndex: string): number => {
   if (tabIndex.toLocaleLowerCase() == "sales") return 0
   if (tabIndex.toLocaleLowerCase() == "transactions") return 1
   if (tabIndex.toLocaleLowerCase() == "attendees") return 2
+  if (tabIndex.toLocaleLowerCase() == "pageviews") return 3
   return 0
 }
 
@@ -225,6 +227,9 @@ const EventDashBoard = () => {
                 <Tab onClick={() => setActiveTab("attendees")} tabIndex={2}>
                   Attendees
                 </Tab>
+                <Tab onClick={() => setActiveTab("pageviews")} tabIndex={3}>
+                  Page Views
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel tabIndex={0}>
@@ -284,6 +289,7 @@ const EventDashBoard = () => {
 
                 <TabPanel tabIndex={1}>{tabIndex && <TransactionsTab />}</TabPanel>
                 <TabPanel tabIndex={2}>{tabIndex && <AttendeesTab />}</TabPanel>
+                <TabPanel tabIndex={3}>{tabIndex && <PageViewsBarChart />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (
