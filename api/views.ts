@@ -24,5 +24,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }),
   )
 
-  res.status(200).send({ message: "views fetched successfully", views: viewsData, status: 200 })
+  res.status(200).send({ message: "views fetched successfully", data: viewsData, status: 200 })
 }

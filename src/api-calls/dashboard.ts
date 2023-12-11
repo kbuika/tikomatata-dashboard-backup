@@ -150,9 +150,8 @@ export const getAllPageViews = async ({
   }
   try {
     const response = await axiosInstance.request(config)
-      if (response.status === 200) {
-        return response.data
-      }
+    console.log(response)
+    return response
   } catch (error: any) {
     return error
   }
