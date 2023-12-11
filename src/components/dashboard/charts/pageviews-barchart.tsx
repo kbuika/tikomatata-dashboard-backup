@@ -28,7 +28,7 @@ const PageViewsBarChart = () => {
     try {
       const res = await getAllPageViews({ eventId, selectedPeriod })
       if (res.status === 200) {
-        setTotalViews(res.data)
+        setTotalViews(res.data.views)
       } else {
         errorToast("Could not fetch this event's views. Try again later.")
       }
