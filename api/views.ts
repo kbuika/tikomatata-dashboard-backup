@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     keys.map(async (key) => {
       const date = key.split(":").pop() // Extract date from the key
       const views: any = await redis.get(key)
-      return { date, views: parseInt(views)/2 } // the views are divided by 2 to accomodate the double render by useEffect in the storefront
+      return { date, views: parseInt(views) }
     }),
   )
 
