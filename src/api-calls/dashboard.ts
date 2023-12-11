@@ -131,3 +131,31 @@ export const getSuccessfulSalesInPeriod = async ({
     return error
   }
 }
+
+export const getAllPageViews = async ({
+  eventId,
+  selectedPeriod = {
+    startDate: moment().clone().subtract(14, "days").format("YYYY-MM-DD"),
+    endDate: moment().endOf("day").format("YYYY-MM-DD"),
+  },
+}: SalesInPeriod) => {
+  const config = {
+    method: "GET",
+    maxBodyLength: Infinity,
+    url: `/api/views?eventId=${eventId}&startDate=${selectedPeriod.startDate}&endDate=${selectedPeriod.endDate}`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    mode: "no-cors", // disable cors
+  }
+  try {
+    const response = await axiosInstance.request(config)
+    console.log(response)
+    if(response.status === 200) {
+      return response.data
+    }
+  } catch (error: any) {
+    return error
+  }
+}
+
