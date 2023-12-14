@@ -5,6 +5,7 @@ import { StatusOnlineIcon } from "@heroicons/react/outline"
 
 import { DataTableColumnHeader } from "../ui/data-table/data-table-column-header"
 import moment from "moment"
+import { StatusOfflineIcon } from "@heroicons/react/solid"
 
 interface TransactionType {
     createdOn: string
@@ -57,8 +58,8 @@ export const TransactionColumns: ColumnDef<TransactionType>[] = [
       const status = row.getValue("transactionStatus") as string
       return (
         <div className="flex w-[100px] items-center">
-          <Badge color={status === "SUCCESSFUL" ? "emerald" : "red"} icon={StatusOnlineIcon}>
-            {status.toLowerCase()}
+          <Badge color={status === "SUCCESSFUL" ? "emerald" : "stone"} icon={status === "SUCCESSFUL" ? StatusOnlineIcon : StatusOfflineIcon}>
+            {status.toLowerCase() == "successful" ? "successful": "incomplete"}
           </Badge>
         </div>
       )
