@@ -11,11 +11,13 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { TransactionColumns } from "../../table-columns/transaction-columns"
 import { DataTable } from "../../ui/data-table/data-table"
+import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 
 // Optimize API calls
 const TransactionsTab = () => {
+  // const [tablePage, setTablePage] = useSearchParamsState("dashTab", "sales")
   const [alltransactions, setAllTransactions] = useState([])
-  const [currentTablePage, setCurrentTablePage] = useState<number>(0)
+  const [currentTablePage, setCurrentTablePage] = useSearchParamsState("page", 0)
   const [totalTablePages, setTotalTablePages] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
   const params = useParams()
@@ -24,10 +26,10 @@ const TransactionsTab = () => {
     fetchAllTransactions(params.id, currentTablePage)
   }, [currentTablePage])
 
-  const fetchAllTransactions = async (eventId: string | undefined, currentTablePage: number) => {
+  const fetchAllTransactions = async (eventId: string | undefined, currentTablePage: number | string) => {
     setIsLoading(true)
     try {
-      const res = await getTransactionsForEvent({ eventId, page:currentTablePage}) //TODO: add pagination
+      const res = await getTransactionsForEvent({ eventId, page:currentTablePage as number}) //TODO: add pagination
       if (res.status === 200) {
         const { transactions, totalPages} = res.data[0];
         setAllTransactions(transactions || [])
@@ -57,7 +59,7 @@ const TransactionsTab = () => {
                 />
               </Flex>
             </div>
-            <DataTable columns={TransactionColumns} data={alltransactions} dataloading={isLoading} totalTablePages={totalTablePages} setTablePage={setCurrentTablePage} tablePage={currentTablePage}/>
+            <DataTable columns={TransactionColumns} data={alltransactions} dataloading={isLoading} totalTablePages={totalTablePages} setTablePage={setCurrentTablePage} tablePage={currentTablePage as number}/>
           </>
       </div>
     </TabPanel>

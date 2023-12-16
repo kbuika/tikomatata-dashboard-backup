@@ -65,7 +65,8 @@ const EventDashBoard = () => {
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
-  const tabIndex = getActiveTabIndex(activeTab)
+  // TODO: Ask Willy to start table page count from 1 not 0
+  const tabIndex = getActiveTabIndex(activeTab as string)
 
   useEffect(() => {
     fetchAllSales(params.id)
@@ -287,9 +288,9 @@ const EventDashBoard = () => {
                   )}
                 </TabPanel>
 
-                <TabPanel tabIndex={1}>{tabIndex && <TransactionsTab />}</TabPanel>
-                <TabPanel tabIndex={2}>{tabIndex && <AttendeesTab />}</TabPanel>
-                <TabPanel tabIndex={3}>{tabIndex && <PageViewsBarChart />}</TabPanel>
+                <TabPanel tabIndex={1}>{tabIndex == 1 && <TransactionsTab />}</TabPanel>
+                <TabPanel tabIndex={2}>{tabIndex == 2 && <AttendeesTab />}</TabPanel>
+                <TabPanel tabIndex={3}>{tabIndex == 3 && <PageViewsBarChart />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (
