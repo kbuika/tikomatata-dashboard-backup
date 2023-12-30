@@ -32,7 +32,9 @@ const TransactionsTab = () => {
       const res = await getTransactionsForEvent({ eventId, page:currentTablePage as number}) //TODO: add pagination
       if (res.status === 200) {
         const { transactions, totalPages} = res.data[0];
-        setAllTransactions(transactions || [])
+        //FIXME: Filter all comps from transactions -- clean this up after jump-off
+        const filteredData = transactions.filter((entry:any) => !entry.transactionId.startsWith("COMP"));
+        setAllTransactions(filteredData || [])
         setTotalTablePages(totalPages || 1)
         setCurrentTablePage(currentTablePage)
       } else {
