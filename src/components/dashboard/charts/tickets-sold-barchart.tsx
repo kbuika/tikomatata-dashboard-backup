@@ -36,7 +36,6 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
         if (indexToRemove !== -1) {
           sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 1).toString()
         }
-        console.log(sales)
         setTotalSales(res.data.sales)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
