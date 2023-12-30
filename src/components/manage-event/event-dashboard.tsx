@@ -65,7 +65,8 @@ const EventDashBoard = () => {
   const [isLoadingSales, setIsLoadingSales] = useState(false)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const params = useParams()
-  const tabIndex = getActiveTabIndex(activeTab)
+  // TODO: Ask Willy to start table page count from 1 not 0
+  const tabIndex = getActiveTabIndex(activeTab as string)
 
   useEffect(() => {
     fetchAllSales(params.id)
@@ -77,7 +78,7 @@ const EventDashBoard = () => {
     try {
       const res = await getTotalSales(eventId)
       if (res.status === 200) {
-        setTotalSales(res.data.totalAmount)
+        setTotalSales(res.data.totalAmount - 700)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }
@@ -104,7 +105,7 @@ const EventDashBoard = () => {
           mode: "no-cors", // disable cors
           body: JSON.stringify({ emailHtml, subject: "Request to publish event" }),
         })
-        if(emailRes.status === 200) {
+        if (emailRes.status === 200) {
           successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false)
         }
       } else {
@@ -122,8 +123,22 @@ const EventDashBoard = () => {
     try {
       const res = await getTotalTicketSalesByType(eventId)
       if (res.status === 200) {
-        setTicketSalesByType(res.data.ticketsSoldByType)
-        setTotalTicketsSale(res.data.totalTicketsSold)
+        // FIXME: Hack to remove one flash sale ticket. Remove code afterwards
+        // Find the index of the "Flash Sale" entry
+        const flashSaleIndex = res.data.ticketsSoldByType.findIndex(
+          (ticket: any) => ticket.name === "Flash Sale",
+        )
+
+        // Create a new array with updated ticket count for "Flash Sale"
+        const newArray:any = [...res.data.ticketsSoldByType]
+        if (flashSaleIndex !== -1) {
+          newArray[flashSaleIndex] = {
+            ...newArray[flashSaleIndex],
+            tickets: newArray[flashSaleIndex].tickets - 1,
+          }
+        }
+        setTicketSalesByType(newArray)
+        setTotalTicketsSale(res.data.totalTicketsSold - 1)
       } else {
         errorToast("Could not fetch this event's ticket sales by type. Try again later.")
       }
@@ -152,61 +167,73 @@ const EventDashBoard = () => {
       right={
         <div className="text-neutralDark">
           <div>
-            {selectedEvent?.published ? <Button disabled={true} className="bg-mainPrimary">Unpublish</Button> : 
-            <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
-              <DialogTrigger>
-                <CustomButton className=" w-auto">Publish Event</CustomButton>
-              </DialogTrigger>
-              <DialogContent className="rounded-lg">
-                <DialogHeader>
-                  <DialogTitle>Publish Event?</DialogTitle>
-                  <DialogDescription className="mt-4">
-                    <p className="mt-4 text-base text-left">
-                      This will send a review request before your event goes live.
-                    </p>
-                    <div className="mt-4 text-base text-left mt-2">
-                      This review can take between 30 minutes to 3 hours. Incase you&apos;d like a quick review, please contact support
-                      <ul className="mt-4">
-                        <li> Dennis - {" "}
-                          <a href="mailTo:denno@tikomatata.com" className="underline">
-                            denno@tikomatata.com
-                          </a>, <a href="phone:0110733776" className="underline">
-                            0110733776
-                          </a>
-                        </li>
-                        <li>Kibuika - {" "}
-                          <a href="mailTo:kibuika@tikomatata.com" className="underline">
-                            kibuika@tikomatata.com
-                          </a>, <a href="phone:+254740459940" className="underline">
-                            0740459940
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="flex flex-row items-center justify-end">
-                  <DialogClose className="mr-4">Cancel</DialogClose>
-                  <CustomButton
-                    className="mt-auto w-auto ml-4 flex flex-row items-center"
-                    onClick={onRequestPublishEvent}
-                  >
-                    {publishEventLoading ? (
-                      <>
-                        <Loader2 size={15} className="animate-spin" />
-                        <span className="ml-2">Requesting...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Rocket size={15} />
-                        <span className="ml-2">Request</span>
-                      </>
-                    )}
-                  </CustomButton>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-      }
+            {selectedEvent?.published ? (
+              <Button disabled={true} className="bg-mainPrimary">
+                Unpublish
+              </Button>
+            ) : (
+              <Dialog open={publishDialogOpen} onOpenChange={setPublishDialogOpen}>
+                <DialogTrigger>
+                  <CustomButton className=" w-auto">Publish Event</CustomButton>
+                </DialogTrigger>
+                <DialogContent className="rounded-lg">
+                  <DialogHeader>
+                    <DialogTitle>Publish Event?</DialogTitle>
+                    <DialogDescription className="mt-4">
+                      <p className="mt-4 text-base text-left">
+                        This will send a review request before your event goes live.
+                      </p>
+                      <div className="mt-4 text-base text-left mt-2">
+                        This review can take between 30 minutes to 3 hours. Incase you&apos;d like a
+                        quick review, please contact support
+                        <ul className="mt-4">
+                          <li>
+                            {" "}
+                            Dennis -{" "}
+                            <a href="mailTo:denno@tikomatata.com" className="underline">
+                              denno@tikomatata.com
+                            </a>
+                            ,{" "}
+                            <a href="phone:0110733776" className="underline">
+                              0110733776
+                            </a>
+                          </li>
+                          <li>
+                            Kibuika -{" "}
+                            <a href="mailTo:kibuika@tikomatata.com" className="underline">
+                              kibuika@tikomatata.com
+                            </a>
+                            ,{" "}
+                            <a href="phone:+254740459940" className="underline">
+                              0740459940
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="flex flex-row items-center justify-end">
+                    <DialogClose className="mr-4">Cancel</DialogClose>
+                    <CustomButton
+                      className="mt-auto w-auto ml-4 flex flex-row items-center"
+                      onClick={onRequestPublishEvent}
+                    >
+                      {publishEventLoading ? (
+                        <>
+                          <Loader2 size={15} className="animate-spin" />
+                          <span className="ml-2">Requesting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Rocket size={15} />
+                          <span className="ml-2">Request</span>
+                        </>
+                      )}
+                    </CustomButton>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
         </div>
       }
@@ -282,14 +309,14 @@ const EventDashBoard = () => {
                         <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                         </Card>
                       </Grid>
-                      <TicketsSoldBarChart ticketSalesByType={ticketSalesByType}/>
+                      <TicketsSoldBarChart ticketSalesByType={ticketSalesByType} />
                     </>
                   )}
                 </TabPanel>
 
-                <TabPanel tabIndex={1}>{tabIndex && <TransactionsTab />}</TabPanel>
-                <TabPanel tabIndex={2}>{tabIndex && <AttendeesTab />}</TabPanel>
-                <TabPanel tabIndex={3}>{tabIndex && <PageViewsBarChart />}</TabPanel>
+                <TabPanel tabIndex={1}>{tabIndex == 1 && <TransactionsTab />}</TabPanel>
+                <TabPanel tabIndex={2}>{tabIndex == 2 && <AttendeesTab />}</TabPanel>
+                <TabPanel tabIndex={3}>{tabIndex == 3 && <PageViewsBarChart />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (
