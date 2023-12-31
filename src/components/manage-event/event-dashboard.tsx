@@ -78,7 +78,7 @@ const EventDashBoard = () => {
     try {
       const res = await getTotalSales(eventId)
       if (res.status === 200) {
-        setTotalSales(res.data.totalAmount - 700)
+        setTotalSales(res.data.totalAmount - 2200)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }
@@ -137,8 +137,21 @@ const EventDashBoard = () => {
             tickets: newArray[flashSaleIndex].tickets - 1,
           }
         }
-        setTicketSalesByType(newArray)
-        setTotalTicketsSale(res.data.totalTicketsSold - 1)
+
+        const gateRegularIndex = newArray.findIndex(
+          (ticket: any) => ticket.name === "Gate Regular Ticket",
+        )
+
+        // Create a new array with updated ticket count for "Flash Sale"
+        const newArrayfinal:any = [...res.data.ticketsSoldByType]
+        if (flashSaleIndex !== -1) {
+          newArrayfinal[gateRegularIndex] = {
+            ...newArrayfinal[gateRegularIndex],
+            tickets: newArrayfinal[gateRegularIndex].tickets - 1,
+          }
+        }
+        setTicketSalesByType(newArrayfinal)
+        setTotalTicketsSale(res.data.totalTicketsSold - 2)
       } else {
         errorToast("Could not fetch this event's ticket sales by type. Try again later.")
       }

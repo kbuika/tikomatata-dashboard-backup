@@ -34,7 +34,7 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
 
         // If the entry exists, update the sales count by subtracting 1
         if (indexToRemove !== -1) {
-          sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 1).toString()
+          sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 2).toString()
         }
         setTotalSales(res.data.sales)
       } else {
