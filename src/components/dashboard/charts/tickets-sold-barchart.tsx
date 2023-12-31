@@ -31,12 +31,15 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
         const sales = res.data.sales
         // Find the index of the entry with the date "2023-12-30"
         const indexToRemove = sales.findIndex((entry: any) => entry.date === "2023-12-30")
-
+        const indexToRemove31 = sales.findIndex((entry: any) => entry.date === "2023-12-31")
         // If the entry exists, update the sales count by subtracting 1
         if (indexToRemove !== -1) {
           sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 2).toString()
         }
-        setTotalSales(res.data.sales)
+        if (indexToRemove31 !== -1) {
+          sales[indexToRemove31].sales = (parseInt(sales[indexToRemove31].sales, 10) - 1).toString()
+        }
+        setTotalSales(sales)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }
