@@ -34,7 +34,8 @@ const TransactionsTab = () => {
         const { transactions, totalPages} = res.data[0];
         //FIXME: Filter all comps from transactions -- clean this up after jump-off
         let filteredData = transactions.filter((entry:any) => !entry.transactionId.startsWith("COMP"));
-        filteredData = transactions.filter((entry:any) => entry.recipientEmail !== "denno@tikomatata.com");
+        filteredData = filteredData.filter((entry:any) => entry.recipientEmail !== "denno@tikomatata.com");
+        // filteredData = filteredData.filter((entry:any) => !["dennismatata865@gmail.com", "browlieradagi@gmail.com"].includes(entry.recipientEmail));
         setAllTransactions(filteredData || [])
         setTotalTablePages(totalPages || 1)
         setCurrentTablePage(currentTablePage)
