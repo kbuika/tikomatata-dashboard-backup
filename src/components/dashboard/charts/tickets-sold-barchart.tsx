@@ -37,7 +37,7 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
           sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 2).toString()
         }
         if (indexToRemove31 !== -1) {
-          sales[indexToRemove31].sales = (parseInt(sales[indexToRemove31].sales, 10) - 1).toString()
+          sales[indexToRemove31].sales = (parseInt(sales[indexToRemove31].sales, 10) - 2).toString()
         }
         setTotalSales(sales)
       } else {
