@@ -78,7 +78,7 @@ const EventDashBoard = () => {
     try {
       const res = await getTotalSales(eventId)
       if (res.status === 200) {
-        setTotalSales(res.data.totalAmount - 25200)
+        setTotalSales(res.data.totalAmount)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }
@@ -123,48 +123,8 @@ const EventDashBoard = () => {
     try {
       const res = await getTotalTicketSalesByType(eventId)
       if (res.status === 200) {
-        // FIXME: Hack to remove one flash sale ticket. Remove code afterwards
-        // Find the index of the "Flash Sale" entry
-        const flashSaleIndex = res.data.ticketsSoldByType.findIndex(
-          (ticket: any) => ticket.name === "Flash Sale",
-        )
-
-        // Create a new array with updated ticket count for "Flash Sale"
-        const newArray:any = [...res.data.ticketsSoldByType]
-        if (flashSaleIndex !== -1) {
-          newArray[flashSaleIndex] = {
-            ...newArray[flashSaleIndex],
-            tickets: newArray[flashSaleIndex].tickets - 1,
-          }
-        }
-
-        const gateRegularIndex = newArray.findIndex(
-          (ticket: any) => ticket.name === "Gate Regular Ticket",
-        )
-
-        // Create a new array with updated ticket count for "Flash Sale"
-        const newArrayfinal:any = [...newArray]
-        if (flashSaleIndex !== -1) {
-          newArrayfinal[gateRegularIndex] = {
-            ...newArrayfinal[gateRegularIndex],
-            tickets: newArrayfinal[gateRegularIndex].tickets - 3,
-          }
-        }
-
-        const groupIndex = newArrayfinal.findIndex(
-          (ticket: any) => ticket.name === "Group Ticket ( Squad Of 5)",
-        )
-
-        // Create a new array with updated ticket count for "Flash Sale"
-        const newArrayfinalfinal:any = [...newArrayfinal]
-        if (flashSaleIndex !== -1) {
-          newArrayfinalfinal[groupIndex] = {
-            ...newArrayfinalfinal[groupIndex],
-            tickets: newArrayfinalfinal[groupIndex].tickets - 4,
-          }
-        }
-        setTicketSalesByType(newArrayfinalfinal)
-        setTotalTicketsSale(res.data.totalTicketsSold - 8)
+        setTicketSalesByType(res.data.ticketsSoldByType)
+        setTotalTicketsSale(res.data.totalTicketsSold)
       } else {
         errorToast("Could not fetch this event's ticket sales by type. Try again later.")
       }

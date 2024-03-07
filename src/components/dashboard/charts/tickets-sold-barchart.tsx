@@ -27,26 +27,7 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
     try {
       const res = await getSuccessfulSalesInPeriod({ eventId, selectedPeriod })
       if (res.status === 200) {
-        //FIXME: Hack to remove one ticket from 2023-12-30
         const sales = res.data.sales
-        // Find the index of the entry with the date "2023-12-30"
-        const indexToRemove = sales.findIndex((entry: any) => entry.date === "2023-12-30")
-        const indexToRemove31 = sales.findIndex((entry: any) => entry.date === "2023-12-31")
-        const indexToRemove19 = sales.findIndex((entry: any) => entry.date === "2023-12-19")
-        const indexToRemove26 = sales.findIndex((entry: any) => entry.date === "2023-12-26")
-        // If the entry exists, update the sales count by subtracting 1
-        if (indexToRemove !== -1) {
-          sales[indexToRemove].sales = (parseInt(sales[indexToRemove].sales, 10) - 1).toString()
-        }
-        if (indexToRemove31 !== -1) {
-          sales[indexToRemove31].sales = (parseInt(sales[indexToRemove31].sales, 10) - 5).toString()
-        }
-        if (indexToRemove19 !== -1) {
-          sales[indexToRemove19].sales = (parseInt(sales[indexToRemove19].sales, 10) - 1).toString()
-        }
-        if (indexToRemove26 !== -1) {
-          sales[indexToRemove26].sales = (parseInt(sales[indexToRemove26].sales, 10) - 1).toString()
-        }
         setTotalSales(sales)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
