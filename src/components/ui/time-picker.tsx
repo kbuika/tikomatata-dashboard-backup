@@ -34,7 +34,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime, buttonSty
         <Button
           variant={"outline"}
           className={cn(
-            `w-[200px] justify-start text-left font-normal mt-1 ${buttonStyle}`,
+            `h-[50px] w-[200px] justify-start text-left font-normal mt-1 ${buttonStyle}`,
             !time && "text-muted-foreground",
           )}
         >
