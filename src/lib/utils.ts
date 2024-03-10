@@ -89,3 +89,10 @@ export const generateFileFromImageUrl = async(imageUrl: string, filename: string
   }
 }
 
+export const createSlug = (name: string) => {
+  const formattedName = name.trim().replace(/\s+/g, "-");
+  const lowerCaseName = formattedName.toLowerCase();
+  const alphaNumericName = lowerCaseName.replace(/[^a-z0-9-]+/g, "");
+  return alphaNumericName;
+};
+

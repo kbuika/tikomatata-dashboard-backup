@@ -116,14 +116,14 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
               }`}</div>
             </div>
           </div>
-          <div className="pl-1 opacity-60 -mr-2 scale-125">
+          <div className="pl-4 opacity-60 -mr-2 scale-125">
             {
               isOpen ? (<ChevronUpIcon width={24} />) : (<ChevronDownIcon width={24} />)
             }
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align={align} className="w-auto">
+      <PopoverContent align={align} className="w-auto z-[2000]">
         <div className="flex py-2">
           <div className="flex">
             <div className="flex flex-col">
