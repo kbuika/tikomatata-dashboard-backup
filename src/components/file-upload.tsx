@@ -36,11 +36,11 @@ const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
 
   return (
     <>
-<div className=" w-full rounded-md">
+      <div className=" w-full rounded-md">
         <span className="flex justify-center items-center bg-white text-[12px] mb-1 text-red-500">
           {message}
         </span>
-        <div className="h-32 w-full overflow-hidden relative border-2 items-center rounded-md cursor-pointer   border-gray-400 border-dotted">
+        <div className="h-32 w-full overflow-hidden relative border-2 items-center rounded-md cursor-pointer border-gray-300 border-dotted">
           <input
             type="file"
             onChange={handleFile}
@@ -53,7 +53,7 @@ const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
               <i className="text-[30px] text-gray-400 text-center">
                 <FolderOpen />
               </i>
-              <span className="text-[1em] mt-2">{"Drag and Drop a file"}</span>
+              <span className="text-[1em] mt-2 text-gray-600">Drop your poster here or <span className="text-mainPrimary">click to browse</span></span>
             </div>
           </div>
         </div>
@@ -82,8 +82,6 @@ const FileUploadModal: React.FC<FileUploadProps> = ({ fileChange }) => {
           })}
         </div>
       </div>
-
-      
     </>
   )
 }

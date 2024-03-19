@@ -17,7 +17,7 @@ import { createEventFn } from "@/src/api-calls"
 import { EventDataType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
-import { errorToast, successToast } from "@/src/lib/utils"
+import { createSlug, errorToast, successToast } from "@/src/lib/utils"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/src/components/ui/button"
 import FileUploadModal from "@/src/components/file-upload"
@@ -30,6 +30,7 @@ const schema = yup.object({
   name: yup.string().required("Event name is required"),
   ageLimit: yup.number().notRequired().default(18),
   description: yup.string().required("Description is required"),
+  slug: yup.string().required("Slug is required"),
   poster: yup.mixed().required(),
   location: yup
     .string()
@@ -58,8 +59,9 @@ const CreateEvent = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch
-  } = useForm<EventDataType>({ resolver: yupResolver(schema) })
+    watch,
+  } = useForm<EventDataType>({ resolver: yupResolver(schema), defaultValues: {slug: ""} })
+  const eventName = watch("name")
   const startDate = watch("startDate")
   const endDate = watch("endDate")
 
@@ -82,6 +84,11 @@ const CreateEvent = () => {
     }
   }
 
+  const handleEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("name", event.target.value)
+    setValue("slug", createSlug(event.target.value));
+  };
+
   return (
     <MainAppWrapper
       left={
@@ -95,13 +102,17 @@ const CreateEvent = () => {
             <Link to="/events">
               <Button variant="ghost">Cancel</Button>
             </Link>
-            <CustomButton className="w-auto flex w-24 ml-4" onClick={handleSubmit(onSubmit)} isLoading={isLoading}>
+            <CustomButton
+              className="w-auto flex ml-4"
+              onClick={handleSubmit(onSubmit)}
+              isLoading={isLoading}
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin" /> Creating...
                 </>
               ) : (
-                "Save"
+                "Create Event"
               )}
             </CustomButton>
           </div>
@@ -109,106 +120,116 @@ const CreateEvent = () => {
       }
     >
       <div className="w-full min-h-screen py-[4em] px-4 md:px-0">
-        <div className="flex flex-row items-center justify-between w-full">
-          <div className="w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Event Name
-            </label>
-            <Input
-              id="name"
-              placeholder="Event Name"
-              type="text"
-              required
-              {...register("name", { required: true })}
-              className="mt-1"
-            />
-            {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
+        <div className="border rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">General Information*</h2>
+          <p className="text-sm mb-6">Please enter the general information about your event</p>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="flex flex-col">
+              <label className="font-medium mb-1" htmlFor="name">
+                Event Name*
+              </label>
+              <Input
+                id="name"
+                placeholder="Event Name"
+                type="text"
+                required
+                value={eventName}
+                onChange={handleEventNameChange}
+              />
+              {errors.name && <span className="text-criticalRed">{errors.name?.message}</span>}
+            </div>
+            <div className="flex flex-col">
+              <label className="font-medium mb-1" htmlFor="age">
+                Age Limit*
+              </label>
+              <Input
+                id="name"
+                placeholder="Age Limit"
+                type="number"
+                defaultValue={18}
+                required
+                {...register("ageLimit", { required: false })}
+              />
+              {errors.ageLimit && (
+                <span className="text-criticalRed">{errors.ageLimit?.message}</span>
+              )}
+            </div>
+            <div className="flex flex-col col-span-2">
+              <label className="font-medium mb-1" htmlFor="description">
+                Short Description*
+              </label>
+              <Textarea
+                id="description"
+                placeholder="A brief description of the event"
+                {...register("description", { required: true })}
+              />
+              {errors.description && (
+                <span className="text-criticalRed">{errors.description?.message}</span>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <label className="font-medium mb-1" htmlFor="slug">
+                Event Link*
+              </label>
+              <p className="text-sm mb-2">This will be the link to your event.</p>
+              <div className="flex flex-row">
+                <span className="h-[50px] flex items-center bg-neutralPrimary/60 text-white px-2 rounded-l-sm">https://tikomatata.com/events/</span>
+                <Input
+                id="slug"
+                placeholder="Event Slug"
+                type="text"
+                required 
+                className="h-[50px] rounded-r-sm rounded-l-none pl-2 w-auto border border-gray-300"
+                {...register("slug", { required: true})}
+              />
+              </div>
+              {errors.slug && <span className="text-criticalRed">{errors.slug?.message}</span>}
+            </div>
           </div>
-          {/* <div className="w-[48%]">
-            <label htmlFor="ageLimit" className="text-neutralDark">
-              Age Limit
-            </label>
-            <Input
-              id="name"
-              placeholder="Age Limit"
-              type="number"
-              required
-              {...register("ageLimit", { required: false })}
-              className="mt-1"
-            />
-            {errors.ageLimit && (
-              <span className="text-criticalRed">{errors.ageLimit?.message}</span>
-            )}
-          </div> */}
         </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Description
-            </label>
-            <Textarea
-              id="description"
-              placeholder="A brief description of the event"
-              {...register("description", { required: true })}
-              className="mt-1"
-            />
-            {errors.description && (
-              <span className="text-criticalRed">{errors.description?.message}</span>
-            )}
+        <div className="border rounded-lg p-6 mt-6">
+          <h2 className="text-xl font-semibold mb-4">Location and Dates*</h2>
+          <p className="text-sm mb-6">Where will your event be and at what time</p>
+          <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="flex flex-col col-span-1">
+              <label htmlFor="name" className="text-neutralDark">
+                Event Location
+              </label>
+              <Input
+                id="location"
+                placeholder="Event Location"
+                type="text"
+                {...register("location", { required: true })}
+              />
+              {errors.location && (
+                <span className="text-criticalRed">{errors.location?.message}</span>
+              )}
+            </div>
+            <div className="flex flex-col col-span-1" ref={componentRef}>
+              <label htmlFor="name" className="text-neutralDark">
+                Event Environment
+              </label>
+              <Select {...register("environment", { required: false })}>
+                <SelectTrigger ref={componentRef}>
+                  <SelectValue placeholder="Indoor/Outdoor" />
+                </SelectTrigger>
+                <SelectContent ref={componentRef}>
+                  <SelectGroup ref={componentRef}>
+                    <SelectItem value="Indoor" ref={componentRef}>
+                      Indoor
+                    </SelectItem>
+                    <SelectItem value="Outdoor" ref={componentRef}>
+                      Outdoor
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {errors.environment && (
+                <span className="text-criticalRed">{errors.environment?.message}</span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-row items-center justify-between w-full mt-4">
-          <div className="w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Upload Poster
-            </label>
-            <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
-            {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
-          </div>
-        </div>
-        <div className="flex flex-row flex-wrap items-center justify-between w-full mt-4 max-[620px]:flex-col">
-          <div className="w-[32%] flex flex-col max-[620px]:w-full">
-            <label htmlFor="name" className="text-neutralDark">
-              Event Location
-            </label>
-            <Input
-              id="location"
-              placeholder="Event Location"
-              type="text"
-              {...register("location", { required: true })}
-              className="mt-1"
-            />
-            {errors.location && (
-              <span className="text-criticalRed">{errors.location?.message}</span>
-            )}
-          </div>
-          <div
-            className="w-[32%] flex flex-col max-[620px]:w-full max-[620px]:mt-2"
-            ref={componentRef}
-          >
-            <label htmlFor="name" className="text-neutralDark">
-              Event Environment
-            </label>
-            <Select {...register("environment", { required: false })}>
-              <SelectTrigger ref={componentRef} className="mt-1">
-                <SelectValue placeholder="Indoor/Outdoor" />
-              </SelectTrigger>
-              <SelectContent ref={componentRef}>
-                <SelectGroup ref={componentRef}>
-                  <SelectItem value="Indoor" ref={componentRef}>
-                    Indoor
-                  </SelectItem>
-                  <SelectItem value="Outdoor" ref={componentRef}>
-                    Outdoor
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {errors.environment && (
-              <span className="text-criticalRed">{errors.environment?.message}</span>
-            )}
-          </div>
-          <div className="w-[32%] flex flex-col max-[620px]:w-full">
+          <div className="grid grid-cols-2 gap-6 mb-6">
             <div className="flex flex-col">
               <label htmlFor="endDate" className="text-neutralDark mb-1">
                 Event Start and End date
@@ -229,24 +250,36 @@ const CreateEvent = () => {
                 <span className="text-criticalRed">{errors.endDate?.message}</span>
               )}
             </div>
+            <div className="flex flex-col">
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div className="flex flex-col col-span-1">
+                  <label htmlFor="name" className="text-neutralDark">
+                    Start Time
+                  </label>
+                  <TimePicker time="12:00" setTime={(time) => setValue("startTime", time)} />
+                  {errors.startTime && (
+                    <span className="text-criticalRed">{errors.startTime?.message}</span>
+                  )}
+                </div>
+                <div className="flex flex-col col-span-1">
+                  <label htmlFor="name" className="text-neutralDark">
+                    End Time
+                  </label>
+                  <TimePicker time="12:00" setTime={(time) => setValue("endTime", time)} />
+                  {errors.endTime && (
+                    <span className="text-criticalRed">{errors.endTime?.message}</span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="flex flex-row flex-wrap items-center justify-between w-[50%] mt-4">
-          <div className="flex flex-col">
-            <label htmlFor="name" className="text-neutralDark">
-              Start Time
-            </label>
-            <TimePicker time="12:00" setTime={(time) => setValue("startTime", time)} />
-            {errors.startTime && (
-              <span className="text-criticalRed">{errors.startTime?.message}</span>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="name" className="text-neutralDark">
-              End Time
-            </label>
-            <TimePicker time="12:00" setTime={(time) => setValue("endTime", time)} />
-            {errors.endTime && <span className="text-criticalRed">{errors.endTime?.message}</span>}
+        <div className="border rounded-lg p-6 mt-6">
+          <h2 className="text-xl font-semibold mb-4">Poster*</h2>
+          <p className="text-sm mb-6">Upload a poster of dimensions this x this</p>
+          <div className="w-full">
+            <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
+            {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
           </div>
         </div>
       </div>
