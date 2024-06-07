@@ -16,7 +16,10 @@ interface RequestPublishEmailProps {
   user: any
 }
 
-export const RequestPublishEmail = ({ event, user }: RequestPublishEmailProps) => (
+export const RequestPublishEmail = ({
+  event,
+  user = { name: "Someone", email: "someone@something.com" },
+}: RequestPublishEmailProps) => (
   <Html>
     <Head />
     <Preview>Request to publish event</Preview>
@@ -59,7 +62,8 @@ export default RequestPublishEmail
 const main = {
   backgroundColor: "#ffffff",
   fontFamily:
-    "-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif",
+    // eslint-disable-next-line quotes
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
 }
 
 const container = {
