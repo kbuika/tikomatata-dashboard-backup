@@ -60,7 +60,10 @@ const CreateEvent = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<EventDataType>({ resolver: yupResolver(schema), defaultValues: {slug: ""} })
+  } = useForm<EventDataType>({
+    resolver: yupResolver(schema),
+    defaultValues: { slug: "", ageLimit: 18 },
+  })
   const eventName = watch("name")
   const startDate = watch("startDate")
   const endDate = watch("endDate")
@@ -86,8 +89,8 @@ const CreateEvent = () => {
 
   const handleEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue("name", event.target.value)
-    setValue("slug", createSlug(event.target.value));
-  };
+    setValue("slug", createSlug(event.target.value))
+  }
 
   return (
     <MainAppWrapper
@@ -173,15 +176,17 @@ const CreateEvent = () => {
               </label>
               <p className="text-sm mb-2">This will be the link to your event.</p>
               <div className="flex flex-row">
-                <span className="h-[50px] flex items-center bg-neutralPrimary/60 text-white px-2 rounded-l-sm">https://tikomatata.com/events/</span>
+                <span className="h-[50px] flex items-center bg-neutralPrimary/60 text-white px-2 rounded-l-sm">
+                  https://tikomatata.com/events/
+                </span>
                 <Input
-                id="slug"
-                placeholder="Event Slug"
-                type="text"
-                required 
-                className="h-[50px] rounded-r-sm rounded-l-none pl-2 w-auto border border-gray-300"
-                {...register("slug", { required: true})}
-              />
+                  id="slug"
+                  placeholder="Event Slug"
+                  type="text"
+                  required
+                  className="h-[50px] rounded-r-sm rounded-l-none pl-2 w-auto border border-gray-300"
+                  {...register("slug", { required: true })}
+                />
               </div>
               {errors.slug && <span className="text-criticalRed">{errors.slug?.message}</span>}
             </div>
