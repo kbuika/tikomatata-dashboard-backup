@@ -4,8 +4,11 @@ import type { VercelRequest, VercelResponse } from "@vercel/node"
 const redis = Redis.fromEnv()
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Methods", "GET")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
   if (req.method !== "GET") {
-    res.status(405).send({ message: "Method not allowed", status: 405})
+    res.status(405).send({ message: "Method not allowed", status: 405 })
   }
 
   const { eventId } = req.query
@@ -24,5 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }),
   )
 
-  res.status(200).send({ message: "views fetched successfully", data: { views: viewsData }, status: 200 })
+  res
+    .status(200)
+    .send({ message: "views fetched successfully", data: { views: viewsData }, status: 200 })
 }

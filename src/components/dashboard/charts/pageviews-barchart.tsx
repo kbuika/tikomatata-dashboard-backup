@@ -37,7 +37,6 @@ const PageViewsBarChart = () => {
     }
   }
 
-
   return (
     <div className="mt-6">
       <Card>
@@ -51,22 +50,22 @@ const PageViewsBarChart = () => {
             >
               <Title>Page Views for {selectedEvent?.name}</Title>
               {/* TODO: Add period for views */}
-                {/* <Subtitle>
+              {/* <Subtitle>
                   Tickets sold between {moment(selectedPeriod.startDate).format("MMM Do")} and{" "}
                   {moment(selectedPeriod.endDate).format("MMM Do")}
                 </Subtitle> */}
             </Flex>
           </div>
         </div>
-          <BarChart
-            className="mt-6"
-            data={totalViews}
-            index="date"
-            categories={["views"]}
-            colors={["violet"]}
-            valueFormatter={valueFormatter}
-            yAxisWidth={48}
-          />
+        <BarChart
+          className="mt-6"
+          data={totalViews}
+          index="date"
+          categories={["views"]}
+          colors={["violet"]}
+          valueFormatter={valueFormatter}
+          yAxisWidth={48}
+        />
       </Card>
     </div>
   )
