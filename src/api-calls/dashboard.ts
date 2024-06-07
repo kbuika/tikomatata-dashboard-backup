@@ -39,24 +39,24 @@ export const getTotalSales = async (eventId: string | undefined) => {
 }
 
 export const getTotalTicketSalesByType = async (eventId: string | undefined) => {
-    const config = {
-      method: "get",
-      maxBodyLength: Infinity,
-      url: `${baseUrl}/api/v1/ticket/sales?eventId=${eventId}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getCookie("accessToken")}`,
-      },
-    }
-    try {
-      const response = await axiosInstance.request(config)
-      if (response.status === 200) {
-        return response.data
-      }
-    } catch (error: any) {
-      return error
-    }
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/api/v1/ticket/sales?eventId=${eventId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("accessToken")}`,
+    },
   }
+  try {
+    const response = await axiosInstance.request(config)
+    if (response.status === 200) {
+      return response.data
+    }
+  } catch (error: any) {
+    return error
+  }
+}
 
 export const getTransactionsForEvent = async ({
   eventId,
@@ -124,9 +124,9 @@ export const getSuccessfulSalesInPeriod = async ({
   }
   try {
     const response = await axiosInstance.request(config)
-      if (response.status === 200) {
-        return response.data
-      }
+    if (response.status === 200) {
+      return response.data
+    }
   } catch (error: any) {
     return error
   }
@@ -150,11 +150,10 @@ export const getAllPageViews = async ({
   }
   try {
     const response = await axiosInstance.request(config)
-    if(response.status === 200) {
+    if (response.status === 200) {
       return response.data
     }
   } catch (error: any) {
     return error
   }
 }
-

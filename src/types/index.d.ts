@@ -36,6 +36,21 @@ export interface EventDataType {
   slug?: string
 }
 
+export interface EventRequestType {
+  mapLink?: Maybe<string | undefined>
+  name: string
+  description: string
+  ageLimit: number | null
+  slug: string
+  poster: AnyPresentValue
+  location: string
+  environment: string | null
+  startDate: string
+  endDate: string
+  startTime: string
+  endTime: string
+}
+
 export interface EventDataTypeExtended extends EventDataType {
   poster: FileList | null
 }
@@ -56,6 +71,18 @@ export interface TicketDataType {
   saleEndTime: string
 }
 
+export interface TicketDataRequestType {
+  name: string
+  price: string
+  quantity: string
+  saleStartDate: string
+  saleEndDate: string
+  saleStartTime: string
+  saleEndTime: string
+  eventId?: string | number
+  ticketId?: string | number | undefined
+}
+
 export interface CompTicketType {
   name: string
   email: string
@@ -63,5 +90,13 @@ export interface CompTicketType {
   ticketType: string
   quantity: number
   eventId?: number | string
-  ticketId?: number | string
+  ticketId: string
+}
+
+export interface CompTicketRequestType {
+  name: string
+  email: string
+  phone: string
+  ticketId: string
+  quantity: number
 }

@@ -18,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useEventsStore } from "../stores/events-store"
 import { errorToast, formatPhoneNumber, successToast } from "../lib/utils"
-import { CompTicketType } from "../types"
+import { CompTicketRequestType, CompTicketType } from "../types"
 import { sendCompTicket } from "../api-calls"
 import { useParams } from "react-router-dom"
 
@@ -41,9 +41,9 @@ const SendComplimentaryTicket = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<CompTicketType>({ resolver: yupResolver(schema) })
+  } = useForm<CompTicketRequestType>({ resolver: yupResolver(schema) })
 
-  const submit: SubmitHandler<CompTicketType> = async (data) => {
+  const submit: SubmitHandler<CompTicketRequestType> = async (data) => {
     setIsLoading(true)
     try {
       const compTicketData = {
@@ -57,7 +57,7 @@ const SendComplimentaryTicket = () => {
           `${data?.name} has been sent ${data?.quantity} Complimentary ticket${
             data.quantity > 1 ? "s " : " "
           }!!`,
-          false
+          false,
         )
         setCompSheetOpen(false)
       } else {
@@ -69,15 +69,19 @@ const SendComplimentaryTicket = () => {
       errorToast(
         `Failed to send complimentary ticket${data?.quantity > 1 ? "s " : " "} to ${data?.name}`,
       )
-    }finally {
-        setIsLoading(false)
+    } finally {
+      setIsLoading(false)
     }
   }
   return (
     <div className="ml-auto">
       <Sheet open={compSheetOpen} onOpenChange={setCompSheetOpen}>
         <SheetTrigger>
-          <CustomButton onClick={() => setCompSheetOpen(true)} variant={"secondary"} className="bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary">
+          <CustomButton
+            onClick={() => setCompSheetOpen(true)}
+            variant={"secondary"}
+            className="bg-gray-200 text-mainPrimary dark:bg-gray-200 dark:text-mainPrimary"
+          >
             Send Complimentary Ticket
           </CustomButton>
         </SheetTrigger>
@@ -144,7 +148,9 @@ const SendComplimentaryTicket = () => {
               <label htmlFor="name" className="text-neutralDark">
                 Ticket Type
               </label>
-              <Select onValueChange={(value: string | undefined) => setValue("ticketId", value)}>
+              <Select
+                onValueChange={(value: string | undefined) => setValue("ticketId", value || "")}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Ticket Type" />
                 </SelectTrigger>
@@ -161,9 +167,9 @@ const SendComplimentaryTicket = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {errors.ticketType && (
+              {/* {errors.ticketType && (
                 <span className="text-criticalRed">{errors.ticketType?.message}</span>
-              )}
+              )} */}
             </div>
             <div className="w-full mt-4">
               <label htmlFor="quantity" className="text-neutralDark">
@@ -198,7 +204,7 @@ const SendComplimentaryTicket = () => {
                 disabled={isLoading}
                 isLoading={isLoading}
               >
-                {isLoading ? "Sending...": "Send"}
+                {isLoading ? "Sending..." : "Send"}
               </CustomButton>
             </div>
           </div>

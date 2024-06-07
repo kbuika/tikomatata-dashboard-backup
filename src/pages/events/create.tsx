@@ -14,7 +14,7 @@ import {
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { createEventFn } from "@/src/api-calls"
-import { EventDataType } from "@/src/types"
+import { EventRequestType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
 import { createSlug, errorToast, successToast } from "@/src/lib/utils"
@@ -60,12 +60,15 @@ const CreateEvent = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<EventDataType>({ resolver: yupResolver(schema), defaultValues: {slug: ""} })
+  } = useForm<EventRequestType>({
+    resolver: yupResolver(schema),
+    defaultValues: { slug: "", ageLimit: 18 },
+  })
   const eventName = watch("name")
   const startDate = watch("startDate")
   const endDate = watch("endDate")
 
-  const onSubmit: SubmitHandler<EventDataType> = async (data) => {
+  const onSubmit: SubmitHandler<EventRequestType> = async (data) => {
     setIsLoading(true)
     try {
       const res = await createEventFn(data)
@@ -86,8 +89,8 @@ const CreateEvent = () => {
 
   const handleEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue("name", event.target.value)
-    setValue("slug", createSlug(event.target.value));
-  };
+    setValue("slug", createSlug(event.target.value))
+  }
 
   return (
     <MainAppWrapper
@@ -173,15 +176,17 @@ const CreateEvent = () => {
               </label>
               <p className="text-sm mb-2">This will be the link to your event.</p>
               <div className="flex flex-row">
-                <span className="h-[50px] flex items-center bg-neutralPrimary/60 text-white px-2 rounded-l-sm">https://tikomatata.com/events/</span>
+                <span className="h-[50px] flex items-center bg-neutralPrimary/60 text-white px-2 rounded-l-sm">
+                  https://tikomatata.com/events/
+                </span>
                 <Input
-                id="slug"
-                placeholder="Event Slug"
-                type="text"
-                required 
-                className="h-[50px] rounded-r-sm rounded-l-none pl-2 w-auto border border-gray-300"
-                {...register("slug", { required: true})}
-              />
+                  id="slug"
+                  placeholder="Event Slug"
+                  type="text"
+                  required
+                  className="h-[50px] rounded-r-sm rounded-l-none pl-2 w-auto border border-gray-300"
+                  {...register("slug", { required: true })}
+                />
               </div>
               {errors.slug && <span className="text-criticalRed">{errors.slug?.message}</span>}
             </div>
@@ -279,7 +284,9 @@ const CreateEvent = () => {
           <p className="text-sm mb-6">Upload a poster of dimensions this x this</p>
           <div className="w-full">
             <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
-            {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
+            {errors.poster && (
+              <span className="text-criticalRed">{String(errors.poster?.message)}</span>
+            )}
           </div>
         </div>
       </div>

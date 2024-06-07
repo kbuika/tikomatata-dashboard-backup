@@ -8,7 +8,7 @@ import { Button } from "../ui/button"
 import { DatePicker } from "../ui/date-picker"
 import CustomButton from "../ui/custom-button"
 // import { Switch } from "../ui/switch"
-import { TicketDataType } from "@/src/types"
+import { TicketDataRequestType } from "@/src/types"
 import { createTicketFn } from "@/src/api-calls"
 import { checkRegistrationError, errorToast, successToast } from "@/src/lib/utils"
 import { useState } from "react"
@@ -47,9 +47,9 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<TicketDataType>({ resolver: yupResolver(schema) })
+  } = useForm<TicketDataRequestType>({ resolver: yupResolver(schema) })
 
-  const submit: SubmitHandler<TicketDataType> = async (data) => {
+  const submit: SubmitHandler<TicketDataRequestType> = async (data) => {
     setIsLoading(true)
     try {
       data = { ...data, eventId: parseInt(params?.id || "") }
@@ -58,7 +58,7 @@ const CreateTicket: React.FC<CreateTicketProps> = ({ setCreateTicketView }) => {
         resetAllTickets() // reset tickets store to fetch new tickets
         successToast("Ticket has been created successfully!")
         setCreateTicketView(false)
-        window.location.reload(); // reload page to fetch new tickets FIXME: find a better way to do this
+        window.location.reload() // reload page to fetch new tickets FIXME: find a better way to do this
       } else {
         errorToast(res?.data?.message)
         if (res?.response?.data?.data?.errors) {

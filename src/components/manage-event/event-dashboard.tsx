@@ -94,23 +94,24 @@ const EventDashBoard = () => {
 
     try {
       const res = await getUserInfo()
-      if (res?.status === 200) {
-        const emailHtml = render(RequestPublishEmail({ event: selectedEvent, user: res?.data }))
+      // if (res?.status === 200) {
+      // FIXME: Restore the checker when the endpoint is fixed
+      const emailHtml = render(RequestPublishEmail({ event: selectedEvent, user: res?.data }))
 
-        const emailRes = await fetch("/api/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          mode: "no-cors", // disable cors
-          body: JSON.stringify({ emailHtml, subject: "Request to publish event" }),
-        })
-        if (emailRes.status === 200) {
-          successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false)
-        }
-      } else {
-        errorToast(`Could not send your request to publish ${selectedEvent?.name}.`, false)
+      const emailRes = await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "no-cors", // disable cors
+        body: JSON.stringify({ emailHtml, subject: "Request to publish event" }),
+      })
+      if (emailRes.status === 200) {
+        successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false)
       }
+      // } else {
+      //   errorToast(`Could not send your request to publish ${selectedEvent?.name}.`, false)
+      // }
     } catch (err) {
       errorToast("Could not publish event. Try again later.")
     } finally {
