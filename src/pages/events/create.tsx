@@ -14,7 +14,7 @@ import {
 } from "../../components/ui/select"
 import { Textarea } from "../../components/ui/textarea"
 import { createEventFn } from "@/src/api-calls"
-import { EventDataType } from "@/src/types"
+import { EventRequestType } from "@/src/types"
 import { Loader2 } from "lucide-react"
 import moment from "moment"
 import { createSlug, errorToast, successToast } from "@/src/lib/utils"
@@ -60,7 +60,7 @@ const CreateEvent = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm<EventDataType>({
+  } = useForm<EventRequestType>({
     resolver: yupResolver(schema),
     defaultValues: { slug: "", ageLimit: 18 },
   })
@@ -68,7 +68,7 @@ const CreateEvent = () => {
   const startDate = watch("startDate")
   const endDate = watch("endDate")
 
-  const onSubmit: SubmitHandler<EventDataType> = async (data) => {
+  const onSubmit: SubmitHandler<EventRequestType> = async (data) => {
     setIsLoading(true)
     try {
       const res = await createEventFn(data)
@@ -284,7 +284,9 @@ const CreateEvent = () => {
           <p className="text-sm mb-6">Upload a poster of dimensions this x this</p>
           <div className="w-full">
             <FileUploadModal fileChange={(files: FileList | any) => setValue("poster", files)} />
-            {errors.poster && <span className="text-criticalRed">{errors.poster?.message}</span>}
+            {errors.poster && (
+              <span className="text-criticalRed">{String(errors.poster?.message)}</span>
+            )}
           </div>
         </div>
       </div>

@@ -96,7 +96,7 @@ dependencies:
     specifier: ^6.9.7
     version: 6.9.13
   qs:
-    specifier: ^6.11.2
+    specifier: ^6.12.1
     version: 6.12.1
   react:
     specifier: ^18.2.0

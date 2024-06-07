@@ -8,7 +8,7 @@ import { Sheet, SheetTrigger, SheetHeader, SheetContent } from "./ui/sheet"
 import Input from "./ui/Input"
 import { DatePicker } from "./ui/date-picker"
 import CustomButton from "./ui/custom-button"
-import { TicketDataType } from "../types"
+import { TicketDataRequestType, TicketDataType } from "../types"
 import moment from "moment"
 import { TimePicker } from "./ui/time-picker"
 import { checkRegistrationError, errorToast, successToast } from "../lib/utils"
@@ -46,9 +46,15 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<TicketDataType>({ resolver: yupResolver(schema), defaultValues: ticket })
+  } = useForm<TicketDataRequestType>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      ...ticket,
+      eventId: ticket?.eventId,
+    },
+  })
 
-  const submit: SubmitHandler<TicketDataType> = async (data) => {
+  const submit: SubmitHandler<TicketDataRequestType> = async (data) => {
     setIsLoading(true)
     try {
       data = { ...data, eventId: ticket?.eventId, ticketId: ticket?.ticketId }
@@ -57,7 +63,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
         resetAllTickets() // reset tickets in store to trigger a re-fetch
         successToast("Ticket has been updated successfully!")
         setEditSheetOpen(false)
-        window.location.reload(); // reload page to reflect changes
+        window.location.reload() // reload page to reflect changes
       } else {
         errorToast(res?.data?.message)
         if (res?.response?.data?.data?.errors) {
@@ -88,7 +94,9 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                           <p className="underline underline-offset-4">edit</p>
                         </SheetTrigger>
                         <SheetContent className="w-[400px] sm:w-[540px]">
-                          <SheetHeader className="font-bold text-lg text-center">Edit Ticket Details</SheetHeader>
+                          <SheetHeader className="font-bold text-lg text-center">
+                            Edit Ticket Details
+                          </SheetHeader>
                           {isLoading ? (
                             <div className="flex items-center justify-center min-h-[40vh]">
                               <Loader2 className="w-10 h-10 animate-spin" />
@@ -136,13 +144,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("quantity", updateTicketError)
                                     ?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError("quantity", updateTicketError)
-                                            ?.message
-                                        }
-                                      </span>
-                                    )}
+                                    <span className="text-criticalRed">
+                                      {
+                                        checkRegistrationError("quantity", updateTicketError)
+                                          ?.message
+                                      }
+                                    </span>
+                                  )}
                                 </div>
                                 <div className="w-[48%]">
                                   <label htmlFor="price" className="text-neutralDark">
@@ -167,77 +175,77 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                 </div>
                               </div>
-                                <div className="flex flex-col w-full mt-4">
-                                  <label htmlFor="name" className="text-neutralDark">
-                                    Sale Start Date
-                                  </label>
-                                  <DatePicker
-                                    onChange={(date: Date | undefined) => {
-                                      const startDate = moment(date).format("YYYY-MM-DD")
-                                      setValue("saleStartDate", startDate)
-                                      setUpdateTicketError([])
-                                    }}
-                                    defaultDate={ticket?.saleStartDate}
-                                    className="w-full mt-1"
-                                    popoverZIndex={350}
-                                  />
-                                  {errors.saleStartDate && (
-                                    <span className="text-criticalRed">
-                                      {errors.saleEndDate?.message}
-                                    </span>
-                                  )}
-                                  {checkRegistrationError("saleStartDate", updateTicketError)
-                                    ?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError("saleStartDate", updateTicketError)
-                                            ?.message
-                                        }
-                                      </span>
-                                    )}
-                                  {checkRegistrationError(
-                                    "saleStartDate, saleEndDate",
-                                    updateTicketError,
-                                  )?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError(
-                                            "saleStartDate, saleEndDate",
-                                            updateTicketError,
-                                          )?.message
-                                        }
-                                      </span>
-                                    )}{" "}
-                                </div>
-                                <div className="flex flex-col w-full mt-4">
-                                  <label htmlFor="name" className="text-neutralDark">
-                                    Sale End Date
-                                  </label>
-                                  <DatePicker
-                                    onChange={(date: Date | undefined) => {
-                                      const endDate = moment(date).format("YYYY-MM-DD")
-                                      setValue("saleEndDate", endDate)
-                                      setUpdateTicketError([])
-                                    }}
-                                    defaultDate={ticket?.saleEndDate}
-                                    className="w-full mt-1"
-                                    popoverZIndex={350}
-                                  />
-                                  {errors.saleEndDate && (
-                                    <span className="text-criticalRed">
-                                      {errors.saleEndDate?.message}
-                                    </span>
-                                  )}
-                                  {checkRegistrationError("saleEndDate", updateTicketError)
-                                    ?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError("saleEndDate", updateTicketError)
-                                            ?.message
-                                        }
-                                      </span>
-                                    )}{" "}
-                                </div>
+                              <div className="flex flex-col w-full mt-4">
+                                <label htmlFor="name" className="text-neutralDark">
+                                  Sale Start Date
+                                </label>
+                                <DatePicker
+                                  onChange={(date: Date | undefined) => {
+                                    const startDate = moment(date).format("YYYY-MM-DD")
+                                    setValue("saleStartDate", startDate)
+                                    setUpdateTicketError([])
+                                  }}
+                                  defaultDate={ticket?.saleStartDate}
+                                  className="w-full mt-1"
+                                  popoverZIndex={350}
+                                />
+                                {errors.saleStartDate && (
+                                  <span className="text-criticalRed">
+                                    {errors.saleEndDate?.message}
+                                  </span>
+                                )}
+                                {checkRegistrationError("saleStartDate", updateTicketError)
+                                  ?.hasError && (
+                                  <span className="text-criticalRed">
+                                    {
+                                      checkRegistrationError("saleStartDate", updateTicketError)
+                                        ?.message
+                                    }
+                                  </span>
+                                )}
+                                {checkRegistrationError(
+                                  "saleStartDate, saleEndDate",
+                                  updateTicketError,
+                                )?.hasError && (
+                                  <span className="text-criticalRed">
+                                    {
+                                      checkRegistrationError(
+                                        "saleStartDate, saleEndDate",
+                                        updateTicketError,
+                                      )?.message
+                                    }
+                                  </span>
+                                )}{" "}
+                              </div>
+                              <div className="flex flex-col w-full mt-4">
+                                <label htmlFor="name" className="text-neutralDark">
+                                  Sale End Date
+                                </label>
+                                <DatePicker
+                                  onChange={(date: Date | undefined) => {
+                                    const endDate = moment(date).format("YYYY-MM-DD")
+                                    setValue("saleEndDate", endDate)
+                                    setUpdateTicketError([])
+                                  }}
+                                  defaultDate={ticket?.saleEndDate}
+                                  className="w-full mt-1"
+                                  popoverZIndex={350}
+                                />
+                                {errors.saleEndDate && (
+                                  <span className="text-criticalRed">
+                                    {errors.saleEndDate?.message}
+                                  </span>
+                                )}
+                                {checkRegistrationError("saleEndDate", updateTicketError)
+                                  ?.hasError && (
+                                  <span className="text-criticalRed">
+                                    {
+                                      checkRegistrationError("saleEndDate", updateTicketError)
+                                        ?.message
+                                    }
+                                  </span>
+                                )}{" "}
+                              </div>
                               <div className="flex flex-row items-center justify-between w-full mt-4">
                                 <div className="flex flex-col">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -255,13 +263,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleStartTime", updateTicketError)
                                     ?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError("saleStartTime", updateTicketError)
-                                            ?.message
-                                        }
-                                      </span>
-                                    )}{" "}
+                                    <span className="text-criticalRed">
+                                      {
+                                        checkRegistrationError("saleStartTime", updateTicketError)
+                                          ?.message
+                                      }
+                                    </span>
+                                  )}{" "}
                                 </div>
                                 <div className="flex flex-col ml-2">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -279,13 +287,13 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                   )}
                                   {checkRegistrationError("saleEndTime", updateTicketError)
                                     ?.hasError && (
-                                      <span className="text-criticalRed">
-                                        {
-                                          checkRegistrationError("saleEndTime", updateTicketError)
-                                            ?.message
-                                        }
-                                      </span>
-                                    )}{" "}
+                                    <span className="text-criticalRed">
+                                      {
+                                        checkRegistrationError("saleEndTime", updateTicketError)
+                                          ?.message
+                                      }
+                                    </span>
+                                  )}{" "}
                                 </div>
                               </div>
                               <div className="flex items-center justify-end mt-6">

@@ -1,16 +1,16 @@
+import axios from "axios"
+import qs from "qs"
 import { OAUTH2_REDIRECT_URI } from "../constants"
 import { getCookie, getUserNameInitials } from "../lib/utils"
 import {
-  CompTicketType,
-  EventDataType,
+  CompTicketRequestType,
   EventDataTypeExtended,
+  EventRequestType,
   ResetPasswordArgs,
-  TicketDataType,
+  TicketDataRequestType,
   UserLoginObj,
   UserRegisterObj,
 } from "../types"
-import axios from "axios"
-import qs from "qs"
 import axiosInstance from "./axios-interceptor"
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
@@ -29,7 +29,7 @@ export const registerUser = async (user: UserRegisterObj) => {
     data,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Basic ${authToken}`
+      Authorization: `Basic ${authToken}`,
     },
   }
   try {
@@ -52,7 +52,7 @@ export const loginUser = async (user: UserLoginObj) => {
     data: data,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${authToken}`
+      Authorization: `Basic ${authToken}`,
     },
   }
   try {
@@ -146,7 +146,7 @@ export const getUserAvatarAndInitials = async () => {
   }
 }
 
-export const createEventFn = async (eventData: EventDataType) => {
+export const createEventFn = async (eventData: EventRequestType) => {
   const eventPoster: File = eventData?.poster?.[0]
   const payload = JSON.stringify(eventData)
 
@@ -180,13 +180,12 @@ export const updateEventFn = async (eventData: EventDataTypeExtended) => {
   formData.append("payload", new Blob([payload], { type: "application/json" }))
   // formData.set("Content-Type", "application/json")
 
-  if(eventData?.poster !== null || eventData?.poster !== undefined) {
+  if (eventData?.poster !== null || eventData?.poster !== undefined) {
     const eventPoster: File | undefined = eventData?.poster?.[0]
-    if(eventPoster !== undefined) {
+    if (eventPoster !== undefined) {
       formData.append("file", eventPoster, "poster")
     }
   }
-
 
   const config = {
     method: "post",
@@ -215,7 +214,7 @@ export const deactivateEventFn = async (eventId: string | undefined) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getCookie("accessToken")}`,
     },
-    data: {eventId: eventId},
+    data: { eventId: eventId },
   }
 
   try {
@@ -248,7 +247,7 @@ export const fetchUserEventsFn = async (page = 0, size = 10) => {
   }
 }
 
-export const createTicketFn = async (ticketData: TicketDataType) => {
+export const createTicketFn = async (ticketData: TicketDataRequestType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -268,7 +267,7 @@ export const createTicketFn = async (ticketData: TicketDataType) => {
   }
 }
 
-export const updateTicketFn = async (ticketData: TicketDataType) => {
+export const updateTicketFn = async (ticketData: TicketDataRequestType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -330,7 +329,7 @@ export const publishEventFn = async (eventId: number | undefined) => {
   }
 }
 
-export const sendCompTicket = async (data: CompTicketType) => {
+export const sendCompTicket = async (data: CompTicketRequestType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
