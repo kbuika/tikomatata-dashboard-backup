@@ -102,7 +102,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                               <Loader2 className="w-10 h-10 animate-spin" />
                             </div>
                           ) : (
-                            <div className="h-auto w-full mt-6 mb-6 w-full">
+                            <div className="h-auto w-full mt-6 mb-6">
                               <div className="flex flex-row items-center justify-between w-full">
                                 <div className="w-full">
                                   <label htmlFor="name" className="text-neutralDark">
@@ -317,7 +317,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                     </div>
                   </div>
 
-                  <div className="border-b border-dashed border-b-2 my-3 pt-3">
+                  <div className="border-dashed border-b-2 my-3 pt-3">
                     <div className="absolute rounded-full w-5 h-5 bg-neutralDark -mt-2 -left-2"></div>
                     <div className="absolute rounded-full w-5 h-5 bg-neutralDark -mt-2 -right-2"></div>
                   </div>
