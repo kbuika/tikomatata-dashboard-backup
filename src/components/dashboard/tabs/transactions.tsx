@@ -6,13 +6,13 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { TransactionColumns } from "../../table-columns/transaction-columns"
 import { DataTable } from "../../ui/data-table/data-table"
-import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
+import { useTabAwareSearchParamsState } from "@/src/hooks/useTabAwareSearchParamsState"
 
 // Optimize API calls
 const TransactionsTab = () => {
   // const [tablePage, setTablePage] = useSearchParamsState("dashTab", "sales")
   const [alltransactions, setAllTransactions] = useState([])
-  const [currentTablePage, setCurrentTablePage] = useSearchParamsState("page", 0)
+  const [currentTablePage, setCurrentTablePage] = useTabAwareSearchParamsState("page", 0, "transactions")
   const [totalTablePages, setTotalTablePages] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
   const params = useParams()
@@ -27,7 +27,7 @@ const TransactionsTab = () => {
   ) => {
     setIsLoading(true)
     try {
-      const res = await getTransactionsForEvent({ eventId, page: currentTablePage as number }) //TODO: add pagination
+      const res = await getTransactionsForEvent({ eventId, page: +currentTablePage }) //TODO: add pagination
       if (res.status === 200) {
         const { transactions, totalPages } = res.data[0]
         setAllTransactions(transactions || [])
