@@ -35,7 +35,7 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
               "sales": [
                   {
                       "date": "2024-09-01",
-                      "sales": "167"
+                      "sales": "181"
                   },
                   {
                       "date": "2024-08-31",

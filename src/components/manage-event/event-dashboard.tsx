@@ -94,7 +94,7 @@ const EventDashBoard = () => {
         "status": 200,
         "message": "Total sales calculated",
         "data": {
-            "totalAmount": 987367.0
+            "totalAmount": 1007367.0
         },
         "eventId": eventId
     }
@@ -146,7 +146,7 @@ const EventDashBoard = () => {
         "status": 200,
         "message": "Sale by ticket types",
         "data": {
-            "totalTicketsSold": 760,
+            "totalTicketsSold": 781,
             "ticketsSoldByType": [
                 {
                     "name": "Wadau",
@@ -154,7 +154,7 @@ const EventDashBoard = () => {
                 },
                 {
                     "name": "Flash Sale Wadau",
-                    "tickets": 385
+                    "tickets": 406
                 },
                 {
                     "name": "Flash Sale Army of Three",
