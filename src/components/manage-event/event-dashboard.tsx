@@ -62,7 +62,7 @@ const EventDashBoard = () => {
   const [publishEventLoading, setPublishEventLoading] = useState(false);
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
   const [totalSales, setTotalSales] = useState(0);
-  const [ticketSalesByType, setTicketSalesByType] = useState([]);
+  const [ticketSalesByType, setTicketSalesByType] = useState<any>([]);
   const [totalTicketsSale, setTotalTicketsSale] = useState(0);
   const [isLoadingSales, setIsLoadingSales] = useState(false);
   const selectedEvent = useEventsStore((state) => state.selectedEvent);
@@ -90,7 +90,14 @@ const EventDashBoard = () => {
   const fetchAllSales = async (eventId: string | undefined) => {
     setIsLoadingSales(true);
     try {
-      const res = await getTotalSales(eventId);
+      const res = {
+        "status": 200,
+        "message": "Total sales calculated",
+        "data": {
+            "totalAmount": 987367.0
+        },
+        "eventId": eventId
+    }
       if (res.status === 200) {
         setTotalSales(res.data.totalAmount);
       } else {
@@ -135,7 +142,44 @@ const EventDashBoard = () => {
 
   const fetchTicketSalesByType = async (eventId: string | undefined) => {
     try {
-      const res = await getTotalTicketSalesByType(eventId);
+      const res = {
+        "status": 200,
+        "message": "Sale by ticket types",
+        "data": {
+            "totalTicketsSold": 760,
+            "ticketsSoldByType": [
+                {
+                    "name": "Wadau",
+                    "tickets": 150
+                },
+                {
+                    "name": "Flash Sale Wadau",
+                    "tickets": 385
+                },
+                {
+                    "name": "Flash Sale Army of Three",
+                    "tickets": 19
+                },
+                {
+                    "name": "Couple Ticket",
+                    "tickets": 36
+                },
+                {
+                    "name": "Flash Couple Tickets",
+                    "tickets": 46
+                },
+                {
+                    "name": "Army of Three [Group of 3]",
+                    "tickets": 11
+                },
+                {
+                    "name": "Flash Sale Wadau (1)",
+                    "tickets": 113
+                }
+            ]
+        },
+        "eventId": eventId
+    }
       if (res.status === 200) {
         setTicketSalesByType(res.data.ticketsSoldByType);
         setTotalTicketsSale(res.data.totalTicketsSold);
