@@ -22,7 +22,7 @@ const PageViewsBarChart = () => {
 
   useEffect(() => {
     fetchAllPageViews(params.id)
-  }, [])
+  }, [params.id, selectedPeriod])
 
   const fetchAllPageViews = async (eventId: string | undefined) => {
     try {

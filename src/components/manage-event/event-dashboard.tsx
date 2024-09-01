@@ -18,7 +18,7 @@ import {
 } from "@tremor/react"
 import { Loader2, Rocket } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import CalendarImage from "../../assets/images/calendar.png"
 import AttendeesTab from "../dashboard/tabs/attendees"
 import TransactionsTab from "../dashboard/tabs/transactions"
@@ -33,7 +33,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog"
 import TicketsSoldBarChart from "../dashboard/charts/tickets-sold-barchart"
-import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
+// import { useSearchParamsState } from "@/src/hooks/useSearchParamsState"
 import RequestPublishEmail from "../../email-templates/request-publish-email"
 import { render } from "@react-email/render"
 import { Button } from "../ui/button"
@@ -55,47 +55,61 @@ const getActiveTabIndex = (tabIndex: string): number => {
   return 0
 }
 
+
 const EventDashBoard = () => {
-  const [activeTab, setActiveTab] = useSearchParamsState("dashTab", "sales")
-  const [publishEventLoading, setPublishEventLoading] = useState(false)
-  const [publishDialogOpen, setPublishDialogOpen] = useState(false)
-  const [totalSales, setTotalSales] = useState(0)
-  const [ticketSalesByType, setTicketSalesByType] = useState([])
-  const [totalTicketsSale, setTotalTicketsSale] = useState(0)
-  const [isLoadingSales, setIsLoadingSales] = useState(false)
-  const selectedEvent = useEventsStore((state) => state.selectedEvent)
-  const params = useParams()
-  // TODO: Ask Willy to start table page count from 1 not 0
-  const tabIndex = getActiveTabIndex(activeTab as string)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get("dashTab") || "sales");
+  const [publishEventLoading, setPublishEventLoading] = useState(false);
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  const [totalSales, setTotalSales] = useState(0);
+  const [ticketSalesByType, setTicketSalesByType] = useState([]);
+  const [totalTicketsSale, setTotalTicketsSale] = useState(0);
+  const [isLoadingSales, setIsLoadingSales] = useState(false);
+  const selectedEvent = useEventsStore((state) => state.selectedEvent);
+  const params = useParams();
 
   useEffect(() => {
-    fetchAllSales(params.id)
-    fetchTicketSalesByType(params.id)
-  }, [])
+    fetchAllSales(params.id);
+    fetchTicketSalesByType(params.id);
+  }, []);
+
+  useEffect(() => {
+    const currentTab = searchParams.get("dashTab");
+    if (currentTab !== activeTab) {
+      setSearchParams(prev => {
+        prev.set("dashTab", activeTab);
+        return prev;
+      }, { replace: true });
+    }
+  }, [activeTab, searchParams, setSearchParams]);
+
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+  };
 
   const fetchAllSales = async (eventId: string | undefined) => {
-    setIsLoadingSales(true)
+    setIsLoadingSales(true);
     try {
-      const res = await getTotalSales(eventId)
+      const res = await getTotalSales(eventId);
       if (res.status === 200) {
-        setTotalSales(res.data.totalAmount)
+        setTotalSales(res.data.totalAmount);
       } else {
-        errorToast("Could not fetch this event's sales. Try again later.")
+        errorToast("Could not fetch this event's sales. Try again later.");
       }
     } catch (error) {
-      errorToast("Could not fetch this event's sales. Try again later.")
+      errorToast("Could not fetch this event's sales. Try again later.");
     } finally {
-      setIsLoadingSales(false)
+      setIsLoadingSales(false);
     }
-  }
+  };
 
   const onRequestPublishEvent = async () => {
-    setPublishEventLoading(true)
+    setPublishEventLoading(true);
 
     try {
-      const res = await getUserInfo()
+      const res = await getUserInfo();
       if (res?.status === 200) {
-        const emailHtml = render(RequestPublishEmail({ event: selectedEvent, user: res?.data }))
+        const emailHtml = render(RequestPublishEmail({ event: selectedEvent, user: res?.data }));
 
         const emailRes = await fetch("/api/send", {
           method: "POST",
@@ -104,50 +118,35 @@ const EventDashBoard = () => {
           },
           mode: "no-cors", // disable cors
           body: JSON.stringify({ emailHtml, subject: "Request to publish event" }),
-        })
+        });
         if (emailRes.status === 200) {
-          successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false)
+          successToast(`Your request to publish ${selectedEvent?.name} has been sent!`, false);
         }
       } else {
-        errorToast(`Could not send your request to publish ${selectedEvent?.name}.`, false)
+        errorToast(`Could not send your request to publish ${selectedEvent?.name}.`, false);
       }
     } catch (err) {
-      errorToast("Could not publish event. Try again later.")
+      errorToast("Could not publish event. Try again later.");
     } finally {
-      setPublishEventLoading(false)
-      setPublishDialogOpen(false)
+      setPublishEventLoading(false);
+      setPublishDialogOpen(false);
     }
-  }
+  };
 
   const fetchTicketSalesByType = async (eventId: string | undefined) => {
     try {
-      const res = await getTotalTicketSalesByType(eventId)
+      const res = await getTotalTicketSalesByType(eventId);
       if (res.status === 200) {
-        setTicketSalesByType(res.data.ticketsSoldByType)
-        setTotalTicketsSale(res.data.totalTicketsSold)
+        setTicketSalesByType(res.data.ticketsSoldByType);
+        setTotalTicketsSale(res.data.totalTicketsSold);
       } else {
-        errorToast("Could not fetch this event's ticket sales by type. Try again later.")
+        errorToast("Could not fetch this event's ticket sales by type. Try again later.");
       }
     } catch (error) {
-      errorToast("Could not fetch this event's ticket sales by type. Try again later.")
+      errorToast("Could not fetch this event's ticket sales by type. Try again later.");
     }
-  }
+  };
 
-  // const onPublishEvent = async () => {
-  //   setPublishEventLoading(true)
-  //   try {
-  //     const res = await publishEventFn(selectedEvent?.eventId)
-  //     if (res?.data?.status === 200) {
-  //       successToast("Your event is live!")
-  //     } else {
-  //       errorToast(res?.data?.message)
-  //     }
-  //   } catch (err) {
-  //     errorToast("Could not publish event. Try again later.")
-  //   } finally {
-  //     setPublishEventLoading(false)
-  //   }
-  // }
   return (
     <EventPagesWrapper
       right={
@@ -229,24 +228,20 @@ const EventDashBoard = () => {
           // FIXME: Proper conditional rendering
           // eslint-disable-next-line no-constant-condition
           true ? (
-            <TabGroup className="" defaultIndex={tabIndex}>
+            <TabGroup
+              className=""
+              defaultIndex={getActiveTabIndex(activeTab)}
+              onIndexChange={(index) => handleTabChange(["sales", "transactions", "attendees", "pageviews"][index])}
+            >
               <TabList color="violet">
-                <Tab onClick={() => setActiveTab("sales")} tabIndex={0}>
-                  Sales
-                </Tab>
-                <Tab onClick={() => setActiveTab("transactions")} tabIndex={1}>
-                  Transactions
-                </Tab>
-                <Tab onClick={() => setActiveTab("attendees")} tabIndex={2}>
-                  Attendees
-                </Tab>
-                <Tab onClick={() => setActiveTab("pageviews")} tabIndex={3}>
-                  Page Views
-                </Tab>
+                <Tab>Sales</Tab>
+                <Tab>Transactions</Tab>
+                <Tab>Attendees</Tab>
+                <Tab>Page Views</Tab>
               </TabList>
               <TabPanels>
-                <TabPanel tabIndex={0}>
-                  {tabIndex === 0 && (
+                <TabPanel>
+                  {activeTab === "sales" && (
                     <>
                       <Grid
                         numItemsLg={2}
@@ -264,14 +259,7 @@ const EventDashBoard = () => {
                                 </Metric>
                               )}
                             </div>
-                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
                           </Flex>
-                          {/* TODO: Restore this once the "target" feature is ready */}
-                          {/* <Flex className="mt-4 space-x-2">
-                          <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
-                          <Text>{item.target}</Text>
-                        </Flex>
-                        <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                         </Card>
                         <Card>
                           <Flex alignItems="start">
@@ -285,14 +273,7 @@ const EventDashBoard = () => {
                                 </Metric>
                               )}
                             </div>
-                            {/* <BadgeDelta deltaType={item.deltaType}>{item.delta}</BadgeDelta> */}
                           </Flex>
-                          {/* TODO: Restore this once the "target" feature is ready */}
-                          {/* <Flex className="mt-4 space-x-2">
-                          <Text className="truncate">{`${item.progress}% (${item.metric})`}</Text>
-                          <Text>{item.target}</Text>
-                        </Flex>
-                        <ProgressBar value={item.progress} className="mt-2" color="orange" /> */}
                         </Card>
                       </Grid>
                       <TicketsSoldBarChart ticketSalesByType={ticketSalesByType} />
@@ -300,9 +281,9 @@ const EventDashBoard = () => {
                   )}
                 </TabPanel>
 
-                <TabPanel tabIndex={1}>{tabIndex == 1 && <TransactionsTab />}</TabPanel>
-                <TabPanel tabIndex={2}>{tabIndex == 2 && <AttendeesTab />}</TabPanel>
-                <TabPanel tabIndex={3}>{tabIndex == 3 && <PageViewsBarChart />}</TabPanel>
+                <TabPanel>{activeTab === "transactions" && <TransactionsTab />}</TabPanel>
+                <TabPanel>{activeTab === "attendees" && <AttendeesTab />}</TabPanel>
+                <TabPanel>{activeTab === "pageviews" && <PageViewsBarChart />}</TabPanel>
               </TabPanels>
             </TabGroup>
           ) : (
@@ -321,7 +302,7 @@ const EventDashBoard = () => {
         }
       </div>
     </EventPagesWrapper>
-  )
-}
+  );
+};
 
 export default EventDashBoard
