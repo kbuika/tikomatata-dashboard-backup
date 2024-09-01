@@ -20,8 +20,11 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Button } from "../ui/button"
 import { Loader2 } from "lucide-react"
+import { DataTable } from "../ui/data-table/data-table"
+import { useTabAwareSearchParamsState } from "@/src/hooks/useTabAwareSearchParamsState"
+import { createSupportColumns } from "../table-columns/support-columns"
 
-interface EmailDataType {
+export interface EmailDataType {
   emailBody?: string
   emailId: string
   emailRecipient: number
@@ -34,18 +37,24 @@ const EventSupport = () => {
   const [resendingEmail, setResendingEmail] = useState(false)
   const [selectedEmailOrder, setSelectedEmailOrder] = useState<EmailDataType>()
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
+  const [currentTablePage, setCurrentTablePage] = useTabAwareSearchParamsState("page", 0, "support")
+  const [totalTablePages, setTotalTablePages] = useState<number>(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   const params = useParams()
 
   useEffect(() => {
-    fetchEventTicketEmails(params.id)
-  }, [])
+    fetchEventTicketEmails(params.id, currentTablePage)
+  }, [currentTablePage])
 
-  const fetchEventTicketEmails = async (eventId: string | undefined) => {
+  const fetchEventTicketEmails = async (eventId: string | undefined, currentTablePage: number | string) => {
     try {
-      const res = await getEventTicketEmails({ eventId })
+      const res = await getEventTicketEmails({ eventId, page: +currentTablePage })
       if (res.status === 200) {
-        setAllEmails(res.data.emails)
+        const { totalPages, emails } = res.data
+        setAllEmails(emails)
+        setTotalTablePages(totalPages || 1)
+        setCurrentTablePage(currentTablePage)
       } else {
         errorToast("Could not fetch this event's sales. Try again later.")
       }
@@ -72,56 +81,21 @@ const EventSupport = () => {
       setResendingEmail(false)
     }
   }
-  
+
+  const columns = createSupportColumns(resendUserOrderEmail, selectedEmailOrder, resendingEmail)
+
   return (
     <EventPagesWrapper>
       <div className="border h-auto rounded-md p-4">
-        <Card>
           <Title>{selectedEvent?.name} Support</Title>
-          <Table className="mt-5">
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>Email ID</TableHeaderCell>
-                <TableHeaderCell>Email</TableHeaderCell>
-                <TableHeaderCell>Retries</TableHeaderCell>
-                <TableHeaderCell>Email Status</TableHeaderCell>
-                <TableHeaderCell>Resend Email</TableHeaderCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allEmails.map((item: EmailDataType) => (
-                <TableRow key={item.emailId}>
-                  <TableCell>{item.emailId}</TableCell>
-                  <TableCell>
-                    <Text>{item.emailRecipient}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text>{item.numberOfRetries}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      color={item?.emailStatus === "SUCCESS" ? "emerald" : "red"}
-                      icon={StatusOnlineIcon}
-                    >
-                      {item.emailStatus.toLowerCase()}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-row">
-                      <Button onClick={() => resendUserOrderEmail(item)} disabled={selectedEmailOrder?.emailId === item?.emailId && resendingEmail} className="bg-mainPrimary">{selectedEmailOrder?.emailId === item?.emailId && resendingEmail ? <Loader2 className="animate-spin"/> : "Resend"}</Button>
-                      {/* <CustomButton
-                    className="bg-mainPrimary text-white ml-2 w-[6em]"
-                    onClick={() => console.log("clicked")}
-                >
-                    Email
-                </CustomButton> */}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+          <DataTable
+            columns={columns}
+            data={allEmails}
+            dataloading={isLoading}
+            totalTablePages={totalTablePages}
+            setTablePage={setCurrentTablePage}
+            tablePage={currentTablePage as number}
+          />
       </div>
     </EventPagesWrapper>
   )
