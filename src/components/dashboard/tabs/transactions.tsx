@@ -3,36 +3,39 @@ import { errorToast } from "@/src/lib/utils"
 import { InformationCircleIcon } from "@heroicons/react/solid"
 import { Flex, Icon, TabPanel, Title } from "@tremor/react"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { TransactionColumns } from "../../table-columns/transaction-columns"
 import { DataTable } from "../../ui/data-table/data-table"
-import { useTabAwareSearchParamsState } from "@/src/hooks/useTabAwareSearchParamsState"
+// import { useSearchParams } from "react-router-dom"
 
 // Optimize API calls
 const TransactionsTab = () => {
-  // const [tablePage, setTablePage] = useSearchParamsState("dashTab", "sales")
   const [alltransactions, setAllTransactions] = useState([])
-  const [currentTablePage, setCurrentTablePage] = useTabAwareSearchParamsState("page", 0, "transactions")
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [currentTablePage, setCurrentTablePage] = useState(Number(searchParams.get("transactionsPage") || "0"));
   const [totalTablePages, setTotalTablePages] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
   const params = useParams()
 
   useEffect(() => {
     fetchAllTransactions(params.id, currentTablePage)
-  }, [currentTablePage])
+  }, [currentTablePage, params.id])
 
-  const fetchAllTransactions = async (
-    eventId: string | undefined,
-    currentTablePage: number | string,
-  ) => {
+  useEffect(() => {
+    setSearchParams(prev => {
+      prev.set("transactionsPage", currentTablePage.toString());
+      return prev;
+    }, { replace: true });
+  }, [currentTablePage, setSearchParams]);
+
+  const fetchAllTransactions = async (eventId: string | undefined, page: number) => {
     setIsLoading(true)
     try {
-      const res = await getTransactionsForEvent({ eventId, page: +currentTablePage }) //TODO: add pagination
+      const res = await getTransactionsForEvent({ eventId, page })
       if (res.status === 200) {
         const { transactions, totalPages } = res.data[0]
         setAllTransactions(transactions || [])
         setTotalTablePages(totalPages || 1)
-        setCurrentTablePage(currentTablePage)
       } else {
         errorToast("Could not fetch this event's transactions. Try again later.")
       }
