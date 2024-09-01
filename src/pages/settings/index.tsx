@@ -1,18 +1,37 @@
+import { useState, useEffect } from "react"
 import LoadingScreen from "@/src/components/loading-screen"
 import useUser from "@/src/hooks/use-user"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import { useUserDetailsStore } from "@/src/stores/user-details-store"
 import KenyaIcon from "../../assets/icons/kenya.png"
+import Button  from "@/src/components/ui/custom-button"
 
 const Settings = () => {
-  const {isUserLoading} = useUser()
+  const { isUserLoading } = useUser()
   const user = useUserDetailsStore((state) => state.user)
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "")
+      setPhone(user.phone || "")
+      setEmail(user.email || "")
+    }
+  }, [user])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    //TODO: Implement update logic here
+    console.log("Update user:", { name, phone, email })
+  }
 
   return (
     <MainAppWrapper
       left={
         <div>
-          <h1 className="text-[17px] md:text-[16px] font-semibold text-center text-neutralDark">
+          <h1 className="text-2xl font-semibold text-center text-neutralDark">
             Profile Settings
           </h1>
         </div>
@@ -23,72 +42,63 @@ const Settings = () => {
           <LoadingScreen />
         </div>
       ) : (
-        <>
-          <div className="flex flex-col items-center pt-[3em] justify-center w-full px-8">
-            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-base font-semibold">Profile Picture</h3>
-              </div>
-              <div className="mt-2 md:w-[60%] lg:w-[70%]">
-                <img src={user?.imageUrl} alt="" className="h-[5em] w-[5em] rounded-md" />
-                {/* <CustomButton className="ml-8 h-8 flex items-center">Change Avatar</CustomButton> */}
+        <form onSubmit={handleSubmit} className="flex flex-col items-center pt-24 justify-center w-full max-w-2xl mx-auto px-4">
+          <div className="w-full space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <label htmlFor="avatar" className="text-lg font-semibold mb-2 md:mb-0">Profile Picture</label>
+              <div className="flex items-center">
+                <img src={user?.imageUrl} alt="" className="h-20 w-20 rounded-full object-cover" />
+                <Button type="button" className="ml-4">Change Avatar</Button>
               </div>
             </div>
-            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-base font-semibold">Full Name</h3>
-              </div>
-              <div className="mt-2 md:w-[60%] lg:w-[70%]">
+
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <label htmlFor="name" className="text-lg font-semibold mb-2 md:mb-0">Full Name</label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full md:w-2/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter Full Name"
+              />
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <label htmlFor="phone" className="text-lg font-semibold mb-2 md:mb-0">Phone Number</label>
+              <div className="flex w-full md:w-2/3">
+                <span className="inline-flex items-center px-3 text-gray-500 bg-gray-100 border border-r-0 border-gray-300 rounded-l-md">
+                  <img src={KenyaIcon} alt="Kenyan Flag" className="w-6 h-4 mr-2" />
+                  +254
+                </span>
                 <input
-                  id="name"
-                  type="text"
-                  required
-                  className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                  placeholder="Enter Full Name"
-                  autoComplete="nope"
-                  defaultValue={user?.name}
-                ></input>
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Phone number"
+                />
               </div>
             </div>
-            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-base font-semibold">Phone Number</h3>
-              </div>
-              <div className="md:w-[60%] lg:w-[70%]">
-                <div className="flex items-center mt-2">
-                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-sm border rounded-r-none border-gray-600">
-                    <img src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                    <span className="max-[400px]:hidden">+254</span>
-                  </span>
-                  <input
-                    id="phone"
-                    type="text"
-                    required
-                    className="w-3/4 h-[50px] bg-white appearance-none rounded-sm rounded-l-none relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                    placeholder="Phone number"
-                    autoComplete="nope"
-                  ></input>
-                </div>
-              </div>
+
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <label htmlFor="email" className="text-lg font-semibold mb-2 md:mb-0">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full md:w-2/3 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Email Address"
+              />
             </div>
-            <div className="w-full mt-[26px] flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-base font-semibold">Email</h3>
-              </div>
-              <div className="mt-2 md:w-[60%] lg:w-[70%]">
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                  placeholder="Email Address"
-                  autoComplete="nope"
-                  defaultValue={user?.email}
-                ></input>
-              </div>
+
+            <div className="flex justify-end">
+              <Button type="submit" className="px-6 py-2">Save Changes</Button>
             </div>
           </div>
-        </>
+        </form>
       )}
     </MainAppWrapper>
   )

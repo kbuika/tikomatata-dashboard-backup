@@ -1,20 +1,24 @@
 import useSWR from "swr";
-// services
 import userService from "../services/user.service";
-// constants
 import { CURRENT_USER } from "../constants/fetch-keys";
 import { getUserNameInitials } from "../lib/utils";
-// types
 // import type { ICurrentUserResponse, IUser } from "types";
+import { useUserDetailsStore } from "../stores/user-details-store";
+
 export default function useUser() {
-  // API to fetch user information
+  const setUser = useUserDetailsStore((state) => state.setUser);
+
   const { data, isLoading, error, mutate } = useSWR<any>(
     CURRENT_USER,
     () => userService.currentUser(),
     {
       revalidateOnFocus: false,
-      revalidateOnMount: false,
-      // revalidateIfStale: false,
+      revalidateOnMount: true,
+      onSuccess: (data) => {
+        if (data) {
+          setUser(data);
+        }
+      },
     }
   );
 

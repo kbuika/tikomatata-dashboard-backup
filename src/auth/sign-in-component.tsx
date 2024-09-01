@@ -48,7 +48,8 @@ export default function SignInComponent({ setToken, setIsSignIn, isSignIn }: ISi
       if (res?.status === 200) {
         successToast("Login Successful")
         setToken(res?.data?.token)
-        navigate("/events")
+        const lastVisitedPage = sessionStorage.getItem("lastVisitedPage")
+        navigate(lastVisitedPage || "/events")
       }
       if (res?.status !== 200) {
         errorToast(res?.message)
