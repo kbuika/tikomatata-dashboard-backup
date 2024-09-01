@@ -11,9 +11,10 @@ interface TimePickerProps {
   time: string
   setTime: (time: string) => void
   buttonStyle?: any
+  popoverZIndex?: number
 }
-// TODO: Create a default time for the time picker
-export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime, buttonStyle }) => {
+
+export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime, buttonStyle, popoverZIndex = 200 }) => {
   const [selectedTime, setSelectedTime] = React.useState<DateTime>(
     DateTime.fromFormat(time, "HH:mm", { zone: "utc" }),
   )
@@ -44,7 +45,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ time, setTime, buttonSty
           </>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[280px] p-0">
+      <PopoverContent className="w-[280px] p-0" style={{ zIndex: popoverZIndex }}>
         <>
           <div className="p-2 flex flex-row items-center justify-center w-full">
             <Input
