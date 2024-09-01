@@ -255,6 +255,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                     time={ticket?.saleStartTime}
                                     setTime={(time) => setValue("saleStartTime", time)}
                                     buttonStyle={"w-[160px]"}
+                                    popoverZIndex={350}
                                   />
                                   {errors.saleStartTime && (
                                     <span className="text-criticalRed">
@@ -279,6 +280,7 @@ const EventTicketCard: React.FC<EventTicketProps> = (ticketData) => {
                                     time="12:00"
                                     setTime={(time) => setValue("saleEndTime", time)}
                                     buttonStyle={"w-[160px]"}
+                                    popoverZIndex={350}
                                   />
                                   {errors.saleEndTime && (
                                     <span className="text-criticalRed">

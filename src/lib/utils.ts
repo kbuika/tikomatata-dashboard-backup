@@ -96,3 +96,9 @@ export const createSlug = (name: string) => {
   return alphaNumericName;
 };
 
+export const removeAllCookies = () => {
+  Object.keys(Cookies.get()).forEach(function(cookieName) {
+    Cookies.remove(cookieName);
+  });
+}
+
