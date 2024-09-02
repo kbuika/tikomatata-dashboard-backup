@@ -90,14 +90,7 @@ const EventDashBoard = () => {
   const fetchAllSales = async (eventId: string | undefined) => {
     setIsLoadingSales(true);
     try {
-      const res = {
-        "status": 200,
-        "message": "Total sales calculated",
-        "data": {
-            "totalAmount": 1007367.0
-        },
-        "eventId": eventId
-    }
+      const res = await getTotalSales(eventId);
       if (res.status === 200) {
         setTotalSales(res.data.totalAmount);
       } else {
@@ -142,44 +135,7 @@ const EventDashBoard = () => {
 
   const fetchTicketSalesByType = async (eventId: string | undefined) => {
     try {
-      const res = {
-        "status": 200,
-        "message": "Sale by ticket types",
-        "data": {
-            "totalTicketsSold": 781,
-            "ticketsSoldByType": [
-                {
-                    "name": "Wadau",
-                    "tickets": 150
-                },
-                {
-                    "name": "Flash Sale Wadau",
-                    "tickets": 406
-                },
-                {
-                    "name": "Flash Sale Army of Three",
-                    "tickets": 19
-                },
-                {
-                    "name": "Couple Ticket",
-                    "tickets": 36
-                },
-                {
-                    "name": "Flash Couple Tickets",
-                    "tickets": 46
-                },
-                {
-                    "name": "Army of Three [Group of 3]",
-                    "tickets": 11
-                },
-                {
-                    "name": "Flash Sale Wadau (1)",
-                    "tickets": 113
-                }
-            ]
-        },
-        "eventId": eventId
-    }
+      const res = await getTotalTicketSalesByType(eventId);
       if (res.status === 200) {
         setTicketSalesByType(res.data.ticketsSoldByType);
         setTotalTicketsSale(res.data.totalTicketsSold);
