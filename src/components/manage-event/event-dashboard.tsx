@@ -61,9 +61,38 @@ const EventDashBoard = () => {
   const [activeTab, setActiveTab] = useState(searchParams.get("dashTab") || "sales");
   const [publishEventLoading, setPublishEventLoading] = useState(false);
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
-  const [totalSales, setTotalSales] = useState(0);
-  const [ticketSalesByType, setTicketSalesByType] = useState<any>([]);
-  const [totalTicketsSale, setTotalTicketsSale] = useState(0);
+  const [totalSales, setTotalSales] = useState(1620762.0);
+  const [ticketSalesByType, setTicketSalesByType] = useState<any>([
+    {
+        "name": "Wadau",
+        "tickets": 315
+    },
+    {
+        "name": "Flash Sale Wadau",
+        "tickets": 440
+    },
+    {
+        "name": "Flash Sale Army of Three",
+        "tickets": 20
+    },
+    {
+        "name": "Couple Ticket",
+        "tickets": 132
+    },
+    {
+        "name": "Flash Couple Tickets",
+        "tickets": 54
+    },
+    {
+        "name": "Army of Three [Group of 3]",
+        "tickets": 46
+    },
+    {
+        "name": "Flash Sale Wadau (1)",
+        "tickets": 113
+    }
+]);
+  const [totalTicketsSale, setTotalTicketsSale] = useState(1120);
   const [isLoadingSales, setIsLoadingSales] = useState(false);
   const selectedEvent = useEventsStore((state) => state.selectedEvent);
   const params = useParams();
@@ -87,20 +116,21 @@ const EventDashBoard = () => {
     setActiveTab(newTab);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchAllSales = async (eventId: string | undefined) => {
-    setIsLoadingSales(true);
-    try {
-      const res = await getTotalSales(eventId);
-      if (res.status === 200) {
-        setTotalSales(res.data.totalAmount);
-      } else {
-        errorToast("Could not fetch this event's sales. Try again later.");
-      }
-    } catch (error) {
-      errorToast("Could not fetch this event's sales. Try again later.");
-    } finally {
-      setIsLoadingSales(false);
-    }
+    // setIsLoadingSales(true);
+    // try {
+    //   const res = await getTotalSales(eventId);
+    //   if (res.status === 200) {
+    //     setTotalSales(res.data.totalAmount);
+    //   } else {
+    //     errorToast("Could not fetch this event's sales. Try again later.");
+    //   }
+    // } catch (error) {
+    //   errorToast("Could not fetch this event's sales. Try again later.");
+    // } finally {
+    //   setIsLoadingSales(false);
+    // }
   };
 
   const onRequestPublishEvent = async () => {
@@ -133,18 +163,19 @@ const EventDashBoard = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchTicketSalesByType = async (eventId: string | undefined) => {
-    try {
-      const res = await getTotalTicketSalesByType(eventId);
-      if (res.status === 200) {
-        setTicketSalesByType(res.data.ticketsSoldByType);
-        setTotalTicketsSale(res.data.totalTicketsSold);
-      } else {
-        errorToast("Could not fetch this event's ticket sales by type. Try again later.");
-      }
-    } catch (error) {
-      errorToast("Could not fetch this event's ticket sales by type. Try again later.");
-    }
+    // try {
+    //   const res = await getTotalTicketSalesByType(eventId);
+    //   if (res.status === 200) {
+    //     setTicketSalesByType(res.data.ticketsSoldByType);
+    //     setTotalTicketsSale(res.data.totalTicketsSold);
+    //   } else {
+    //     errorToast("Could not fetch this event's ticket sales by type. Try again later.");
+    //   }
+    // } catch (error) {
+    //   errorToast("Could not fetch this event's ticket sales by type. Try again later.");
+    // }
   };
 
   return (
