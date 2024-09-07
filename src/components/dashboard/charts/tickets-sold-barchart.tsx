@@ -9,68 +9,7 @@ const valueFormatter = (number: number) =>
   `${new Intl.NumberFormat("us").format(number).toString()}`
 
 const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
-  const [totalSales, setTotalSales] = useState<any>([
-    {
-        "date": "2024-09-06",
-        "sales": "94"
-    },
-    {
-        "date": "2024-09-05",
-        "sales": "71"
-    },
-    {
-        "date": "2024-09-04",
-        "sales": "43"
-    },
-    {
-        "date": "2024-09-03",
-        "sales": "40"
-    },
-    {
-        "date": "2024-09-02",
-        "sales": "48"
-    },
-    {
-        "date": "2024-09-01",
-        "sales": "195"
-    },
-    {
-        "date": "2024-08-31",
-        "sales": "161"
-    },
-    {
-        "date": "2024-08-30",
-        "sales": "121"
-    },
-    {
-        "date": "2024-08-29",
-        "sales": "27"
-    },
-    {
-        "date": "2024-08-28",
-        "sales": "17"
-    },
-    {
-        "date": "2024-08-27",
-        "sales": "7"
-    },
-    {
-        "date": "2024-08-26",
-        "sales": "21"
-    },
-    {
-        "date": "2024-08-25",
-        "sales": "19"
-    },
-    {
-        "date": "2024-08-24",
-        "sales": "7"
-    },
-    {
-        "date": "2024-08-23",
-        "sales": "8"
-    }
-])
+  const [totalSales, setTotalSales] = useState<any>([])
   // const [ticketSalesByType, setTicketSalesByType] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -84,19 +23,18 @@ const TicketsSoldBarChart = ({ticketSalesByType}: any) => {
     fetchSalesInPeriod(params.id)
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchSalesInPeriod = async (eventId: string | undefined) => {
-    // try {
-    //   const res = await getSuccessfulSalesInPeriod({ eventId, selectedPeriod })
-    //   if (res.status === 200) {
-    //     const sales = res.data.sales
-    //     setTotalSales(sales)
-    //   } else {
-    //     errorToast("Could not fetch this event's sales. Try again later.")
-    //   }
-    // } catch (error) {
-    //   errorToast("Could not fetch this event's sales. Try again later.")
-    // }
+    try {
+      const res = await getSuccessfulSalesInPeriod({ eventId, selectedPeriod })
+      if (res.status === 200) {
+        const sales = res.data.sales
+        setTotalSales(sales)
+      } else {
+        errorToast("Could not fetch this event's sales. Try again later.")
+      }
+    } catch (error) {
+      errorToast("Could not fetch this event's sales. Try again later.")
+    }
   }
 
 
