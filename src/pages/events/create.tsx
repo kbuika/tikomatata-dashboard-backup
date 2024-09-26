@@ -129,7 +129,7 @@ const CreateEvent = () => {
       <div className="w-full min-h-screen py-[4em] px-4 md:px-0">
         <div className="border rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4">General Information*</h2>
-          <p className="text-sm mb-6">Please enter the general information about your event</p>
+          <p className="text-sm mb-6">Please enter general information about your event</p>
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div className="flex flex-col">
               <label className="font-medium mb-1" htmlFor="name">
