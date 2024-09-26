@@ -25,6 +25,7 @@ import { TimePicker } from "@/src/components/ui/time-picker"
 import MainAppWrapper from "@/src/layouts/wrappers/main-app-wrapper"
 import { useEventsStore } from "@/src/stores/events-store"
 import { DateRangePicker } from "@/src/components/ui/date-range-picker"
+import { Checkbox } from "@/src/components/ui/checkbox"
 
 const schema = yup.object({
   name: yup.string().required("Event name is required"),
@@ -42,6 +43,7 @@ const schema = yup.object({
   endDate: yup.string().required("End date is required"),
   startTime: yup.string().default("12:00").required("Start time is required"),
   endTime: yup.string().default("12:00").required("End time is required"),
+  hasServiceCharge: yup.boolean().notRequired().default(false),
 })
 
 const CreateEvent = () => {
@@ -62,14 +64,16 @@ const CreateEvent = () => {
     watch,
   } = useForm<EventRequestType>({
     resolver: yupResolver(schema),
-    defaultValues: { slug: "", ageLimit: 18 },
+    defaultValues: { slug: "", ageLimit: 18, hasServiceCharge: false },
   })
   const eventName = watch("name")
   const startDate = watch("startDate")
   const endDate = watch("endDate")
+  const hasServiceCharge = watch("hasServiceCharge")
 
   const onSubmit: SubmitHandler<EventRequestType> = async (data) => {
     setIsLoading(true)
+    alert(JSON.stringify(data))
     try {
       const res = await createEventFn(data)
       if (res.status === 200) {
@@ -170,7 +174,7 @@ const CreateEvent = () => {
                 <span className="text-criticalRed">{errors.description?.message}</span>
               )}
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-2">
               <label className="font-medium mb-1" htmlFor="slug">
                 Event Link*
               </label>
@@ -189,6 +193,18 @@ const CreateEvent = () => {
                 />
               </div>
               {errors.slug && <span className="text-criticalRed">{errors.slug?.message}</span>}
+            </div>
+            <div>
+              <label>Has Service Charge</label>
+              <p className="text-sm mb-2">This is used to charge the customer a service fee</p>
+              <div>
+                <Checkbox
+                  id="hasServiceCharge"
+                  checked={hasServiceCharge}
+                  value={hasServiceCharge}
+                  onCheckedChange={(checked) => setValue("hasServiceCharge", checked)}
+                />
+              </div>
             </div>
           </div>
         </div>
