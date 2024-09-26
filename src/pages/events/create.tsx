@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Resolver } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import CustomButton from "../../components/ui/custom-button"
@@ -63,7 +63,7 @@ const CreateEvent = () => {
     setValue,
     watch,
   } = useForm<EventRequestType>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as Resolver<EventRequestType>,
     defaultValues: { slug: "", ageLimit: 18, hasServiceCharge: false },
   })
   const eventName = watch("name")
@@ -200,9 +200,8 @@ const CreateEvent = () => {
               <div>
                 <Checkbox
                   id="hasServiceCharge"
-                  checked={hasServiceCharge}
-                  value={hasServiceCharge}
-                  onCheckedChange={(checked) => setValue("hasServiceCharge", checked)}
+                  checked={hasServiceCharge || false}
+                  onCheckedChange={(checked: boolean) => setValue("hasServiceCharge", checked)}
                 />
               </div>
             </div>
