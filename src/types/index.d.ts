@@ -49,6 +49,7 @@ export interface EventRequestType {
   endDate: string
   startTime: string
   endTime: string
+  hasServiceCharge: boolean
 }
 
 export interface EventDataTypeExtended extends EventDataType {
